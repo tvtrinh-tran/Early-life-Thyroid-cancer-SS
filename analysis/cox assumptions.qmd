@@ -1,0 +1,157 @@
+---
+title: "Cox assumptions"
+format: html
+editor: visual
+---
+
+# Proportional hazards assumption
+
+```{r,warning=FALSE, message=FALSE}
+#| echo: false
+#| output: false
+
+library("survminer")
+library("survival")
+library("broom")
+library("tidyverse")
+
+sas <-
+  read.csv(
+    here::here("data/ss_earlylife_popu.csv"),
+    header = TRUE,
+    stringsAsFactors = TRUE,
+    fileEncoding = "latin1"
+  )
+
+sas$ident_EOF=ifelse(sas$ident_EOF==sas$ident_ageexact_bl,sas$ident_ageexact_bl+0.1,sas$ident_EOF)
+all_var_list=c("ses_race",
+       "an_bmi_cat",
+       "ph_MET_wk_current_cat",
+       "alc_cat",
+       "smok_status",
+       "ses_edu_level",
+       "ses_income",
+       "illness_thyroid_all",
+       "fam_history_DTC",
+       
+       "ui_diab_all_mother",
+       #ui_diab_prior_mother,
+       #ui_diab_preg_mother,
+       
+       "ui_hypertension_all",
+       #ui_ges_hypertension,
+       #ui_eclampsia,
+       "ui_epilepsy_prior",
+       "ui_vomit",
+       "ui_DES",
+       "ui_farm_all",
+       "ui_mother_smok",
+       "ui_hh_smok",
+       "ui_mother_age_cat",
+       
+       "ui_diab_father",
+       "ui_father_smok",
+       "ui_father_age_cat",
+       
+       "ui_maternal_1st_born",
+       "ui_preg_order_cat",
+       "ui_preg_last_cat",
+       "ui_multiple_birth",
+       "ui_birth_weight_cat",
+       "ui_early_gest",
+       "ui_breastfed",
+       "ui_soy")
+
+covariates=c("ses_race",
+       "an_bmi_cat",
+       "ph_MET_wk_current_cat",
+       "alc_cat",
+       "smok_status",
+       "ses_edu_level",
+       "ses_income",
+       "illness_thyroid_all",
+       "fam_history_DTC")
+
+surv="Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
+####Model that includes all covariates
+all=reformulate(all_var_list, response = surv)%>%coxph(method = "breslow", data=sas)
+
+
+```
+
+## **Testing proportional Hazards assumption: scaled Schoenfeld residuals**
+
+```{r,warning=FALSE, message=FALSE}
+#| echo: false
+#| output: true
+#| warning: false
+
+###plots of scaled Schoenfeld residuals
+for (i in covariates){
+  p=reformulate(i, response = surv)%>%coxph(method = "breslow", data=sas)%>%cox.zph()%>%ggcoxzph()
+  q1=p$`1`%>%ggplot_build()
+  q1$plot$labels$y = paste0("Beta(t) for ",i,sep="")
+  q1%>%ggplot_gtable()%>%plot()
+}
+
+```
+
+## **Testing proportional Hazards assumption: p-value**
+
+```{r,warning=FALSE, message=FALSE}
+#| echo: false
+#| output: true
+#| warning: false
+
+###Testing proportional Hazards assumption: p-value
+all%>%cox.zph()
+
+```
+
+## **Model selection based on AIC and BIC**
+
+```{r,warning=FALSE, message=FALSE}
+#| echo: false
+#| output: true
+#| warning: false
+model_select_preliminary = as.data.frame(NULL)
+for (i in covariates) {
+  model_select = rbind(
+    model_select_preliminary,
+    reformulate(i, response = surv) %>% coxph(method = "breslow", data = sas) %>%
+      glance() %>% select(AIC, BIC) %>% add_column(variable = i, .before = "AIC")
+  ) %>% arrange(AIC)
+}
+
+print(model_select_preliminary)
+
+
+potential_var=c(NULL,"ph_MET_wk_current_cat",
+       "alc_cat",
+       "smok_status",
+       "ses_edu_level",
+       "ses_income",
+       
+       "fam_history_DTC")
+
+
+model_select=reformulate(cbind("illness_thyroid_all", "an_bmi_cat", "ses_race"), response = surv) %>% coxph(method = "breslow", data = sas) %>%
+      glance() %>% select(AIC, BIC) %>% add_column(variable = "base model", .before = "AIC")
+for (i in potential_var) {
+  model_select = rbind(
+    model_select,
+    reformulate(cbind(i,"illness_thyroid_all", "an_bmi_cat", "ses_race"), response = surv) %>% coxph(method = "breslow", data = sas) %>%
+      glance() %>% select(AIC, BIC) %>% add_column(variable = i, .before = "AIC")
+  ) %>% arrange(AIC)
+}
+print(model_select)
+
+```
+
+# Final decision
+
+13/09/2023: Decide to include smoking status anyway since that is a kinda established risk factors
+
+**14/09/2023: After discussing with Cari, decide to include income and levels of education, too, despite the violation of non-proportional hazards assumption as they are important factors to account for detection bias and they are covariates, not the variables of interest in this study.**
+
+**Final list of covariates: "illness_thyroid_all", "an_bmi_cat", "ses_race", "smok_status", "ses_edu_level", "ses_income"**

@@ -1,0 +1,529 @@
+---
+title: In-utero and infancy factors and thyroid cancer risk in adult women in the Sister Study cohort
+toc: true
+toc-expand: true
+number-sections: true
+anchor-sections: true
+format:
+  html:
+    embed-resources: true
+    code-fold: true
+    code-summary: "Show the code"
+    code-tools: true
+execute: 
+  warning: false
+  output: true
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| label: setup
+###Code chunk 1: label setup
+###Necessary R library and data loading
+library(here)
+library(tidyverse)
+library(gtsummary)
+library(survival)
+library(cmprsk)
+library(broom)
+library(broom.helpers)
+library(tidymodels)
+
+directory="C:/Users/trant4/OneDrive - National Institutes of Health/Trinh/Postdoc NCI - Risk factors and thyroid cancer/SS"
+earlylife_popu <-
+  read.csv(paste(directory,"/data/ss_earlylife_popu.csv",sep = ""),
+    #because quarto cannot knit the output document if here::here("data/ss_earlylife_popu.csv") is put inside read.csv like this,
+    header = TRUE,
+    stringsAsFactors = TRUE,
+    fileEncoding = "latin1"
+  )
+
+```
+
+```{r}
+#| label: var-list
+###Code chunk 2: label: var-list
+###Create lists of exposure and covariates to avoid repetition in the code
+
+#Covariates to adjust in Cox models
+covariates_label = list(
+  "ses_race"~"Race",
+  "an_bmi_cat"~"BMI",
+  "smok_status"~"Smoking status",
+  "ses_edu_level"~"Educational level",
+  "ses_income"~"Household income",
+  "illness_thyroid_all"~"Benign thyroid disease"
+)
+covariates = substr(covariates_label, 2, unlist(gregexpr("~", covariates_label)) - 3)
+
+# add_covariates_label = list(
+#   "rep_meno_age_cat"~"Age at menopause"
+#   "ph_MET_wk_current_cat"~"Physical activity (MET hours/week)"  ,
+#   "ph_MET_wk_current_cont"~"Physical activity (MET hours/week)"  ,
+#   "PH_CurrentTotMETHrsPerWeek_CDC"~"Physical activity (MET hours/week)",
+#   "ph_hrs_wk_current_cont"~"Physical activity (total hours/week)"    ,
+#   "ses_marital_status"~"Marital status"
+#   "sm_pack_yr_cat"~"Smoking (pack/year)"            ,
+#   "sm_pack_yr_cont"~"Smoking (pack/year)"
+#   "sm_yr_smok_cat"~"Years of smoking"    ,
+#   "sm_yr_smok_cont"~"Years of smoking"   ,
+#   "sm_ETS_ever"~"Ever secondhand smoking"       ,
+#   "sm_ETS_total_yr_cat"~"Total years of secondhand smoking"    ,
+#   "sm_ETS_total_yr_cont"~"Total years of secondhand smoking"
+# )
+# add_covariates = substr(add_covariates_label, 2, unlist(gregexpr("~", add_covariates_label)) - 3)
+
+#In-utero and infancy factors
+var_label_utero = list(
+  "ui_diab_all_mother"~"Pre-pregnancy or gestational diabetes",
+  "ui_hypertension_all"~"Gestational hypertension or pre-eclampsia",
+  "ui_epilepsy_prior"~"Epilepsy",
+  "ui_vomit"~"Morning sickness with vomiting",
+  "ui_DES"~"DES use",
+  "ui_mother_smok"~"Smoking during pregnancy",
+  "ui_hh_smok"~"Anyone smoking in the household during pregnancy",
+  "ui_mother_age_cat"~"Age at delivery",
+  "ui_mother_age_cont"~"Age at delivery (year, continuous)",
+  "ui_diab_father"~"Diabetes",
+  "ui_father_smok"~"Smoking during 3 months before conception",
+  "ui_father_age_cat"~"Age at delivery",
+  "ui_father_age_cont"~"Age at delivery (year, continuous)",
+  "ui_birth_weight_cat"~"Birthweight",
+  "ui_birth_weight_cont"~"Birthweight (continuous)",
+  "ui_maternal_1st_born"~"First born",
+  "ui_preg_order_cat"~"Order of birth",
+  "ui_preg_order_cont"~"Order of birth (continuous)",
+  "ui_preg_last_cat"~"Time since the last birth",
+  "ui_preg_last_cont"~"Time since the last birth (year, continuous)",
+  "ui_multiple_birth"~"Multiple birth",
+  "ui_early_gest"~"Gestational age at birth",
+  "ui_breastfed"~"Ever breastfed",
+  "ui_soy"~"Ever fed soy formula"
+)
+var_name_utero = substr(var_label_utero, 2, unlist(gregexpr("~", var_label_utero)) - 3)
+
+#Childhood factors
+var_label_childhood = list(
+"rep_br_dev_age_cat"~"Age at breast development"  ,           
+"rep_br_dev_age_cont"~"Age at breast development" ,         
+"rep_age_menarche_cat"~"Age at menarche"   ,      
+"rep_age_menarche_cont"~"Age at menarche"   ,     
+"rep_bc_ever"~"Ever used hormonal birth control" ,                 
+"rep_bc_ado"~"Hormonal birth control under age 20"  ,                 
+"rep_bc_ado_dur_cat"~"Hormonal birth control duration under age 20",            
+"rep_bc_ado_dur_cont"~"Hormonal birth control duration under age 20"   ,        
+"rep_bc_min_age_cat"~"Start age for hormonal birth control" ,           
+"rep_bc_min_age_cont"~"Start age for hormonal birth control"    ,      
+# "rep_proges_ado"~"Progestin-only birth control under age 20"     ,           
+# "rep_proges_ado_dur_cat"~"Progestin-only birth control duration under age 20" ,       
+# "rep_proges_ado_dur_cont"~"Progestin-only birth control duration under age 20"    ,   
+# "rep_proges_min_age_cat"~"Start age for progestin-only birth control"    ,   
+# "rep_proges_min_age_cont"~"Start age for progestin-only birth control"   ,    
+# "rep_combined_ado"~"Combined hormonal birth control under age 20" ,             
+# "rep_combined_ado_dur_cont"~"Combined hormonal birth control duration under age 20" ,    
+# "rep_combined_ado_dur_cat"~"Combined hormonal birth control duration under age 20"   ,   
+# "rep_combined_min_age_cont"~"Start age for combined hormonal birth control"   ,  
+# "rep_combined_min_age_cat"~"Start age for combined hormonal birth control"  ,   
+# "rep_bc_ado_type"~"Types of hormonal birth control under age 20"      ,         
+# "rep_bc_ingredient"~"Ingredient of hormonal birth control under age 20"   ,          
+"an_weight_age10"~"Weight at age 10 vs. peers"    ,     
+"an_height_age10"~"Height at age 10 vs. peers"    ,           
+"an_weight_teen"~"Teenage weight vs. peers"      ,          
+"an_age_tallest"~"Age reached full adult height"      ,          
+"ph_hrs_wk_child_cat"~"Physical activity before age 13 (total hours/week)"   ,        
+"ph_hrs_wk_child_cont"~"Physical activity before age 13 (total hours/week)"   ,       
+"ph_MET_wk_child_cat"~"Physical activity before age 13 (MET hours/week)"  ,         
+"ph_MET_wk_child_cont"~"Physical activity before age 13 (MET hours/week)"   ,       
+"ph_hrs_wk_teen_cat"~"Physical activity from 13 and 19 (total hours/week)"  ,    
+"ph_hrs_wk_teen_cont"~"Physical activity from 13 and 19 (total hours/week)"  ,   
+"ph_MET_wk_teen_cat"~"Physical activity between the age of 13 and 19 (MET hours/week)"    ,        
+"ph_MET_wk_teen_cont"~"Physical activity between the age of 13 and 19 (MET hours/week)"   ,        
+"ph_MET_wk_before20_cat"~"Physical activity before age 20 (MET hours/week)"      ,  
+"ph_MET_wk_before20_cont"~"Physical activity before age 20 (MET hours/week)" ,
+"ph_hrs_wk_before20_cat"~"Physical activity before age 20 (total hours/week)"    ,    
+"ph_hrs_wk_before20_cont"~"Physical activity before age 20 (total hours/week)"    ,   
+"alc_drinks_before20_cat"~"Alcohol consumption under 20 (drinks/year)"     ,     
+"alc_drinks_before20_cont"~"Alcohol consumption under 20 (drinks/year)"     ,    
+"alc_binge_time_519_cat"~"Times per year drank 4+ drinks under 20"     ,   
+"alc_binge_time_519_cont"~"Times per year drank 4+ drinks under 20"     , 
+"alc_age_start_reg_cat"~"Age started drinking regularly"         ,
+"alc_age_start_reg_cont"~"Age started drinking regularly"        ,
+"sm_age_start_smok_cat"~"Age started smoking"   ,      
+"sm_age_start_smok_cont"~"Age started smoking"  ,      
+"sm_age_stop_smok_cat"~"Age stopped smoking"    ,      
+"sm_age_stop_smok_cont"~"Age stopped smoking"   ,      
+"sm_ETS_before18"~"Secondhand smoking under 18"     ,             
+"sm_ETS_before18_yr_cat"~"Total years of secondhand smoking under 18"   ,        
+"sm_ETS_before18_yr_cont"~"Total years of secondhand smoking under 18"  ,        
+"smok_before20"~"Smoking before 20"       ,          
+"sm_pack_yr_1019_cat"~"Smoking from 10 and 19 (Pack-years)"    , 
+"sm_pack_yr_1019_cont"~"Smoking from 10 and 19 (Pack-years)"  ,        
+"sm_pack_yr_before20_cat"~"Smoking before 20 (Pack-years)"  ,       
+"sm_pack_yr_before20_cont"~"Smoking before 20 (Pack-years)"  ,       
+"sm_yr_smok_1019_cat"~"Total years of smoking from 10 to 19"    ,       
+"sm_yr_smok_1019_cont"~"Total years of smoking from 10 to 19"   ,       
+"sm_yr_smok_before20_cat"~"Total years of smoking before 20"     ,     
+"sm_yr_smok_before20_cont"~"Total years of smoking before 20"   ,
+"ses_income_child"~"Family income while growing up"         ,     
+"ses_hunger_child"~"Ever not having enough to eat during childhood"          ,    
+"ses_edu_level_child"~"Highest household education level at age 13"     
+)
+var_name_childhood = substr(var_label_childhood, 2, unlist(gregexpr("~", var_label_childhood)) - 3)
+
+```
+
+```{r}
+#| label: functions
+###Code chunk 3: label functions
+###Create functions that I'll use in the codes
+
+#1. Function for descriptive info
+descript_table = function(var_name, var_label,data)
+{
+  Descriptive_table = data[,-1]   |>
+    tbl_summary(
+      include = var_name,
+      type = all_continuous() ~ "continuous",
+      statistic = list(
+        all_continuous()
+        ~ c("{median} ({p25}, {p75})"),
+        all_categorical() ~ "{n} ({p}%)"
+      ),
+      label = var_label,
+      digits = all_continuous() ~ 1,
+      missing = "ifany"
+    )  |>
+    remove_row_type(variables = ses_race,
+                    type = "level",
+                    level_value = "Unknown")  |>
+    remove_row_type(
+      variables = ses_race_detail,
+      type = "level",
+      level_value = c("1) Non-Hispanic White",
+                      "2) Non-Hispanic Black",
+                      "3) Hispanic")
+    )  |>
+    remove_row_type(variables = ses_race_detail,
+                    type = "header")
+  return(Descriptive_table)
+}
+
+#2. Function for cox models
+cox_model = function(var_name, var_label, covar, data)
+{
+  results_cox_function = map2(
+    .x = var_name,
+    .y = var_label,
+    ~ reformulate(c(.x,covar),response = surv)|>
+      coxph(method = "breslow", data = data) |>
+      tbl_regression(
+        exponentiate = TRUE,
+        conf.int = TRUE,
+        conf.level = 0.95,
+        add_estimate_to_reference_rows = TRUE,
+        label = .y,
+      include = .x)
+  ) |>
+    tbl_stack() |>
+    modify_column_hide(p.value) |>
+    modify_table_styling(
+      columns = c(estimate, ci),
+      rows = p.value < 0.05,
+      text_format = "bold"
+    ) |>
+    modify_header(n_event ~ "**Number of events**",
+                  exposure ~ "**Person-years**",
+                  estimate ~ "**HR**") |>
+    modify_table_body(~ .x %>% dplyr::relocate(exposure, .before = estimate))  
+  return(results_cox_function)
+  rm(results_cox_function)
+}
+#3 Polish tables for in utero paper
+polish_utero = function(data) 
+{
+#polish the table
+  data = modify_footnote(data,
+    abbreviation = TRUE,
+    `estimate_2` ~ "Multivariate models were adjusted for race/ethnicity, baseline BMI, baseline thyroid benign disease, household income, smoking status, and educational level"
+  ) 
+
+data = data |>
+  modify_table_body(
+    ~ .x  |>
+      dplyr::add_row(
+        label = "Maternal pregnancy characteristics",
+        .before = grep("ui_diab_all_mother", data$table_body$variable)
+      )  |>
+      dplyr::add_row(
+        label = "Paternal pregnancy characteristics",
+        .before = grep("ui_diab_father", data$table_body$variable) + 1
+      )  |>
+      dplyr::add_row(
+        label = "Birth and infancy characteristics",
+        .before = grep("ui_birth_weight_cat", data$table_body$variable) + 2
+      )
+  ) 
+
+data = data |>
+  modify_table_styling(
+    column = "label",
+    rows = data$table_body$label %in% c(
+      "Participant characteristics at baseline",
+      "Maternal pregnancy characteristics",
+      "Paternal pregnancy characteristics",
+      "Birth and infancy characteristics"
+    ),
+    text_format = "bold"
+  )   
+}
+```
+
+# **Paper 1: Association between in-utero and infancy factors and thyroid cancer incidence**
+
+## Main tables and figures
+
+### Table 1: Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants
+
+```{r}
+#| label: tbl-utero
+#| tbl-cap: "Association between in-utero and infancy factors and thyroid cancer incidence"
+
+###Code chunk 4: label tbl-stats-utero
+###To create Table Association between in-utero and infancy factors and thyroid cancer incidence
+surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
+
+
+####Loop over in utero and infancy factors in cox models, both univariate and multivariate analyses
+descript_utero = descript_table(var_name = var_name_utero, 
+                                var_label = var_label_utero,
+                                data = earlylife_popu)
+
+univariate=cox_model(var_name = var_name_utero,
+                     var_label = var_label_utero,
+                     covar = NULL,
+                     data=earlylife_popu)
+
+multivariate=cox_model(var_name = var_name_utero,
+                       var_label = var_label_utero,
+                       covar = covariates,
+                       data=earlylife_popu)
+
+#assemble descriptive table and cox models' results
+cox_utero = tbl_merge(
+  tbls = list(descript_utero, univariate, multivariate),
+  tab_spanner = c("**N (%)**",
+                  "**Univariate models**",
+                  "**Multivariate models**")) |> 
+#polish the table
+  modify_footnote(
+    abbreviation = TRUE,
+    `estimate_2` ~ "Multivariate models were adjusted for race/ethnicity, baseline BMI, baseline thyroid benign disease, household income, smoking status, and educational level"
+  ) 
+
+cox_utero = cox_utero |>
+  modify_table_body(
+    ~ .x  |>
+      dplyr::add_row(
+        label = "Maternal pregnancy characteristics",
+        .before = grep("ui_diab_all_mother", cox_utero$table_body$variable)
+      )  |>
+      dplyr::add_row(
+        label = "Paternal pregnancy characteristics",
+        .before = grep("ui_diab_father", cox_utero$table_body$variable) + 1
+      )  |>
+      dplyr::add_row(
+        label = "Birth and infancy characteristics",
+        .before = grep("ui_birth_weight_cat", cox_utero$table_body$variable) + 2
+      )
+  ) 
+
+cox_utero = cox_utero |>
+  modify_table_styling(
+    column = "label",
+    rows = cox_utero$table_body$label %in% c(
+      "Participant characteristics at baseline",
+      "Maternal pregnancy characteristics",
+      "Paternal pregnancy characteristics",
+      "Birth and infancy characteristics"
+    ),
+    text_format = "bold"
+  )          
+
+#return the table 
+rm(descript_utero, univariate, multivariate)
+cox_utero
+```
+
+### Table 2: Stratified analyses according to birth year
+
+```{r}
+#| label: tbl-utero-strat-birth_year
+#| tbl-cap: "Association between in-utero and infancy factors and thyroid cancer incidence, stratified according to BMI"
+###To create Table Association between in-utero and infancy factors and thyroid cancer incidence
+surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
+
+earlylife_popu_1947=earlylife_popu |> filter(ident_birth_year=="1) Tertile 1: Before 1947")
+multivariate_1947=cox_model(var_name = var_name_utero,
+                       var_label = var_label_utero,
+                       covar = covariates,
+                       data=earlylife_popu_1947)
+
+earlylife_popu_1955=earlylife_popu |> filter(ident_birth_year=="2) Tertile 2: 1947-1955")
+multivariate_1955=cox_model(var_name = var_name_utero,
+                       var_label = var_label_utero,
+                       covar = covariates,
+                       data=earlylife_popu_1955)
+
+earlylife_popu_after1955=earlylife_popu |> filter(ident_birth_year=="3) Tertile 3: After 1955")
+multivariate_after1955=cox_model(var_name = var_name_utero,
+                       var_label = var_label_utero,
+                       covar = covariates,
+                       data=earlylife_popu_after1955)
+
+strat_birth_yr= tbl_merge(
+  tbls = list(multivariate_1947, multivariate_1955, multivariate_after1955),
+  tab_spanner = c("**Before 1947**",
+                  "**1947-1955**",
+                  "**After 1955**")) |> 
+  polish_utero(strat_birth_yr)
+
+#return the table 
+rm(earlylife_popu_1947,earlylife_popu_1955, earlylife_popu_after1955, multivariate_1947, multivariate_1955,multivariate_after1955)
+strat_birth_yr
+
+earlylife_popu_1947=earlylife_popu |> filter(ident_birth_year=="1) Tertile 1: Before 1947")
+multivariate_1947=cox_model(var_name = var_name_utero,
+                       var_label = var_label_utero,
+                       covar = covariates,
+                       data=earlylife_popu_1947)
+
+earlylife_popu_1955=earlylife_popu |> filter(ident_birth_year=="2) Tertile 2: 1947-1955")
+multivariate_1955=cox_model(var_name = var_name_utero,
+                       var_label = var_label_utero,
+                       covar = covariates,
+                       data=earlylife_popu_1955)
+
+```
+
+## Sensitivity analyses
+
+### Supplementary table 1: Association between birth weight and thyroid cancer risk after excluding preterm birth
+
+```{r}
+#| label: sensi-birthweight
+surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
+
+non_preterm = earlylife_popu |> filter(ui_early_gest == "1) Not born less than 2 weeks before due date")
+birth_weight_name = c("ui_birth_weight_cat", "ui_birth_weight_cont")
+birth_weight_label = list(
+  "ui_birth_weight_cat" ~ "Birthweight",
+  "ui_birth_weight_cont" ~ "Birthweight (continuous)"
+)
+
+descript_birth=descript_table(var_name = birth_weight_name,
+                              var_label = birth_weight_label,
+                              data = non_preterm)
+
+multivariate_birth = cox_model(var_name = birth_weight_name,
+                               var_label = birth_weight_label,
+                               covar=covariates,
+                               data = non_preterm)
+
+#assemble descriptive table and cox models' results
+cox_birth = tbl_merge(
+  tbls = list(descript_birth, multivariate_birth),
+  tab_spanner = c("**N (%)**",
+                  "**Multivariate models**")) |> 
+#polish the table
+  modify_footnote(
+    abbreviation = TRUE,
+    `estimate_2` ~ "Multivariate models were adjusted for race/ethnicity, baseline BMI, baseline thyroid benign disease, household income, smoking status, and educational level"
+  ) 
+
+#Add ui_birth_weight_cont squared, insignificant
+non_preterm=non_preterm|>mutate(ui_birth_weight_cont_2= (ui_birth_weight_cont)^2)
+a = reformulate(c(covariates, "ui_birth_weight_cont"), response = surv) |>
+  coxph(method = "breslow", data = non_preterm)
+b = reformulate(c(covariates, "ui_birth_weight_cont", "ui_birth_weight_cont_2"),  response = surv) |>
+  coxph(method = "breslow", data = non_preterm) 
+dif=anova(a,b)
+#Insignificant B-Spline
+a=reformulate(c(covariates,"bs(ui_birth_weight_cont)"),response = surv)|>
+coxph(method = "breslow", data = non_preterm) |> summary()
+
+
+
+earlylife_popu=earlylife_popu|>mutate(ui_birth_weight_cont_2= (ui_birth_weight_cont)^2)
+a = reformulate(c(covariates, "ui_birth_weight_cont"), response = surv) |>
+  coxph(method = "breslow", data = earlylife_popu)
+b = reformulate(c(covariates, "ui_birth_weight_cont", "ui_birth_weight_cont_2"),  response = surv) |>
+  coxph(method = "breslow", data = earlylife_popu) 
+dif=anova(a,b)
+```
+
+## Nitty-gritty analyses that will not be shown in the paper
+
+### Test for non-linearity of birth weight in the whole population and in non-preterm participants
+
+Whole population, multivariate model, add squared term and compare the two nested models
+
+```{r}
+earlylife_popu=earlylife_popu|>mutate(ui_birth_weight_cont_2= (ui_birth_weight_cont)^2)
+a = reformulate(c(covariates, "ui_birth_weight_cont"), response = surv) |>
+  coxph(method = "breslow", data = earlylife_popu)
+b = reformulate(c(covariates, "ui_birth_weight_cont", "ui_birth_weight_cont_2"),  response = surv) |>
+  coxph(method = "breslow", data = earlylife_popu) 
+anova(a,b)
+
+```
+
+Whole population, multivariate model, insignificant spline birth weight,
+
+```{r}
+#Insignificant B-Spline
+a=reformulate(c(covariates,"bs(ui_birth_weight_cont)"),response = surv)|>
+coxph(method = "breslow", data = earlylife_popu) |> summary()
+
+```
+
+Non-preterm, multivariate model, add squared term and compare the two nested models
+
+```{r}
+#Add ui_birth_weight_cont squared, insignificant
+non_preterm=non_preterm|>mutate(ui_birth_weight_cont_2= (ui_birth_weight_cont)^2)
+a = reformulate(c(covariates, "ui_birth_weight_cont"), response = surv) |>
+  coxph(method = "breslow", data = non_preterm)
+b = reformulate(c(covariates, "ui_birth_weight_cont", "ui_birth_weight_cont_2"),  response = surv) |>
+  coxph(method = "breslow", data = non_preterm) 
+anova(a,b)
+
+```
+
+# **Paper 2: Association between childhood factors and thyroid cancer incidence**
+
+```{r}
+#| label: tbl-stats-childhood
+#| tbl-cap: "Association between childhood factors and thyroid cancer incidence"
+#| cache: true
+#| dependson: "setup"
+###Code chunk 5: label tbl-stats-childhood
+###To create Table Association between in-utero and infancy factors and thyroid cancer incidence
+surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
+
+
+####Loop over in childhood factors in cox models
+
+```
+
+# Appendix: R codes to reproduce this document
+
+```{r}
+#| label: appendix-Rcodes
+#| ref.label=knitr::all_labels()
+#| echo = TRUE
+#| eval = FALSE
+#Need to troubleshoot this code chunk. Don't know why it doesn't work
+#YAMLException: can not read a block mapping entry; a multiline key may not be an implicit key
+```
