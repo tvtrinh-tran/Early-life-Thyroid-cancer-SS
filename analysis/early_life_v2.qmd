@@ -30,9 +30,10 @@ library(cmprsk)
 library(broom)
 library(broom.helpers)
 library(tidymodels)
+library(purrr)
 
 directory="C:/Users/trant4/OneDrive - National Institutes of Health/Trinh/Postdoc NCI - Risk factors and thyroid cancer/SS"
-earlylife_popu <-
+earlylife_popu =
   read.csv(paste(directory,"/data/ss_earlylife_popu.csv",sep = ""),
     #because quarto cannot knit the output document if here::here("data/ss_earlylife_popu.csv") is put inside read.csv like this,
     header = TRUE,
@@ -216,7 +217,7 @@ cox_model = function(var_name, var_label, covar, data)
   results_cox_function = map2(
     .x = var_name,
     .y = var_label,
-    ~ reformulate(c(.x,covar),response = surv)|>
+    ~ reformulate(c(.x, covar), response = surv) |>
       coxph(method = "breslow", data = data) |>
       tbl_regression(
         exponentiate = TRUE,
@@ -224,7 +225,15 @@ cox_model = function(var_name, var_label, covar, data)
         conf.level = 0.95,
         add_estimate_to_reference_rows = TRUE,
         label = .y,
-      include = .x)
+        include = .x
+      ) |>
+      modify_fmt_fun(estimate ~ function(x)
+        ifelse(is.na(x), NA, "—"),
+        rows = n_event == "0") |>
+      modify_fmt_fun(ci ~ function(x)
+        ifelse(is.na(x), NA, "—"),
+        rows = n_event == "0") 
+      
   ) |>
     tbl_stack() |>
     modify_column_hide(p.value) |>
@@ -236,7 +245,7 @@ cox_model = function(var_name, var_label, covar, data)
     modify_header(n_event ~ "**Number of events**",
                   exposure ~ "**Person-years**",
                   estimate ~ "**HR**") |>
-    modify_table_body(~ .x %>% dplyr::relocate(exposure, .before = estimate))  
+    modify_table_body( ~ .x |> dplyr::relocate(exposure, .before = estimate))
   return(results_cox_function)
   rm(results_cox_function)
 }
@@ -278,6 +287,46 @@ data = data |>
     text_format = "bold"
   )   
 }
+
+#4 Stratified analyses
+
+
+stratification = function(strat_var,
+                          var_name,
+                          var_label,
+                          covar,
+                          data)
+{
+  data = data |> 
+    filter({{strat_var}}!="Unknown")|>droplevels()
+  
+  # Extract unique levels from the stratification variable
+  unique_levels = data |> select({{strat_var}}) |>
+    summarise_each(list( ~ levels(.))) |>
+    pull() |> as.factor()
+  
+
+  header = substring(unique_levels,4)
+  header = paste("**", header, "**",sep="")
+
+  
+  # Use purrr::map to create a list of stratified data frames and appy the function cox_model on them
+  results = unique_levels |>
+    map(
+      ~ data |>
+        filter({{strat_var}} == .x) |>
+         cox_model(
+           var_name = var_name,
+           var_label = var_label,
+           covar = covar
+         )
+     ) |>
+   tbl_merge(tab_spanner = header)
+  return(results)
+  rm(results)
+}
+
+
 ```
 
 # **Paper 1: Association between in-utero and infancy factors and thyroid cancer incidence**
@@ -316,94 +365,56 @@ cox_utero = tbl_merge(
   tab_spanner = c("**N (%)**",
                   "**Univariate models**",
                   "**Multivariate models**")) |> 
-#polish the table
-  modify_footnote(
-    abbreviation = TRUE,
-    `estimate_2` ~ "Multivariate models were adjusted for race/ethnicity, baseline BMI, baseline thyroid benign disease, household income, smoking status, and educational level"
-  ) 
-
-cox_utero = cox_utero |>
-  modify_table_body(
-    ~ .x  |>
-      dplyr::add_row(
-        label = "Maternal pregnancy characteristics",
-        .before = grep("ui_diab_all_mother", cox_utero$table_body$variable)
-      )  |>
-      dplyr::add_row(
-        label = "Paternal pregnancy characteristics",
-        .before = grep("ui_diab_father", cox_utero$table_body$variable) + 1
-      )  |>
-      dplyr::add_row(
-        label = "Birth and infancy characteristics",
-        .before = grep("ui_birth_weight_cat", cox_utero$table_body$variable) + 2
-      )
-  ) 
-
-cox_utero = cox_utero |>
-  modify_table_styling(
-    column = "label",
-    rows = cox_utero$table_body$label %in% c(
-      "Participant characteristics at baseline",
-      "Maternal pregnancy characteristics",
-      "Paternal pregnancy characteristics",
-      "Birth and infancy characteristics"
-    ),
-    text_format = "bold"
-  )          
+  polish_utero()
 
 #return the table 
 rm(descript_utero, univariate, multivariate)
 cox_utero
 ```
 
-### Table 2: Stratified analyses according to birth year
+### Table 2: Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants, by birth year (tertiles), and urban vs rural status
 
 ```{r}
-#| label: tbl-utero-strat-birth_year
-#| tbl-cap: "Association between in-utero and infancy factors and thyroid cancer incidence, stratified according to BMI"
-###To create Table Association between in-utero and infancy factors and thyroid cancer incidence
+#| label: tbl-utero-strat
+#| tbl-cap: "Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants, by birth year (tertiles), and urban vs rural status"
+
 surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
 
-earlylife_popu_1947=earlylife_popu |> filter(ident_birth_year=="1) Tertile 1: Before 1947")
-multivariate_1947=cox_model(var_name = var_name_utero,
-                       var_label = var_label_utero,
-                       covar = covariates,
-                       data=earlylife_popu_1947)
+strat_birth_yr=stratification(strat_var = ident_birth_year,                                                      var_name = var_name_utero,
+                              var_label = var_label_utero,
+                              covar = covariates,
+                              data = earlylife_popu)
+strat_urban_child=stratification(strat_var = ses_urban_child,                                                    var_name = var_name_utero,
+                              var_label = var_label_utero,
+                              covar = covariates,
+                              data = earlylife_popu)
+tab_spanner = c(
+  strat_birth_yr$table_styling$header$spanning_header |> unique(),
+  strat_urban_child$table_styling$header$spanning_header |> unique()
+) |> na.omit()
 
-earlylife_popu_1955=earlylife_popu |> filter(ident_birth_year=="2) Tertile 2: 1947-1955")
-multivariate_1955=cox_model(var_name = var_name_utero,
-                       var_label = var_label_utero,
-                       covar = covariates,
-                       data=earlylife_popu_1955)
+strat_all = tbl_merge(
+  tbls = c(strat_birth_yr$tbls, strat_urban_child$tbls),
+  tab_spanner = tab_spanner
+)|>  polish_utero()
+```
 
-earlylife_popu_after1955=earlylife_popu |> filter(ident_birth_year=="3) Tertile 3: After 1955")
-multivariate_after1955=cox_model(var_name = var_name_utero,
-                       var_label = var_label_utero,
-                       covar = covariates,
-                       data=earlylife_popu_after1955)
+### Table 3: Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants, by birth year (tertiles), and urban vs rural status
 
-strat_birth_yr= tbl_merge(
-  tbls = list(multivariate_1947, multivariate_1955, multivariate_after1955),
-  tab_spanner = c("**Before 1947**",
-                  "**1947-1955**",
-                  "**After 1955**")) |> 
-  polish_utero(strat_birth_yr)
+```{r}
+#| label: tbl-utero-strat
+#| tbl-cap: "Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants, by birth year (tertiles), and urban vs rural status"
 
-#return the table 
-rm(earlylife_popu_1947,earlylife_popu_1955, earlylife_popu_after1955, multivariate_1947, multivariate_1955,multivariate_after1955)
-strat_birth_yr
+surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
 
-earlylife_popu_1947=earlylife_popu |> filter(ident_birth_year=="1) Tertile 1: Before 1947")
-multivariate_1947=cox_model(var_name = var_name_utero,
-                       var_label = var_label_utero,
-                       covar = covariates,
-                       data=earlylife_popu_1947)
-
-earlylife_popu_1955=earlylife_popu |> filter(ident_birth_year=="2) Tertile 2: 1947-1955")
-multivariate_1955=cox_model(var_name = var_name_utero,
-                       var_label = var_label_utero,
-                       covar = covariates,
-                       data=earlylife_popu_1955)
+strat_birth_yr=stratification(strat_var = ident_birth_year,                                                      var_name = var_name_utero,
+                              var_label = var_label_utero,
+                              covar = covariates,
+                              data = earlylife_popu)
+strat_urban_child=stratification(strat_var = ses_urban_child,                                                    var_name = var_name_utero,
+                              var_label = var_label_utero,
+                              covar = covariates,
+                              data = earlylife_popu)
 
 ```
 
@@ -415,7 +426,7 @@ multivariate_1955=cox_model(var_name = var_name_utero,
 #| label: sensi-birthweight
 surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
 
-non_preterm = earlylife_popu |> filter(ui_early_gest == "1) Not born less than 2 weeks before due date")
+non_preterm = earlylife_popu |> filter(ui_early_gest != "3) Yes, 1+ months before due date")
 birth_weight_name = c("ui_birth_weight_cat", "ui_birth_weight_cont")
 birth_weight_label = list(
   "ui_birth_weight_cat" ~ "Birthweight",
