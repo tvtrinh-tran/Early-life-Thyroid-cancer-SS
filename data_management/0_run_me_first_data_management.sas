@@ -16,7 +16,7 @@ value ajcc_seven 		0="1) No DTC" 		1="2) I"		2="3) II"		3="4) III"		4="5) IV"		5
 value invassive			0="1) Censored: No DTC/non-invasive" 1="2) Invassive DTC";
 value birth_year		-1="Unknown" 0="1) Tertile 1: Before 1947" 1="2) Tertile 2: 1947-1955" 2="3) Tertile 3: After 1955";
 value edu 				0="1) Highschool or GED or less" 1="2) Some college or associate or technical degree" 2="3) Bachelor’s degree or higher" 3="Unknown";
-value income 			1="2) <$20000" 		2="1) $20000-$49999" 3="3) $50000-$99999" 4="4) $100000+" -1="Unknown";
+value income 			1,2="1) <$50000" 3="2) $50000-$99999" 4="3) $100000+" -1="Unknown";
 value income_childhood 	1="2) Well off" 	2="1) Middle income" 3="3) Low income" 4="4) Poor" 5="5) Unknown";
 value household_compo 	1="1) Two parents" 	2="2) Single parent" 3="3) Other" 4="Unknown";
 value marital 			0="2) Single/never married" 1="1) Married/Committed relationship" 2="3) Divorced/Widowed/Separated" 3="Unknown";
@@ -84,8 +84,7 @@ value RSYESNO14_modif 	1="2) Yes" 2="1) No" other="Unknown";
 value exclusion 		1="1) Any history of invassive cancer prior to baseline"
 						2="2) Self-reported total thyroidectomy prior to baseline"
 						3="3) Self-reported chemotherapy or radiotherapy for cancer(s) prior to baseline"
-						4="4) Follow-up time less than 1 year"
-						5="5) Withdrawal from the Sister study";
+						4="4) Withdrawal from the Sister study";
 run;
 proc catalog catalog = formats;
   copy out = ss.D_ss_formats;

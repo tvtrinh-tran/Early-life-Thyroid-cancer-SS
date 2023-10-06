@@ -25,9 +25,8 @@ data ss_earlylife_popu;
 	else if tre_thyroidectomy=1 then
 		exclusion = 2 /*Self-reported total thyroidectomy prior to baseline*/;
 	else if ident_treatment_cancer_bl=1 then exclusion = 3; /*Self-reported chemotherapy or radiotherapy for cancer(s) prior to baseline*/
-	else if ident_FU_year = 0 then exclusion = 4; /*Follow-up time less than 1 year*/
 	else if psid in ("00315_208117" "00315_225588" "00315_226048" "00315_227709" "00315_242695") then
-		exclusion = 5;
+		exclusion = 4;
 
 	/*Withdrawal from the Sister study*/
 	/* exclude individuals who had missing data (W) for all variables- 27.06.2023 (ttvt) */
