@@ -136,7 +136,7 @@ data ss_utero_infant;
 	ui_mother_age_cat=F2Age_v1;
 	ui_father_age_cont=F16Age_v1*1;
 	ui_father_age_cat=F16Age_v1;
-
+	ui_early_gest=FH_EarlyGest;
 	format 
 	F4   F4NEW_modif.
 	F5	F4NEW_modif.
@@ -159,7 +159,8 @@ data ss_utero_infant;
 	F28fix F28X_modif.
 	F29fix F29X_modif.
 	FH_BrstFedTime F23X_modif.
-	FH_EarlyGest FHGEST_modif.
+	ui_early_gest FHGEST_modif.
+	FH_EarlyGest FHGEST_modif_new.
 	ui_diab_all_mother ui_hypertension_all F4NEW_modif.
 	ui_farm_all farm.
 	ui_mother_age_cat ui_father_age_cat parents_age.
@@ -192,7 +193,7 @@ data ss_utero_infant;
 	F22=ui_breastfed	 	 	/*CALC: F22. (recoded) Were you ever breastfed as an infant?*/
 	F24=ui_soy	 	 	/*CALC: F24. (recoded) Were you fed formulas made from soy (not regular formula)?*/
 	F174b=ui_diab_father
-	FH_EarlyGest=ui_early_gest	 	 	 	/*CALC: Born at least 2 weeks before due date [F18,F19]*/
+	FH_EarlyGest=ui_early_gest_detail	 	 	 	/*CALC: Born at least 2 weeks before due date [F18,F19]*/
 	FH_BrstFedTime=ui_breastfed_time		/*CALC: F23. How many weeks or months were you breastfed? (among those definitely breastfed [F22])*/
 	Sib_Maternal_FirstBorn=ui_maternal_1st_born
 	;

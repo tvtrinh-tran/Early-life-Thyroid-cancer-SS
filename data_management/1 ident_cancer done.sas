@@ -194,7 +194,7 @@ data ss_ident_cancer;
 	else ident_compete=0;
 
 proc rank data=ss_ident_cancer
-     groups=3
+     groups=2
      out=group(keep=psid ident_birth_year );
 var Birth_Year ;
 ranks ident_birth_year;
