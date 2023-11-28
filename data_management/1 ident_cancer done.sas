@@ -207,6 +207,7 @@ run;
 data ss_ident_cancer;
 set ss_ident_cancer;
 format ident_DTC_histo histo. ident_DTC_stage_AJCC7 ajcc_seven. ident_DTC_inv invassive. ident_DTC_size size. ident_birth_year birth_year.;
+rename FU_ThyCa_DxReportSource = ident_DTC_source;
 run;
 
 data ss.ss_ident_cancer;
@@ -223,6 +224,7 @@ data ss.ss_ident_cancer;
 		ident_DTC_stage_AJCC7
 		ident_DTC_size
 		ident_DTC_inv
+		ident_DTC_source
 		ident_FU_year
 		ident_EOF
 		ident_compete;
