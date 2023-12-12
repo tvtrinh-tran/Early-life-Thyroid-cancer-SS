@@ -76,8 +76,8 @@ polish_utero = function(data)
   #polish the table
   data = modify_footnote(data,
                          abbreviation = TRUE,
-                         `estimate_2` ~ "Multivariate models were adjusted for race/ethnicity, baseline BMI, smoking, baseline thyroid benign disease, 
-                         educational level, household income, and Area Deprivation Index"
+                         `estimate_2` ~ "Multivariate models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status, 
+                         personal history of benign thyroid disease, educational level, household annual income, and Area Deprivation Index"
   ) 
   
   data = data |>
@@ -110,10 +110,10 @@ polish_utero = function(data)
     )   
 }
 
-#4 Stratified analyses
+#4 Stratified analyses (wide)
 
 
-stratification = function(strat_var,
+stratification_wide = function(strat_var,
                           surv,
                           var_name,
                           var_label,
@@ -147,4 +147,85 @@ stratification = function(strat_var,
     tbl_merge(tab_spanner = header)
   return(results)
   rm(results)
+}
+#5 Stratified analyses (long)
+
+
+stratification_long = function(strat_var,
+                               surv,
+                               var_name,
+                               var_label,
+                               covar,
+                               data)
+{
+  data = data |> 
+    filter({{strat_var}}!="Unknown")|>droplevels()
+  
+  # Extract unique levels from the stratification variable
+  unique_levels = data |> select({{strat_var}}) |>
+    summarise_each(list( ~ levels(.))) |>
+    pull() |> as.factor()
+  
+  
+  header = substring(unique_levels,4)
+  header = paste("**", header, "**",sep="")
+  
+  
+  # Use purrr::map to create a list of stratified data frames and appy the function cox_model on them
+  results = unique_levels |>
+    map(
+      ~ data |>
+        filter({{strat_var}} == .x) |>
+        cox_model(surv = surv,
+                  var_name = var_name,
+                  var_label = var_label,
+                  covar = covar
+        )) |>
+    tbl_stack()|>modify_table_body(~ .x |> dplyr::mutate(label = unique_levels))
+  return(results)
+  rm(results)
+}
+
+#6. Function for competing risk models
+
+competing_risk_model = function(surv, var_name, var_label, covar, data)
+{
+  competing = function(x, y)
+  {
+    formula = reformulate(c(x, covar), response = "Surv(fgstart, fgstop, fgstatus)")
+    finegray_data = reformulate(c(x, covar), response = surv) |>
+      finegray(id = PSID, data = data)
+    fine_gray = coxph(formula, weight = fgwt, finegray_data) |>
+      tbl_regression(
+        exponentiate = TRUE,
+        conf.int = TRUE,
+        conf.level = 0.95,
+        add_estimate_to_reference_rows = TRUE,
+        label = y,
+        include = x
+      )|>
+      modify_fmt_fun(estimate ~ function(x)
+        ifelse(is.na(x), NA, "—"),
+        rows = n_event == "0") |>
+      modify_fmt_fun(ci ~ function(x)
+        ifelse(is.na(x), NA, "—"),
+        rows = n_event == "0") 
+  }
+  
+  results_competing_risk_function <-
+    map2(.x = var_name, .y = var_label, competing) |>
+    tbl_stack() |>
+    modify_column_hide(p.value) |>
+    modify_table_styling(
+      columns = c(estimate, ci),
+      rows = p.value < 0.05,
+      text_format = "bold"
+    ) |>
+    modify_header(n_event ~ "**Number of events**",
+                  exposure ~ "**Person-years**",
+                  estimate ~ "**HR**") |>
+    modify_table_body(~ .x |> dplyr::relocate(exposure, .before = estimate))
+  
+  return(results_competing_risk_function)
+  rm(results_competing_risk_function)
 }

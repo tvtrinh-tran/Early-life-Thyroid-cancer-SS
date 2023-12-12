@@ -139,6 +139,15 @@ data ss_ident_cancer;
 		ident_DTC=1;
 	else ident_DTC=0;
 
+	if FU_ThyCa_Event=1 and ident_DTC = 1 then ident_not_DTC = 1;
+	else if FU_ThyCa_Event=1 and ident_DTC ne 1 then do;
+		if ident_DTC = 0 and FU_ThyCa_DxGrade in (2 3) then ident_not_DTC = 2; 
+		else if FU_ThyCa_DxHist01 = 8021 then ident_not_DTC = 3;
+		else if FU_ThyCa_DxHist01 in (8346 8347 8510) then ident_not_DTC = 4; 
+		else ident_not_DTC = 0;
+		end;
+	else ident_not_DTC = 0;
+
 	/*In our data, consider for PTC: 8260, 8340-8344; for FTC: 8290, 8330, 8331; 8000 (NOS), 8010 (NOS) and missing (n=79), coded as Unknown*/
 	if ident_DTC=0 then
 		ident_DTC_histo=0 /*no DTC*/;
@@ -148,6 +157,10 @@ data ss_ident_cancer;
 		ident_DTC_histo=2 /*FTC*/;
 	else if ident_DTC=1  then
 		ident_DTC_histo = 3 /*Unknown*/;
+
+	/*Medically confirmed*/
+	if ident_DTC=1 and FU_ThyCa_DxReportSource = 1 then ident_DTC_source = 1;
+	else ident_DTC_source = 0; 
 
 	/*stage AJCC7*/
 	if ident_DTC=0 then
@@ -206,8 +219,8 @@ run;
 
 data ss_ident_cancer;
 set ss_ident_cancer;
-format ident_DTC_histo histo. ident_DTC_stage_AJCC7 ajcc_seven. ident_DTC_inv invassive. ident_DTC_size size. ident_birth_year birth_year.;
-rename FU_ThyCa_DxReportSource = ident_DTC_source;
+format ident_DTC_histo histo. ident_DTC_stage_AJCC7 ajcc_seven. ident_DTC_inv invassive. ident_DTC_size size. ident_birth_year birth_year. ident_not_DTC not_DTC.;
+rename FU_ThyCa_DxReportSource = ident_DTC_source_detail;
 run;
 
 data ss.ss_ident_cancer;
@@ -220,11 +233,13 @@ data ss.ss_ident_cancer;
 		ident_cancer_bl
 		ident_treatment_cancer_bl
 		ident_DTC
+		ident_not_DTC
 		ident_DTC_histo
 		ident_DTC_stage_AJCC7
 		ident_DTC_size
 		ident_DTC_inv
 		ident_DTC_source
+		ident_DTC_source_detail
 		ident_FU_year
 		ident_EOF
 		ident_compete;
