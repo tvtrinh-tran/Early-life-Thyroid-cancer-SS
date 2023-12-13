@@ -229,3 +229,14 @@ competing_risk_model = function(surv, var_name, var_label, covar, data)
   return(results_competing_risk_function)
   rm(results_competing_risk_function)
 }
+
+#7. function to sort ui_birth_weight properly
+sort_birth_weight = function(table) {table|>
+  modify_table_body( ~.x |>
+                       dplyr::mutate(sort = 1:nrow(.x)) |>
+                       dplyr::mutate(sort = if_else(label == "2) Between 2500 and 3999 g",
+                                                    sort + 1,
+                                                    if_else(label =="1) < 2500 g", sort - 1, sort)
+                       )) |> arrange(sort))
+}
+

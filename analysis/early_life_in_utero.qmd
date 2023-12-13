@@ -24,11 +24,11 @@ editor_options:
 
 ## Introduction
 
-With a rapid increased incidence over several decades, thyroid cancer has emerged as the fifth most common cancer in women globally. The rise in cases, encompassing both small, indolent tumors and advanced cases, is growingly recognized as being driven by both overdiagnosis and exposures to environmental and hormonal factors. Beyond the two well-established risk factors---childhood exposure to ionizing radiation and obesity, the etiology of thyroid cancer remains largely elusive.
+With a rapid increased incidence over several decades, thyroid cancer has emerged as the fifth most common cancer in women globally. The rise in cases, encompassing both small, indolent tumors and advanced cases, is growingly recognized as being driven by both overdiagnosis and exposures to environmental and hormonal factors. Yet beyond the two well-established risk factors---childhood exposure to ionizing radiation and obesity, the etiology of thyroid cancer remains largely elusive.
 
-Thyroid cancer, predominantly common in women from early adolescence, and diagnosed at younger ages compared to other cancer, promts a particular interest in examining risk factors during early-life periods, as this phase could be a critical time window of exposure to carcinogens. Some studies have suggested an association between increased risks of thyroid cancer and *in utero* exposure to ionizing radiation and obesity. Additionally, factors related to thyroid hormone synthesis, such as iodine deficiency, autoimmune thyroid disease, and thyroid dysfunction, have been associated with an increased risk of thyroid cancer. These conditions commonly arise during pregnancy, when the fetus depends entirely on maternal thyroid hormone supply in the first half of gestation and partially in the second half (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4819012/, https://www.liebertpub.com/doi/10.1089/thy.2016.0457?url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org&rfr_dat=cr_pub++0pubmed).
+Thyroid cancer is predominantly common in women from early adolescence, and diagnosed at younger ages compared to other cancer. This raises a particular interest in examining risk factors during early-life periods, as this phase could be a critical time window of exposure to carcinogens. Some studies have suggested an association between increased risks of thyroid cancer and *in utero* exposure to ionizing radiation. Additionally, factors related to thyroid hormone synthesis, such as iodine deficiency, autoimmune thyroid disease, and thyroid dysfunction, have been associated with an increased risk of thyroid cancer. These conditions commonly arise during pregnancy, when the fetus depends entirely on maternal thyroid hormone supply in the first half of gestation and partially in the second half (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4819012/, https://www.liebertpub.com/doi/10.1089/thy.2016.0457?url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org&rfr_dat=cr_pub++0pubmed).
 
-However, few epidemiological studies have assessed the influence of in utero and neonatal exposures on thyroid cancer incidence, and the findings are inconsistent. Some suggest an increased risk of thyroid cancer associated with factors that indicate maternal and fetal abnormal thyroid hormone exposures, higher birth weight, whereas others report either little effects or a decreased risk. Findings on other factors, e.g., maternal age, smoking, are also limited and yielded conflicting results (ref: [https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9473679/pdf/nihms-1799998.pdf](#0){.uri}). These inconsistencies could be explained by challenges that epidemiological studies on early-life factors often carry, such as limited and inaccurate data on potential exposures and confounders, the long latency period between exposures and thyroid cancer onset[,]{.underline} the limited number of cases, the large number of subjects that must be studied, ([https://pubmed.ncbi.nlm.nih.gov/22527169/](#0){.uri} ), as well as limited assessment of detection bias to account for thyroid cancer overdiagnosis. Taken together, the associations of exposure during in-utero and neonatal periods with adult thyroid cancer incidence remains poorly understood.
+However, few epidemiological studies have assessed the influence of in utero and neonatal exposures on thyroid cancer incidence, and the findings are inconsistent. Some suggest an increased risk of thyroid cancer associated with maternal and fetal abnormal thyroid hormone exposures, higher birth weight, whereas others report either little effects or a decreased risk. Findings on other factors, e.g., maternal age, smoking, are also limited and yielded conflicting results (ref: [https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9473679/pdf/nihms-1799998.pdf](#0){.uri}). These inconsistencies could be explained by challenges that epidemiological studies on early-life factors often carry, such as limited and inaccurate data on potential exposures and confounders, the long latency period between exposures and thyroid cancer onset[,]{.underline} the limited number of cases, the large number of subjects that must be studied, ([https://pubmed.ncbi.nlm.nih.gov/22527169/](#0){.uri} ), as well as limited assessment of detection bias to account for thyroid cancer overdiagnosis. Taken together, the associations of exposure during in-utero and neonatal periods with adult thyroid cancer incidence remains poorly understood.
 
 To address the current gaps, we evaluated the association between different in-utero and infancy factors and thyroid cancer risk in the Sister Study, a large U.S. nationwide cohort which include 50884 female participants. The Sister Study collected a wide array of information on in-utero and infant exposure and comprehensive details on thyroid cancer incidence, providing an opportunity to provide insights into the association between early life exposures and thyroid cancer while addressing many of the aforementioned methodological issues.
 
@@ -50,7 +50,7 @@ Using the baseline self-reported family history questionnaires, we ascertained i
 
 ### Baseline covariates: 
 
-In-person measurements of weight and height at baseline were used to calculate body mass index (BMI, the weight in kilograms divided by the square of the height in meters). Information on other characteristics, including age, self-identified race/ethnicity, smoking status, personal educational level, personal history of benign thyroid disease, and household annual income were assessed during the telephone interview. Individuals were considered to have a history of benign thyroid disease if they reported being diagnosed with hyperthyroidism, hypothyroidism, non-toxic goiter/thyroid nodules, or any other thyroid conditions, or if they ever used thyroid hormone substitutes, antithyroid, or iodine/iodide medication. We also considered the Area Deprivation Index (ADI) rankings, which was constructed based on 17 weighted US census income, educational attainment, employment and housing indicators (eg, unemployment rate and median home value) obtained from the American Community Survey. Each neighbourhood received a percentile ranking, with a higher percentage of ADI indicating a higher level of deprivation. The 2000 ADI rankings were linked to each participants' enrolment residential address using Census block-group identification codes. Participants were divided into four groups based on approximate ADI quartiles within the cohort.
+In-person measurements of weight and height at baseline were used to calculate body mass index (BMI, the weight in kilograms divided by the square of the height in meters). Information on other characteristics, including age, self-identified race/ethnicity, smoking status, personal educational level, personal history of benign thyroid disease, and household annual income were assessed during the telephone interview. Individuals were considered to have a history of benign thyroid disease if they reported being diagnosed with hyperthyroidism, hypothyroidism, non-toxic goiter/thyroid nodules, or any other thyroid conditions, or if they ever used thyroid hormone substitutes, antithyroid, or iodine/iodide medication. We also considered the Area Deprivation Index (ADI) rankings, which was constructed based on 17 weighted US census income, educational attainment, employment and housing indicators (e.g., unemployment rate and median home value) obtained from the American Community Survey. Each neighborhood received a percentile ranking, with a higher percentage of ADI indicating a higher level of deprivation. The 2000 ADI rankings were linked to each participants' enrollment residential address using Census block-group identification codes. Participants were divided into four groups based on approximate ADI quartiles within the cohort.
 
 ### Statistical analyses:
 
@@ -62,7 +62,7 @@ Data management was conducted using SAS 9.4 and all analyses were conducted usin
 
 ## Results
 
-The baseline descriptive statistics are provided in Table 1 and Supplementary Table 2. Most participants were non-Hispanic Whites (n=39863, 83%) and the median age at baseline was 55.4 (Interquartile range, IQR, 48.9-62.1). Of the 47810 women included in the study, 30% (n=14315) reported having a BMI of 30 or more and 43.1% (n=20740) smoked at or prior to baseline.
+The baseline descriptive statistics are provided in Table 1. The median age at baseline was 55.4 (Interquartile range, IQR, 48.9-62.1) and most participants were non-Hispanic Whites (n=39863, 83%). Of the 47810 women included in the study, 30% (n=14315) reported having a BMI of 30 or more and 43.1% (n=20740) smoked at or prior to baseline. Half of participants had completed a bachelor's degree or higher (n=24408, 51%) and 34% had a household annual income of \$100000 or more (n=16108).
 
 After a median follow-up of 13.1 years (IQR 11.5-15), 233 cases of thyroid cancer were reported, of which, 72.1% (n=168) were confirmed with medical or pathological reports. There was 159 (68.2%), 6 (2.6%), and 68 (29.2%) cases with papillary, follicular, and unspecified histology, respectively.
 
@@ -176,6 +176,8 @@ earlylife_popu=earlylife_popu|>
                                             ses_ADI_baseline_cat=="4) Quartile 4" ~ "2) 30 or more",
                                             ses_ADI_baseline_cat=="Unknown" ~ "Unknown"),
          ses_ADI_baseline_cat_half = factor(ses_ADI_baseline_cat_half, levels=c("1) Less than 30","2) 30 or more","Unknown")))
+levels(earlylife_popu$ui_birth_weight_cat)=c("2) Between 2500 and 3999 g","1) < 2500 g","3) 4000+ g","Unknown")
+
 
 
 ```
@@ -195,7 +197,7 @@ covariates_label_utero = list(
   "smok_status"~"Smoking status",
   "illness_thyroid_all"~"Benign thyroid disease",
   "ses_edu_level"~"Educational level",
-  "ses_income"~"Household income",
+  "ses_income"~"Household annual income",
   "ses_ADI_baseline_cat_half"~"Area depreviation index"
 )
 covariates_utero = substr(covariates_label_utero, 2, unlist(gregexpr("~", covariates_label_utero)) - 3)
@@ -232,7 +234,7 @@ var_name_utero = substr(var_label_utero, 2, unlist(gregexpr("~", var_label_utero
 
 ```
 
-## Tables and Figures
+## Main Tables and Figures
 
 ### Figure 1: Flowchart of study population
 
@@ -285,7 +287,35 @@ rm(eligible,excluded,included,vert)
 
 ```
 
-### Table 1: Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants
+### Table 1: Characteristics of the study population (n=47810)
+
+```{r}
+#| label: tbl-descript
+#| tbl-cap: "Association between in-utero and infancy factors and thyroid cancer incidence"
+#| cache: true
+#| dependson: c("data", "var-list-utero", "functions")
+#| cache.extra: !expr file.mtime("C:/Users/trant4/OneDrive - National Institutes of Health/Trinh/Postdoc NCI - Risk factors and thyroid cancer/SS/data/ss_earlylife_popu.csv")
+
+table1_descript_var_label = list(
+  "ident_ageexact_bl"~"Age at baseline",
+  "ses_race"~"Race",
+  "an_bmi_cat"~"BMI",
+  "smok_status"~"Smoking status",
+  "illness_thyroid_all"~"Benign thyroid disease",
+  "ses_edu_level"~"Educational level",
+  "ses_income"~"Household annual income",
+  "ses_ADI_baseline_cat_half"~"Area depreviation index"
+)
+table1_descript_var_name = substr(table1_descript_var_label, 2, unlist(gregexpr("~", table1_descript_var_label)) - 3)
+
+descript_covar = descript_table(var_name = table1_descript_var_name,
+                                var_label = table1_descript_var_label,
+                                data = earlylife_popu) |> sort_birth_weight()
+descript_covar
+rm(table1_descript_var_label,table1_descript_var_name)
+```
+
+### Table 2: Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants
 
 ```{r}
 #| label: tbl-utero
@@ -301,19 +331,19 @@ rm(eligible,excluded,included,vert)
 ####Loop over in utero and infancy factors in cox models, both univariate and multivariate analyses
 descript_utero = descript_table(var_name = var_name_utero, 
                                 var_label = var_label_utero,
-                                data = earlylife_popu)
+                                data = earlylife_popu)|> sort_birth_weight()
 
 univariate_utero=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
                      var_name = var_name_utero,
                      var_label = var_label_utero,
                      covar = NULL,
-                     data=earlylife_popu)
+                     data=earlylife_popu)|> sort_birth_weight()
 
 multivariate_utero=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
                        var_name = var_name_utero,
                        var_label = var_label_utero,
                        covar = covariates_utero,
-                       data=earlylife_popu)
+                       data=earlylife_popu)|> sort_birth_weight()
 
 #assemble descriptive table and cox models' results
 cox_utero = tbl_merge(
@@ -328,7 +358,7 @@ rm(descript_utero, univariate_utero, multivariate_utero)
 cox_utero
 ```
 
-### Table 2: Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants by birth cohort
+### Table 3: Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants by birth cohort
 
 ```{r}
 #| label: tbl-utero-strat-by-birth-cohort
@@ -345,7 +375,7 @@ strat_birth_yr_utero = stratification_wide(
   var_label = var_label_utero,
   covar = covariates_utero,
   data = earlylife_popu
-) |> as_gt() |>
+) |> sort_birth_weight()|> as_gt() |>
   gt::tab_spanner(
     label = gt::md("**Birth cohort**"),
     spanners = c("**Before 1951**", "**1951 or after**")
@@ -354,7 +384,136 @@ strat_birth_yr_utero = stratification_wide(
 strat_birth_yr_utero
 ```
 
-### Table 3: Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants, by DTC histology, tumor size, and cancer stage
+### Table 4: Association between thyroid cancer risk and gestational hypertension, gestational diabetes, and birth weight (simultaneous adjustment)
+
+```{r}
+#| label: tbl-hyper-diab-birthweight
+#| tbl-cap: "Association between thyroid cancer risk and gestational hypertension, gestational diabetes, and birth weight (simultaneous adjustment)"
+
+surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
+mutual_name_cat = c("ui_diab_all_mother",
+                    "ui_hypertension_all",
+                    "ui_early_gest",
+                    "ui_birth_weight_cat")
+mutual_label_cat = list(
+  "ui_diab_all_mother" ~ "Pre-pregnancy or gestational diabetes",
+  "ui_hypertension_all" ~ "Gestational hypertension or pre-eclampsia",
+  "ui_early_gest" ~ "Gestational age at birth",
+  "ui_birth_weight_cat" ~ "Birth weight"
+)
+
+mutual_name_cont = c("ui_diab_all_mother",
+                     "ui_hypertension_all",
+                     "ui_early_gest",
+                     "ui_birth_weight_cont")
+mutual_label_cont = list(
+  "ui_diab_all_mother" ~ "Pre-pregnancy or gestational diabetes",
+  "ui_hypertension_all" ~ "Gestational hypertension or pre-eclampsia",
+  "ui_early_gest" ~ "Gestational age at birth",
+  "ui_birth_weight_cont" ~ "Birth weight (continuous)"
+)
+
+hyper_diab_birthweight_mutual_cat = reformulate(c(mutual_name_cat, covariates_utero), response = surv) |>
+  coxph(method = "breslow", data = earlylife_popu) |>
+  tbl_regression(
+    exponentiate = TRUE,
+    conf.int = TRUE,
+    conf.level = 0.95,
+    add_estimate_to_reference_rows = TRUE,
+    label = mutual_label_cat,
+    include = mutual_name_cat
+  )|> sort_birth_weight()
+
+hyper_diab_birthweight_mutual_cont = reformulate(c(mutual_name_cont, covariates_utero), response = surv) |>
+  coxph(method = "breslow", data = earlylife_popu) |>
+  tbl_regression(
+    exponentiate = TRUE,
+    conf.int = TRUE,
+    conf.level = 0.95,
+    add_estimate_to_reference_rows = TRUE,
+    label = list("ui_birth_weight_cont" ~ "Birth weight (continuous)"),
+    include = "ui_birth_weight_cont"
+  )
+
+hyper_diab_birthweight_mutual_all = tbl_stack(list(
+  hyper_diab_birthweight_mutual_cat,
+  hyper_diab_birthweight_mutual_cont
+)) |>
+  modify_fmt_fun(estimate ~ function(x)
+    ifelse(is.na(x), NA, "—"),
+    rows = n_event == "0") |>
+  modify_fmt_fun(ci ~ function(x)
+    ifelse(is.na(x), NA, "—"),
+    rows = n_event == "0") |>
+  modify_column_hide(p.value) |>
+  modify_table_styling(
+    columns = c(estimate, ci),
+    rows = p.value < 0.05,
+    text_format = "bold"
+  ) |>
+  modify_header(n_event ~ "**Number of events**",
+                exposure ~ "**Person-years**",
+                estimate ~ "**HR**") |>
+  modify_table_body( ~ .x |> dplyr::relocate(exposure, .before = estimate))
+hyper_diab_birthweight_mutual_all
+```
+
+### Table 5: Association between birth weight and thyroid cancer risk, after excluding participants who were born more than 2 weeks before due date or part of a multiple birth
+
+```{r}
+#| label: tbl-sensi-birthweight
+#| tbl-cap: "Association between birth weight and thyroid cancer risk after excluding participants who were born more than 2 weeks before due date or part of a multiple birth"
+surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
+
+non_preterm = earlylife_popu |> filter(ui_early_gest != "2) Yes, at least 2 weeks before due date" & (ui_multiple_birth != "2) Multiple birth" ))
+
+
+birth_weight_name = c("ui_birth_weight_cat", "ui_birth_weight_cont")
+birth_weight_label = list(
+  "ui_birth_weight_cat" ~ "Birth weight",
+  "ui_birth_weight_cont" ~ "Birth weight (continuous)"
+)
+
+descript_birth = descript_table(var_name = birth_weight_name,
+                                var_label = birth_weight_label,
+                                data = non_preterm)
+
+multivariate_birth = cox_model(
+  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+  var_name = birth_weight_name,
+  var_label = birth_weight_label,
+  covar = covariates_utero,
+  data = non_preterm
+)
+
+#assemble descriptive table and cox models' results
+cox_birth_weight = tbl_merge(
+  tbls = list(descript_birth, multivariate_birth),
+  tab_spanner = c("**N (%)**",
+                  "**Multivariate models**")
+) |> sort_birth_weight() |>
+  #polish the table
+  modify_footnote(
+    abbreviation = TRUE,
+    `estimate_2` ~ "Multivariate models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status, 
+                         personal history of benign thyroid disease, educational level, household annual income, and Area Deprivation Index"
+  )
+cox_birth_weight
+
+```
+
+
+## Supplementary materials
+
+### Supplementary table 1: ICD codes used to classify well-differentiated thyroid cancer
+
+| Histological categories   | Codes                                  |
+|---------------------------|----------------------------------------|
+| Papillary thyroid cancer  | 8050, 8260, 8340-8344, 8350, 8450-8460 |
+| Follicular thyroid cancer | 8290, 8330-8335                        |
+| Unknown histology         | 8000, 8010, missing data               |
+
+### Supplementary table 2: Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants, when considering only medically confirmed cases, papillary histology, competing risks, or when stratified by tumor size, and cancer stage
 
 ```{r}
 #| label: utero-medically-confirmed
@@ -369,11 +528,9 @@ cox_medical_confirmed = cox_model(
   var_label = var_label_utero,
   covar = covariates_utero,
   data = earlylife_popu
-)
+)|> sort_birth_weight()
 
 ```
-
-
 
 ```{r}
 #| label: utero-PTC
@@ -388,10 +545,9 @@ cox_PTC_utero = cox_model(
   var_label = var_label_utero,
   covar = covariates_utero,
   data = earlylife_popu
-)
+)|> sort_birth_weight()
 
 ```
-
 
 ```{r}
 #| label: utero-cmprsk
@@ -407,7 +563,7 @@ cox_cmprsk_utero = cox_model(
   var_label = var_label_utero,
   covar = covariates_utero,
   data = earlylife_popu
-)
+)|> sort_birth_weight()
 
 ```
 
@@ -424,7 +580,7 @@ cox_stage_I_utero = cox_model(
   var_label = var_label_utero,
   covar = covariates_utero,
   data = earlylife_popu
-)
+)|> sort_birth_weight()
 
 ```
 
@@ -441,7 +597,7 @@ cox_adv_stage_utero = cox_model(
   var_label = var_label_utero,
   covar = covariates_utero,
   data = earlylife_popu
-)
+)|> sort_birth_weight()
 
 ```
 
@@ -458,7 +614,7 @@ cox_1cm_utero = cox_model(
   var_label = var_label_utero,
   covar = covariates_utero,
   data = earlylife_popu
-)
+)|> sort_birth_weight()
 
 ```
 
@@ -475,7 +631,7 @@ cox_large_tumor_utero = cox_model(
   var_label = var_label_utero,
   covar = covariates_utero,
   data = earlylife_popu
-)
+)|> sort_birth_weight()
 
 ```
 
@@ -503,7 +659,7 @@ sensi_censor_utero = tbl_merge(
 sensi_censor_utero
 ```
 
-### Table 4: Association between birth weight (continuous) and thyroid cancer incidence in the Sister Study participants by Area Deprivation Index, levels of education, and household income
+### Supplementary table 3: Association between birth weight (continuous) and thyroid cancer incidence in the Sister Study participants by Area Deprivation Index, levels of education, and household income
 
 ```{r}
 #| label: tbl-birthweight-strat
@@ -577,118 +733,7 @@ strat_all_birthweight = strat_all_birthweight |> modify_table_body(
 strat_all_birthweight
 ```
 
-### Table 5: Association between birth weight and thyroid cancer risk after excluding participants who were born more than 2 weeks before due date or part of a multiple birth
 
-```{r}
-#| label: tbl-sensi-birthweight
-#| tbl-cap: "Association between birth weight and thyroid cancer risk after excluding participants who were born more than 2 weeks before due date or part of a multiple birth"
-surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
-
-non_preterm = earlylife_popu |> filter(ui_early_gest != "2) Yes, at least 2 weeks before due date" & (ui_multiple_birth != "2) Twins" | ui_multiple_birth != "3) Polyzygotic"))
-
-
-birth_weight_name = c("ui_birth_weight_cat", "ui_birth_weight_cont")
-birth_weight_label = list(
-  "ui_birth_weight_cat" ~ "Birth weight",
-  "ui_birth_weight_cont" ~ "Birth weight (continuous)"
-)
-
-descript_birth = descript_table(var_name = birth_weight_name,
-                                var_label = birth_weight_label,
-                                data = non_preterm)
-
-multivariate_birth = cox_model(
-  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
-  var_name = birth_weight_name,
-  var_label = birth_weight_label,
-  covar = covariates_utero,
-  data = non_preterm
-)
-
-#assemble descriptive table and cox models' results
-cox_birth_weight = tbl_merge(
-  tbls = list(descript_birth, multivariate_birth),
-  tab_spanner = c("**N (%)**",
-                  "**Multivariate models**")
-) |>
-  #polish the table
-  modify_footnote(
-    abbreviation = TRUE,
-    `estimate_2` ~ "Multivariate models were adjusted for race/ethnicity, baseline BMI, smoking, baseline thyroid benign disease, 
-                         educational level, household income, and Area Deprivation Indexl"
-  )
-cox_birth_weight
-```
-
-### Table 6: Association between thyroid cancer risk and gestational hypertension, gestational diabetes, and birth weight (simultaneous adjustment)
-
-```{r}
-#| label: tbl-hyper-diab-birthweight
-#| tbl-cap: "Association between thyroid cancer risk and gestational hypertension, gestational diabetes, and birth weight (simultaneous adjustment)"
-
-surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
-mutual_name_cat = c("ui_diab_all_mother",
-                    "ui_hypertension_all",
-                    "ui_birth_weight_cat")
-mutual_label_cat = list(
-  "ui_diab_all_mother" ~ "Pre-pregnancy or gestational diabetes",
-  "ui_hypertension_all" ~ "Gestational hypertension or pre-eclampsia",
-  "ui_birth_weight_cat" ~ "Birth weight"
-)
-
-mutual_name_cont = c("ui_diab_all_mother",
-                     "ui_hypertension_all",
-                     "ui_birth_weight_cont")
-mutual_label_cont = list(
-  "ui_diab_all_mother" ~ "Pre-pregnancy or gestational diabetes",
-  "ui_hypertension_all" ~ "Gestational hypertension or pre-eclampsia",
-  "ui_birth_weight_cont" ~ "Birth weight (continuous)"
-)
-
-hyper_diab_birthweight_mutual_cat = reformulate(c(mutual_name_cat, covariates_utero), response = surv) |>
-  coxph(method = "breslow", data = earlylife_popu) |>
-  tbl_regression(
-    exponentiate = TRUE,
-    conf.int = TRUE,
-    conf.level = 0.95,
-    add_estimate_to_reference_rows = TRUE,
-    label = mutual_label_cat,
-    include = mutual_name_cat
-  )
-
-hyper_diab_birthweight_mutual_cont = reformulate(c(mutual_name_cont, covariates_utero), response = surv) |>
-  coxph(method = "breslow", data = earlylife_popu) |>
-  tbl_regression(
-    exponentiate = TRUE,
-    conf.int = TRUE,
-    conf.level = 0.95,
-    add_estimate_to_reference_rows = TRUE,
-    label = list("ui_birth_weight_cont" ~ "Birth weight (continuous)"),
-    include = "ui_birth_weight_cont"
-  )
-
-hyper_diab_birthweight_mutual_all = tbl_stack(list(
-  hyper_diab_birthweight_mutual_cat,
-  hyper_diab_birthweight_mutual_cont
-)) |>
-  modify_fmt_fun(estimate ~ function(x)
-    ifelse(is.na(x), NA, "—"),
-    rows = n_event == "0") |>
-  modify_fmt_fun(ci ~ function(x)
-    ifelse(is.na(x), NA, "—"),
-    rows = n_event == "0") |>
-  modify_column_hide(p.value) |>
-  modify_table_styling(
-    columns = c(estimate, ci),
-    rows = p.value < 0.05,
-    text_format = "bold"
-  ) |>
-  modify_header(n_event ~ "**Number of events**",
-                exposure ~ "**Person-years**",
-                estimate ~ "**HR**") |>
-  modify_table_body( ~ .x |> dplyr::relocate(exposure, .before = estimate))
-hyper_diab_birthweight_mutual_all
-```
 
 ## Nitty-gritty analyses that will not be shown in the paper
 
