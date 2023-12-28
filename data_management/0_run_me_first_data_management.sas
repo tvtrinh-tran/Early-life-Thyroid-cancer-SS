@@ -54,7 +54,7 @@ value F29X_modif 		-1="Unknown" 1="1) Male" 2="2) Female";
 value F32X_modif 		-1="Unknown" 1="1) Identical" 2="2) Non-identical"; 
 value F35X_modif 		-1="Unknown" 0="1) None" 1="2) 1" 2-6="3) 2+"; 
 value F38X_modif 		-1="Unknown" 1="2) All non-identical" 2-3="3) Identical to at least one"; 
-value FHGEST_modif 		-1="Unknown" 0="1) Born post-term or up to 2 weeks pre-term" 1,2="2) Yes, at least 2 weeks before due date"; 
+value FHGEST_modif 		-1="Unknown" 0="1) Born post-term or up to 2 weeks pre-term" 1,2="2) Born at least 2 weeks before the due date"; 
 value FHGEST_modif_new		-1="Unknown" 0="1) Born post-term or up to 2 weeks pre-term" 1="2) Yes, 2 to 4 weeks pre-term" 2="3) Yes, more than 4 weeks pre-term"; 
 value FHMISS2X_modif 	.D ="Unknown" .E="Unknown" .M="Unknown".P="Unknown".Q="Unknown" 90="Unknown" 98="Unknown" 99="Unknown"; 
 value FHYESNO_modif 	-1="Unknown" 0="1) No" 1="2) Yes"; 
