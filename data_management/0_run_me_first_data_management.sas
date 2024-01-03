@@ -69,7 +69,7 @@ VALUE AN4R_modif 		-1="Unknown" 1="2) Shorter"	2="1) Same height"	3="3) Taller"	
 VALUE BMICDC_modif 		-1="Unknown" 1,2="1) <25"	3="2) 25.0-29.9"	4-6="3) 30.0+" /*1="2) < 18.5"	2="1) 18.5-24.9"	3="3) 25.0-29.9"	4="4) 30.0+"	5="5) 35.0-39.9"	6="6) 40.0+"	*/;
 value hrs_week 			0-<1="1) Less than 1 hour" 1-<4="2) 1-4 hours" 4-<7="3) 4-7 hours" 7-high="4) 7 hours or more" -1="Unknown";
 value met_week 			0-20.999999="1) Less than 21 met-hours/week" 21-41.999999="2) 21-42 met-hours/week" 42-high="3) 42 met-hours/week or more" -1="Unknown";
-value thelarche 		0-10="2) Early thelarche" 11-13="1) Average thelarche" 14-20="3) Late thelarche" -1, 21-high ="Unknown";
+value thelarche 		0-10="2) Less than 11 years of age" 11-13="1) 11-13 years of age" 14-20="3) 14 years of age or more" -1, 21-high ="Unknown";
 value meno_age 			 0="1) Still have periods" 1="2) Yes, before 45" 2="3) Yes, between 45 and 55" 3="4) Yes, after 55" 4="5) Yes, unknown age" -1="Unknown";
 value meno_cause 		1="1) Yes, natural" 2-5, 10= "2) Yes, medical reasons (surgery, chemotherapy, suppression medications or birth control pills)" 6, 7, 11="3) Still have periods" 8,9="Unknown";
 value first_preg 		 0="5) Never have any full-term pregnancy" 1="1) Less than 25 years of age" 2="2) 25-29 years of age" 3,4="3) 30 years of age or more" -1="Unknown";
@@ -78,7 +78,7 @@ value nb_preg 			 0="1) 0" 1="2) 1" 2="3) 2" 3-high="4) 3 or more" -1="Unknown";
 value age_menarche 		0-<12="2) Less than 12 years of age" 12-<14="1) 12-14 years of age" 14-20="3) 14 years of age or more" -1,21-high="Unknown";
 value BC_ingredient 	 0="2) No birth control before 20 years of age" 1="1) Combined hormonal contraception" 2="3) Progestin-only contraception" 3="4) Unknown ingredient" 4="Unknown birth control status before 20";
 value bc_ado_dur 		 0="1) No" 1="2) Yes, less than 5 years" 2="3) Yes, 5 years or more" 3="4) Yes, unknown duration" 4="Unknown";
-value bc_min_age 		1="2) Started at 15 years of age or less" 2="1) Started between 15-20 years of age" 3="3) Started after 20 years of age" 0="4) Never used birth control" 4="Unknown birth control status";
+value bc_min_age 		1="2) Started at 15 years of age or less" 2="3) Started between 15-20 years of age" 3="4) Started after 20 years of age" 0="1) Never used birth control" 4="Unknown birth control status";
 value bc_type 			 0="2) No birth control before 20 years of age" 1="1) Oral pills" 2="3) Implants (Norplant)" 3="4) IUD" 4="Injection (Depo-Provera)" 5="5) Patch" 6="6) Other methods" 7="7) Unknown";
 value mammo 			1-2="1) Less than two years ago" -1="Never had a mammogram or the last time was more than 2 years ago" ;
 value physical_exam 	1-2="1) Less than one year ago" -1="Never had one or more than one year ago";

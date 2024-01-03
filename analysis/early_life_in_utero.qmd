@@ -254,7 +254,7 @@ cox_utero = tbl_merge(
   tab_spanner = c("**N (%)**",
                   "**Univariate models**",
                   "**Multivariate models**")) |> 
-  polish_utero()
+  polish_utero()|>modify_column_hide(c(n_event_3,exposure_3))
 
 #return the table 
 rm(descript_utero, univariate_utero, multivariate_utero)
@@ -342,27 +342,21 @@ strat_all_birthweight
 #| tbl-cap: "Simultaneously adjusted association between thyroid cancer risk and pre-pregnancy or gestational diabetes, gestational hypertension or hypertension-related disorders, birth weight, and gestational age at birth"
 
 surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
-mutual_name_cat = c("ui_diab_all_mother",
-                    "ui_hypertension_all",
-                    "ui_early_gest",
-                    "ui_birth_weight_cat")
 mutual_label_cat = list(
   "ui_diab_all_mother" ~ "Pre-pregnancy or gestational diabetes",
   "ui_hypertension_all" ~ "Gestational hypertension or pre-eclampsia",
   "ui_early_gest" ~ "Gestational age at birth",
   "ui_birth_weight_cat" ~ "Birth weight"
 )
+mutual_name_cat = substr(mutual_label_cat, 2, unlist(gregexpr("~", mutual_label_cat)) - 3)
 
-mutual_name_cont = c("ui_diab_all_mother",
-                     "ui_hypertension_all",
-                     "ui_early_gest",
-                     "ui_birth_weight_cont")
 mutual_label_cont = list(
   "ui_diab_all_mother" ~ "Pre-pregnancy or gestational diabetes",
   "ui_hypertension_all" ~ "Gestational hypertension or pre-eclampsia",
   "ui_early_gest" ~ "Gestational age at birth",
   "ui_birth_weight_cont" ~ "Birth weight (continuous)"
 )
+mutual_name_cont = substr(mutual_label_cont, 2, unlist(gregexpr("~", mutual_label_cont)) - 3)
 
 hyper_diab_birthweight_mutual_cat = reformulate(c(mutual_name_cat, covariates_utero), response = surv) |>
   coxph(method = "breslow", data = earlylife_popu) |>

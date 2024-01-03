@@ -63,10 +63,10 @@ data ss_alc;
 
 	alc_age_start_reg_cont=AL_StartAge_T0*1;
 
-	if AL_StartAge_T0 <0 then
-		alc_age_start_reg_cat = 4;
-	else if AL_StatusCat_T0 = 0 then
+	if AL_StatusCat_T0 = 0 then
 		alc_age_start_reg_cat = 0;
+	else if AL_StartAge_T0 <0 then
+		alc_age_start_reg_cat = 4;
 	else if 0<AL_StartAge_T0<15 then
 		alc_age_start_reg_cat=1;
 	else if 0<AL_StartAge_T0<20 then

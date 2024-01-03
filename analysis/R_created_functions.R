@@ -33,12 +33,17 @@ descript_table = function(var_name, var_label,data)
 }
 
 #2. Function for cox models
-cox_model = function(surv,var_name, var_label, covar, data)
+cox_model = function(surv, var_name, var_label, covar, data)
 {
   results_cox_function = map2(
     .x = var_name,
     .y = var_label,
-    ~ reformulate(c(.x, covar), response = surv) |>
+    ~ #add a condition to not adjust for baseline smoking status if the variables of interest are "Age started smoking"
+      (if (.x %in% smok) {
+        reformulate(c(.x, covar[!covar == "smok_status"]), response = surv)
+      } else {
+        reformulate(c(.x, covar), response = surv)
+      }) |>
       coxph(method = "breslow", data = data) |>
       tbl_regression(
         exponentiate = TRUE,
@@ -53,7 +58,7 @@ cox_model = function(surv,var_name, var_label, covar, data)
         rows = n_event == "0") |>
       modify_fmt_fun(ci ~ function(x)
         ifelse(is.na(x), NA, "—"),
-        rows = n_event == "0") 
+        rows = n_event == "0")
     
   ) |>
     tbl_stack() |>
@@ -66,51 +71,13 @@ cox_model = function(surv,var_name, var_label, covar, data)
     modify_header(n_event ~ "**Number of events**",
                   exposure ~ "**Person-years**",
                   estimate ~ "**HR**") |>
-    modify_table_body( ~ .x |> dplyr::relocate(exposure, .before = estimate))
+    modify_table_body(~ .x |> dplyr::relocate(exposure, .before = estimate))
   return(results_cox_function)
   rm(results_cox_function)
 }
-#3 Polish tables for in utero paper
-polish_utero = function(data) 
-{
-  #polish the table
-  data = modify_footnote(data,
-                         abbreviation = TRUE,
-                         `estimate_2` ~ "Multivariate models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status, 
-                         personal history of benign thyroid disease, educational level, household annual income, and Area Deprivation Index"
-  ) 
-  
-  data = data |>
-    modify_table_body(
-      ~ .x  |>
-        dplyr::add_row(
-          label = "Maternal pregnancy characteristics",
-          .before = grep("ui_diab_all_mother", data$table_body$variable)
-        )  |>
-        dplyr::add_row(
-          label = "Paternal pregnancy characteristics",
-          .before = grep("ui_diab_father", data$table_body$variable) + 1
-        )  |>
-        dplyr::add_row(
-          label = "Birth and infancy characteristics",
-          .before = grep("ui_birth_weight_cat", data$table_body$variable) + 2
-        )
-    ) 
-  
-  data = data |>
-    modify_table_styling(
-      column = "label",
-      rows = data$table_body$label %in% c(
-        "Participant characteristics at baseline",
-        "Maternal pregnancy characteristics",
-        "Paternal pregnancy characteristics",
-        "Birth and infancy characteristics"
-      ),
-      text_format = "bold"
-    )   
-}
 
-#4 Stratified analyses (wide)
+
+#3 Stratified analyses (wide)
 
 
 stratification_wide = function(strat_var,
@@ -148,7 +115,8 @@ stratification_wide = function(strat_var,
   return(results)
   rm(results)
 }
-#5 Stratified analyses (long)
+
+#4 Stratified analyses (long)
 
 
 stratification_long = function(strat_var,
@@ -186,7 +154,7 @@ stratification_long = function(strat_var,
   rm(results)
 }
 
-#6. Function for competing risk models
+#5. Function for competing risk models
 
 competing_risk_model = function(surv, var_name, var_label, covar, data)
 {
@@ -230,7 +198,7 @@ competing_risk_model = function(surv, var_name, var_label, covar, data)
   rm(results_competing_risk_function)
 }
 
-#7. function to sort ui_birth_weight properly
+#6. function to sort ui_birth_weight properly
 sort_birth_weight = function(table) {table|>
   modify_table_body( ~.x |>
                        dplyr::mutate(sort = 1:nrow(.x)) |>
@@ -238,5 +206,101 @@ sort_birth_weight = function(table) {table|>
                                                     sort + 1,
                                                     if_else(label =="1) < 2500 g", sort - 1, sort)
                        )) |> arrange(sort))
+}
+#7 function to sort properly rep_br_dev_age_cat, rep_age_menarche_cat, an_weight_age10, an_height_age10, an_weight_teen, ses_income_child
+sort_childhood = function(table) {table|>
+    modify_table_body( ~.x |>
+                         dplyr::mutate(sort = 1:nrow(.x)) |>
+                         dplyr::mutate(sort = if_else(label == "2) 11-13 years of age",  sort + 1,
+                                                      if_else(label =="1) Less than 11 years of age", sort - 1, sort)))|>
+                         dplyr::mutate(sort = if_else(label == "2) 12-14 years of age",  sort + 1,
+                                                      if_else(label =="1) Less than 12 years of age", sort - 1, sort)))|>
+                         dplyr::mutate(sort = if_else(label == "2) Same weight",  sort + 1,
+                                                      if_else(label =="1) Lighter", sort - 1, sort)))|>
+                         dplyr::mutate(sort = if_else(label == "2) Same height",  sort + 1,
+                                                      if_else(label =="1) Shorter", sort - 1, sort)))|>
+                         dplyr::mutate(sort = if_else(label == "2) Middle income",  sort + 1,
+                                                      if_else(label =="1) Well off", sort - 1, sort))) |> arrange(sort))
+}
+
+#8 Polish tables for in utero paper
+polish_utero = function(data) 
+{
+  #polish the table
+  data = modify_footnote(data,
+                         abbreviation = TRUE,
+                         `estimate_2` ~ "Multivariate models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status, 
+                         personal history of benign thyroid disease, educational level, household annual income, and Area Deprivation Index"
+  ) 
+  
+  data = data |>
+    modify_table_body(
+      ~ .x  |>
+        dplyr::add_row(
+          label = "Maternal pregnancy characteristics",
+          .before = grep("ui_diab_all_mother", data$table_body$variable)
+        )  |>
+        dplyr::add_row(
+          label = "Paternal pregnancy characteristics",
+          .before = grep("ui_diab_father", data$table_body$variable) + 1
+        )  |>
+        dplyr::add_row(
+          label = "Birth and infancy characteristics",
+          .before = grep("ui_birth_weight_cat", data$table_body$variable) + 2
+        )
+    ) 
+  
+  data = data |>
+    modify_table_styling(
+      column = "label",
+      rows = data$table_body$label %in% c(
+        "Participant characteristics at baseline",
+        "Maternal pregnancy characteristics",
+        "Paternal pregnancy characteristics",
+        "Birth and infancy characteristics"
+      ),
+      text_format = "bold"
+    )   
+}
+
+#9 Polish tables for childhood paper
+polish_childhood = function(data) 
+{
+  #polish the table
+  data = modify_footnote(data,
+                         abbreviation = TRUE,
+                         `estimate_2` ~ "Multivariate models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status 
+                         (except for the analysis for the age started smoking),personal history of benign thyroid disease, educational level, 
+                         household annual income, and Area Deprivation Index"
+  ) 
+  
+  data = data |>
+    modify_table_body(
+      ~ .x  |>
+        dplyr::add_row(
+          label = "Growth and reproductive factors",
+          .before = grep("an_weight_age10", data$table_body$variable)
+        )  |>
+        dplyr::add_row(
+          label = "Lifestyle factors",
+          .before = grep("ph_hrs_wk_before20_cat", data$table_body$variable) + 1
+        )  |>
+        dplyr::add_row(
+          label = "Socioeconomic factors",
+          .before = grep("ses_income_child", data$table_body$variable) + 2
+        )
+    ) 
+  
+  data = data |>
+    modify_table_styling(
+      column = "label",
+      rows = data$table_body$label %in% c(
+        "Participant characteristics at baseline",
+        "Growth and reproductive factors",
+        "Lifestyle factors",
+        "Socioeconomic factors"
+      ),
+      text_format = "bold"
+    )   
 }
 
