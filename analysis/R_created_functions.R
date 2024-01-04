@@ -33,7 +33,7 @@ descript_table = function(var_name, var_label,data)
 }
 
 #2. Function for cox models
-cox_model = function(surv, var_name, var_label, covar, data)
+cox_model = function(surv, var_name, var_label, covar, data, model_name=NULL)
 {
   results_cox_function = map2(
     .x = var_name,
@@ -72,6 +72,11 @@ cox_model = function(surv, var_name, var_label, covar, data)
                   exposure ~ "**Person-years**",
                   estimate ~ "**HR**") |>
     modify_table_body(~ .x |> dplyr::relocate(exposure, .before = estimate))
+  
+  if (!is.null(model_name)) {
+    results_cox_function = results_cox_function |>   modify_spanning_header(c(n_event, exposure, estimate, ci) ~
+                                                                              paste0("**", model_name, "**"))
+  }
   return(results_cox_function)
   rm(results_cox_function)
 }
@@ -156,7 +161,7 @@ stratification_long = function(strat_var,
 
 #5. Function for competing risk models
 
-competing_risk_model = function(surv, var_name, var_label, covar, data)
+competing_risk_model = function(surv, var_name, var_label, covar, data, model_name = NULL)
 {
   competing = function(x, y)
   {
@@ -194,6 +199,10 @@ competing_risk_model = function(surv, var_name, var_label, covar, data)
                   estimate ~ "**HR**") |>
     modify_table_body(~ .x |> dplyr::relocate(exposure, .before = estimate))
   
+  if (!is.null(model_name)) {
+    results_competing_risk_function = results_competing_risk_function |>   modify_spanning_header(c(n_event, exposure, estimate, ci) ~
+                                                                              paste0("**", model_name, "**"))
+  }
   return(results_competing_risk_function)
   rm(results_competing_risk_function)
 }
@@ -224,15 +233,11 @@ sort_childhood = function(table) {table|>
 }
 
 #8 Polish tables for in utero paper
-polish_utero = function(data) 
+polish_utero = function(data, group_name = FALSE) 
 {
   #polish the table
-  data = modify_footnote(data,
-                         abbreviation = TRUE,
-                         `estimate_2` ~ "Multivariate models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status, 
-                         personal history of benign thyroid disease, educational level, household annual income, and Area Deprivation Index"
-  ) 
-  
+  if (group_name==TRUE)
+  {  
   data = data |>
     modify_table_body(
       ~ .x  |>
@@ -260,21 +265,22 @@ polish_utero = function(data)
         "Birth and infancy characteristics"
       ),
       text_format = "bold"
-    )   
+    ) 
+  }
+  data = modify_footnote(data,
+                         abbreviation = TRUE)|>
+    as_gt() |> tab_footnote(footnote = "Multivariate models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status, 
+                            personal history of benign thyroid disease, educational level, household annual income, and Area Deprivation Index")
+  return(data)
 }
 
 #9 Polish tables for childhood paper
-polish_childhood = function(data) 
+polish_childhood = function(data, group_name = FALSE) 
 {
   #polish the table
-  data = modify_footnote(data,
-                         abbreviation = TRUE,
-                         `estimate_2` ~ "Multivariate models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status 
-                         (except for the analysis for the age started smoking),personal history of benign thyroid disease, educational level, 
-                         household annual income, and Area Deprivation Index"
-  ) 
-  
-  data = data |>
+  if (group_name==TRUE)
+  {  
+    data = data |>
     modify_table_body(
       ~ .x  |>
         dplyr::add_row(
@@ -301,6 +307,14 @@ polish_childhood = function(data)
         "Socioeconomic factors"
       ),
       text_format = "bold"
-    )   
+    )
+  }
+  data = modify_footnote(data, abbreviation = TRUE) |>
+    as_gt() |> tab_footnote(
+      footnote = "Multivariate models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status 
+                         (except for the analysis for the age started smoking), personal history of benign thyroid disease, educational level, 
+                         household annual income, and Area Deprivation Index"
+    )
+  
 }
 

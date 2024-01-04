@@ -25,7 +25,7 @@ value race 				0="1) Non-Hispanic White" 1="2) Non-Hispanic Black" 2="3) Hispani
 value race_other		0="1) Non-Hispanic White" 1="2) Non-Hispanic Black" 2="3) Hispanic" 3="5) Non-Hispanic other races: Asian" 
 						4="6) Non-Hispanic other races: American Indian/Alaska Native" 5="7) Non-Hispanic other races: Hawaiian/Pacific Islander " 6="Unknown" ;
 value residence			-1="Unknown" 1="1) Urban, suburban, small town" 2="2) Rural areas";
-value adi				-1="Unknown" 0="1) Quartile 1" 1="2) Quartile 2" 2="3) Quartile 3" 3="4) Quartile 4";
+value adi				-1="Unknown" 0,1="1) Less than 30 1" 2,3="2) 30 or more" ;
 value smok 				0="1) Never smoked" 1="2) Past smoker" 2="3) Current smoker" -1="Unknown";
 value pack_yr 			0="1) Never smoked" 1="2) 10 pack-years or less" 2="3) 10-20 pack-years" 3="4) More than 20 pack-years" 4="Unknown";
 value packyr_child 		0="1) Never smoked before 20" 1="2) 5 pack-years or less" 2="3) More than 5 pack-years" 3="Unknown";
