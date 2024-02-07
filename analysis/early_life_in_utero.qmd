@@ -50,6 +50,7 @@ library(htmlTable)
 library(grid)
 library(magrittr)
 library(gt)
+library(EValue)
 
 
 directory="C:/Users/trant4/OneDrive - National Institutes of Health/Trinh/Postdoc NCI - Risk factors and thyroid cancer/SS"
@@ -69,10 +70,10 @@ earlylife_popu =
 
 earlylife_popu=earlylife_popu|>
   mutate(ident_DTC_PTC=ifelse(ident_DTC_histo=="2) PTC",1,0),
-         ident_DTC_stageI=ifelse(ident_DTC_stage_AJCC7=="2) I",1,ident_DTC),
-         ident_DTC_adv_stage=ifelse(ident_DTC_stage_AJCC7=="2) I",0,ident_DTC),
-         ident_DTC_1cm=ifelse(ident_DTC_size=="2) <1 cm",1,ident_DTC),
-         ident_DTC_large_tumor=ifelse(ident_DTC_size=="2) <1 cm",0,ident_DTC))
+         ident_DTC_stageI=ifelse(ident_DTC_stage_AJCC7=="2) I",1,0),
+         ident_DTC_adv_stage=ifelse(ident_DTC_stage_AJCC7%in%c("3) II","4) III"),1,0),
+         ident_DTC_1cm=ifelse(ident_DTC_size=="2) <1 cm",1,0),
+         ident_DTC_large_tumor=ifelse(ident_DTC_size%in%c("3) 1-2 cm","4) 2-4 cm","5) 4 cm or more"),1,0))
 
 levels(earlylife_popu$ui_birth_weight_cat)=c("2) Between 2500 and 3999 g","1) < 2500 g","3) 4000+ g","Unknown")
 
@@ -256,7 +257,6 @@ cox_utero = tbl_merge(
 #| dependson: c("data", "var-list-utero", "functions","tbl-utero")
 #| cache.extra: !expr file.mtime("C:/Users/trant4/OneDrive - National Institutes of Health/Trinh/Postdoc NCI - Risk factors and thyroid cancer/SS/data/ss_earlylife_popu.csv")
 #return the table 
-rm(descript_utero, univariate_utero, multivariate_utero)
 cox_utero
 ```
 
@@ -575,6 +575,19 @@ cox_birth_yr_utero$table_styling$header$spanning_header =
 ```
 
 ```{r}
+#| label: e-values
+#| output: false
+#| cache: true
+#| dependson: c("data", "var-list-utero", "functions")
+#| cache.extra: !expr file.mtime("C:/Users/trant4/OneDrive - National Institutes of Health/Trinh/Postdoc NCI - Risk factors and thyroid cancer/SS/data/ss_earlylife_popu.csv")
+multivariate_evalues=multivariate_utero|>polish_childhood(group_name = TRUE)
+Evalues=cbind(multivariate_evalues$`_data`$estimate,multivariate_evalues$`_data`$conf.low,multivariate_evalues$`_data`$conf.high)
+colnames(Evalues)=c("estimate","conf.low","conf.high")
+Evalues=round(add_evalues(Evalues),2)
+
+```
+
+```{r}
 #| label: utero-censor-all
 #| ouput: false
 
@@ -610,9 +623,10 @@ sensi_censor_utero = tbl_merge(
 #| label: tbl-utero-censor-all
 #| tbl-cap: "Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants, when considering only medically confirmed cases, papillary histology, competing risks, or when stratified by tumor size, and cancer stage"
 sensi_censor_utero
+Evalues
 ```
 
-## Supplementary table 3: Association between birth weight and thyroid cancer risk, after excluding participants who were born more than 2 weeks before due date or those who were part of a multiple birth
+## Supplementary table 4: Association between birth weight and thyroid cancer risk, after excluding participants who were born more than 2 weeks before due date or those who were part of a multiple birth
 
 ```{r}
 #| label: sensi-birthweight

@@ -25,7 +25,7 @@ value race 				0="1) Non-Hispanic White" 1="2) Non-Hispanic Black" 2="3) Hispani
 value race_other		0="1) Non-Hispanic White" 1="2) Non-Hispanic Black" 2="3) Hispanic" 3="5) Non-Hispanic other races: Asian" 
 						4="6) Non-Hispanic other races: American Indian/Alaska Native" 5="7) Non-Hispanic other races: Hawaiian/Pacific Islander " 6="Unknown" ;
 value residence			-1="Unknown" 1="1) Urban, suburban, small town" 2="2) Rural areas";
-value adi				-1="Unknown" 0,1="1) Less than 30 1" 2,3="2) 30 or more" ;
+value adi				-1="Unknown" 0,1="1) Less than 30" 2,3="2) 30 or more" ;
 value smok 				0="1) Never smoked" 1="2) Past smoker" 2="3) Current smoker" -1="Unknown";
 value pack_yr 			0="1) Never smoked" 1="2) 10 pack-years or less" 2="3) 10-20 pack-years" 3="4) More than 20 pack-years" 4="Unknown";
 value packyr_child 		0="1) Never smoked before 20" 1="2) 5 pack-years or less" 2="3) More than 5 pack-years" 3="Unknown";
@@ -77,8 +77,9 @@ value last_preg 		 0="4) Never have any full-term pregnancy" 1="1) Less than 10 
 value nb_preg 			 0="1) 0" 1="2) 1" 2="3) 2" 3-high="4) 3 or more" -1="Unknown";
 value age_menarche 		0-<12="2) Less than 12 years of age" 12-<14="1) 12-14 years of age" 14-20="3) 14 years of age or more" -1,21-high="Unknown";
 value BC_ingredient 	 0="2) No birth control before 20 years of age" 1="1) Combined hormonal contraception" 2="3) Progestin-only contraception" 3="4) Unknown ingredient" 4="Unknown birth control status before 20";
+value bc_ado_dur_all	 0="1) Never used birth control" 1="2) Yes, less than 5 years" 2="3) Yes, 5 years or more" 3="4) Yes, unknown duration" 4="Started after 20 years of age" 5="Unknown";
 value bc_ado_dur 		 0="1) No" 1="2) Yes, less than 5 years" 2="3) Yes, 5 years or more" 3="4) Yes, unknown duration" 4="Unknown";
-value bc_min_age 		1="2) Started at 15 years of age or less" 2="3) Started between 15-20 years of age" 3="4) Started after 20 years of age" 0="1) Never used birth control" 4="Unknown birth control status";
+value bc_min_age 		1,2="2) Started at 20 years of age or less" 3="4) Started after 20 years of age" 0="1) Never used birth control" 4="Unknown birth control status";
 value bc_type 			 0="2) No birth control before 20 years of age" 1="1) Oral pills" 2="3) Implants (Norplant)" 3="4) IUD" 4="Injection (Depo-Provera)" 5="5) Patch" 6="6) Other methods" 7="7) Unknown";
 value mammo 			1-2="1) Less than two years ago" -1="Never had a mammogram or the last time was more than 2 years ago" ;
 value physical_exam 	1-2="1) Less than one year ago" -1="Never had one or more than one year ago";

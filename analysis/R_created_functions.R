@@ -14,7 +14,10 @@ descript_table = function(var_name, var_label,data)
         all_categorical() ~ "{n} ({p}%)"
       ),
       label = var_label,
-      digits = all_continuous() ~ 1,
+      digits = list(
+        all_continuous() ~ 1,
+        all_categorical() ~ c(0,1)
+      ),
       missing = "ifany"
     )  |>
     remove_row_type(variables = ses_race,
@@ -63,11 +66,6 @@ cox_model = function(surv, var_name, var_label, covar, data, model_name=NULL)
   ) |>
     tbl_stack() |>
     modify_column_hide(p.value) |>
-    modify_table_styling(
-      columns = c(estimate, ci),
-      rows = p.value < 0.05,
-      text_format = "bold"
-    ) |>
     modify_header(n_event ~ "**Number of events**",
                   exposure ~ "**Person-years**",
                   estimate ~ "**HR**") |>
@@ -189,11 +187,6 @@ competing_risk_model = function(surv, var_name, var_label, covar, data, model_na
     map2(.x = var_name, .y = var_label, competing) |>
     tbl_stack() |>
     modify_column_hide(p.value) |>
-    modify_table_styling(
-      columns = c(estimate, ci),
-      rows = p.value < 0.05,
-      text_format = "bold"
-    ) |>
     modify_header(n_event ~ "**Number of events**",
                   exposure ~ "**Person-years**",
                   estimate ~ "**HR**") |>
@@ -316,5 +309,46 @@ polish_childhood = function(data, group_name = FALSE)
                          household annual income, and Area Deprivation Index"
     )
   
+}
+
+#10 E-value
+evalues.HR <- function(est, lo = NA, hi = NA, rare = NA, true = 1, ...) {
+  
+  # Sanity checks
+  if (est < 0) stop("HR cannot be negative")
+  
+  if (is.na(rare)) rare <- NULL # for compatibility w/ HR constructor
+  
+  if (!inherits(est, "HR")) est <- HR(est, rare = rare)
+  if (!is.na(lo) && !inherits(lo, "HR")) lo <- HR(lo, rare = attr(est, "rare"))
+  if (!is.na(hi) && !inherits(hi, "HR")) hi <- HR(hi, rare = attr(est, "rare"))
+  if (!inherits(true, "HR")) true <- HR(true, rare = attr(est, "rare"))
+  
+  est <- toRR(est)
+  if (!is.na(lo)) lo <- toRR(lo)
+  if (!is.na(hi)) hi <- toRR(hi)
+  true <- toRR(true)
+  
+  return(evalues.RR(est = est, lo = lo, hi = hi))
+}
+
+add_evalues <- function(data) {
+  evalues_output <- apply(data, 1, function(row) {
+    if (!is.na(row["conf.high"]) && row["conf.high"] > 0) {  
+      evalues_result <- as.data.frame(evalues.HR(est = row["estimate"], lo = row["conf.low"], hi = row["conf.high"], rare = TRUE))
+      evalues_result <- evalues_result[-1, ]
+      c(point = evalues_result$point, lower = evalues_result$lower, upper = evalues_result$upper)
+    } else {
+      c(point = NA, lower = NA, upper = NA)
+    }
+  })
+  
+  evalues_output <- as.data.frame(t(evalues_output))
+  evalues_output$Evalues_confidence = ifelse(is.na(evalues_output$lower),evalues_output$upper,evalues_output$lower)
+  # Add new columns to the data frame
+  data <- cbind(data, evalues_output$point,evalues_output$Evalues_confidence)
+  colnames(data)[(ncol(data) - 1):(ncol(data))] <- c("Evalues_estimate", "Evalues_confidence")
+  
+  return(data)
 }
 

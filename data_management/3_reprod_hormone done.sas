@@ -112,7 +112,7 @@ data ss_reprod_hormone;
 
 	/***Any hormonal birth control before 20***/
 	/*Duration*/
-	if DR315_HR_BCAny_Adol = 0 then
+	if DR315_HR_BCAny_Adol = 0 and 0>=HR_BCAny_MinAge_T0 then
 		rep_bc_ado_dur_cat=0;
 	else if DR315_HR_BCAny_Adol = 1 and  0<DR315_HR_BCAny_Adol_Yrs<5 then
 		rep_bc_ado_dur_cat=1;
@@ -120,7 +120,9 @@ data ss_reprod_hormone;
 		rep_bc_ado_dur_cat=2;
 	else if DR315_HR_BCAny_Adol = 1 and DR315_HR_BCAny_Adol_Yrs<=0 then
 		rep_bc_ado_dur_cat=3;
-	else rep_bc_ado_dur_cat = 4;
+	else if DR315_HR_BCAny_Adol = 0 and HR_BCAny_MinAge_T0>20 then
+		rep_bc_ado_dur_cat=4;
+	else rep_bc_ado_dur_cat=5;
 	rep_bc_ado_dur_cont=1*DR315_HR_BCAny_Adol_Yrs;
 
 	/*Min age*/
@@ -256,7 +258,8 @@ data ss_reprod_hormone;
 	rep_nb_preg_cat nb_preg.
 	PG_MenarcheAge age_menarche.
 	DR315_HR_BCAny_Adol rep_proges_ado rep_combined_ado HR_BCAny_Ever_T0 HR_HRT_Ever_T0 yesno.
-	rep_bc_ado_dur_cat rep_proges_ado_dur_cat rep_combined_ado_dur_cat bc_ado_dur.
+	rep_bc_ado_dur_cat bc_ado_dur_all.
+    rep_proges_ado_dur_cat rep_combined_ado_dur_cat bc_ado_dur.
 	rep_bc_min_age_cat rep_proges_min_age_cat rep_combined_min_age_cat bc_min_age.
 	rep_bc_ado_type bc_type.
 	rep_bc_ingredient bc_ingredient.
