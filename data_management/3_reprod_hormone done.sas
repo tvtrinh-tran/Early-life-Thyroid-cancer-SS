@@ -257,7 +257,8 @@ data ss_reprod_hormone;
 	PG_EverPreg_t0 yesno.
 	rep_nb_preg_cat nb_preg.
 	PG_MenarcheAge age_menarche.
-	DR315_HR_BCAny_Adol rep_proges_ado rep_combined_ado HR_BCAny_Ever_T0 HR_HRT_Ever_T0 yesno.
+	DR315_HR_BCAny_Adol rep_proges_ado rep_combined_ado HR_HRT_Ever_T0 yesno.
+	HR_BCAny_Ever_T0 bc_all.
 	rep_bc_ado_dur_cat bc_ado_dur_all.
     rep_proges_ado_dur_cat rep_combined_ado_dur_cat bc_ado_dur.
 	rep_bc_min_age_cat rep_proges_min_age_cat rep_combined_min_age_cat bc_min_age.

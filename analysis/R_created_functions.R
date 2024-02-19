@@ -20,20 +20,11 @@ descript_table = function(var_name, var_label,data)
       ),
       missing = "ifany"
     )  |>
-    remove_row_type(variables = ses_race,
-                    type = "level",
-                    level_value = "Unknown")  |>
-    remove_row_type(
-      variables = ses_race_detail,
-      type = "level",
-      level_value = c("1) Non-Hispanic White",
-                      "2) Non-Hispanic Black",
-                      "3) Hispanic")
-    )  |>
-    remove_row_type(variables = ses_race_detail,
-                    type = "header")
+    
+    modify_footnote(all_stat_cols() ~ NA)
   return(Descriptive_table)
 }
+
 
 #2. Function for cox models
 cox_model = function(surv, var_name, var_label, covar, data, model_name=NULL)
@@ -119,7 +110,7 @@ stratification_wide = function(strat_var,
   rm(results)
 }
 
-#4 Stratified analyses (long)
+#4.1 Stratified analyses (long for continuous variables)
 
 
 stratification_long = function(strat_var,
@@ -155,6 +146,92 @@ stratification_long = function(strat_var,
     tbl_stack()|>modify_table_body(~ .x |> dplyr::mutate(label = unique_levels))
   return(results)
   rm(results)
+}
+
+
+#4.2 Stratified analyses (long for categorical variables)
+
+stratification_long_cat = function(strat_var,
+                                   surv,
+                                   var_name,
+                                   var_label,
+                                   cat=NULL,
+                                   covar,
+                                   data)
+{
+  data = data |> 
+    filter({{strat_var}}!="Unknown")|>droplevels()
+  
+  # Extract unique levels from the stratification variable
+  unique_levels = data |> select({{strat_var}}) |>
+    summarise_each(list( ~ levels(.))) |>
+    pull() |> as.factor()
+  
+  
+  header = substring(unique_levels,4)
+  header = paste("**", header, "**",sep="")
+  
+  
+  # Use purrr::map to create a list of stratified data frames and appy the function cox_model on them
+  results = unique_levels |>
+    map(~ {
+      # Filter data based on the current level of the categorical variable
+      label = as.character(.x)
+      filtered_data <- data |>
+        filter({{strat_var}} == .x)
+      
+      # Apply cox_model function to the filtered data
+      cox_model_results <- cox_model(filtered_data,
+                                     surv = surv,
+                                     var_name = var_name,
+                                     var_label = var_label,
+                                     covar = covar)
+      
+      # Modify table body based on the cox_model results
+      cox_model_results$table_body$label[1]= label
+      
+      return(cox_model_results)
+    }) |>
+    tbl_stack()|> 
+    #modify_table_body(filter, is.na(n_event) | label %in% cat)|>
+    modify_column_hide(exposure)
+  return(results)
+  rm(results)
+}
+
+stratification_long_for_a_list = function(var_name,
+                                          var_label,
+                                          strat_list,
+                                          surv,
+                                          covar,
+                                          data) {
+  results_list <- list()
+  for (strat in strat_list) {
+    strat=as.character(strat)
+    strat_label=strat[3]
+    strat_var=as.name(strat[2])
+    # Call the stratification_long_cat function with the current strat_var
+    result <- stratification_long_cat(
+      strat_var = {
+        {
+          strat_var
+        }
+      },
+      surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+      var_name = var_name,
+      var_label = var_label,
+      covar = covariates_childhood,
+      data = earlylife_popu
+    ) |> modify_table_body(~ .x  |>
+                             dplyr::add_row(label = strat_label,
+                                            .before = 0))
+    
+    # Store the result in the results_list
+    results_list[[as.character(strat_var)]] <- result
+  }
+  
+  final_result = tbl_stack(results_list)
+  return(final_result)
 }
 
 #5. Function for competing risk models
@@ -204,27 +281,42 @@ competing_risk_model = function(surv, var_name, var_label, covar, data, model_na
 sort_birth_weight = function(table) {table|>
   modify_table_body( ~.x |>
                        dplyr::mutate(sort = 1:nrow(.x)) |>
-                       dplyr::mutate(sort = if_else(label == "2) Between 2500 and 3999 g",
+                       dplyr::mutate(sort = if_else(label == "Between 2500 and 3999 g",
                                                     sort + 1,
-                                                    if_else(label =="1) < 2500 g", sort - 1, sort)
+                                                    if_else(label =="< 2500 g", sort - 1, sort)
                        )) |> arrange(sort))
 }
 #7 function to sort properly rep_br_dev_age_cat, rep_age_menarche_cat, an_weight_age10, an_height_age10, an_weight_teen, ses_income_child
 sort_childhood = function(table) {table|>
     modify_table_body( ~.x |>
                          dplyr::mutate(sort = 1:nrow(.x)) |>
-                         dplyr::mutate(sort = if_else(label == "2) 11-13 years of age",  sort + 1,
-                                                      if_else(label =="1) Less than 11 years of age", sort - 1, sort)))|>
-                         dplyr::mutate(sort = if_else(label == "2) 12-14 years of age",  sort + 1,
-                                                      if_else(label =="1) Less than 12 years of age", sort - 1, sort)))|>
-                         dplyr::mutate(sort = if_else(label == "2) Same weight",  sort + 1,
-                                                      if_else(label =="1) Lighter", sort - 1, sort)))|>
-                         dplyr::mutate(sort = if_else(label == "2) Same height",  sort + 1,
-                                                      if_else(label =="1) Shorter", sort - 1, sort)))|>
-                         dplyr::mutate(sort = if_else(label == "2) Middle income",  sort + 1,
-                                                      if_else(label =="1) Well off", sort - 1, sort))) |> arrange(sort))
+                         dplyr::mutate(sort = if_else(label == "11-13 years of age",  sort + 1,
+                                                      if_else(label =="Less than 11 years of age", sort - 1, sort)))|>
+                         dplyr::mutate(sort = if_else(label == "12-14 years of age",  sort + 1,
+                                                      if_else(label =="Less than 12 years of age", sort - 1, sort)))|>
+                         dplyr::mutate(sort = if_else(label == "Same weight",  sort + 1,
+                                                      if_else(label =="Lighter", sort - 1, sort)))|>
+                         dplyr::mutate(sort = if_else(label == "Same height",  sort + 1,
+                                                      if_else(label =="Shorter", sort - 1, sort)))|>
+                         dplyr::mutate(sort = if_else(label == "Middle income",  sort + 1,
+                                                      if_else(label =="Well off", sort - 1, sort))) |> 
+                         arrange(sort))
 }
 
+sort_childhood_not_gtsummary = function(table) {table|>
+                         dplyr::mutate(sort = 1:nrow(table)) |>
+                         dplyr::mutate(sort = if_else(label == "11-13 years of age",  sort + 1,
+                                                      if_else(label =="Less than 11 years of age", sort - 1, sort)))|>
+                         dplyr::mutate(sort = if_else(label == "12-14 years of age",  sort + 1,
+                                                      if_else(label =="Less than 12 years of age", sort - 1, sort)))|>
+                         dplyr::mutate(sort = if_else(label == "Same weight",  sort + 1,
+                                                      if_else(label =="Lighter", sort - 1, sort)))|>
+                         dplyr::mutate(sort = if_else(label == "Same height",  sort + 1,
+                                                      if_else(label =="Shorter", sort - 1, sort)))|>
+                         dplyr::mutate(sort = if_else(label == "Middle income",  sort + 1,
+                                                      if_else(label =="Well off", sort - 1, sort))) |> 
+                         arrange(sort)
+}
 #8 Polish tables for in utero paper
 polish_utero = function(data, group_name = FALSE) 
 {
@@ -262,7 +354,7 @@ polish_utero = function(data, group_name = FALSE)
   }
   data = modify_footnote(data,
                          abbreviation = TRUE)|>
-    as_gt() |> tab_footnote(footnote = "Multivariate models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status, 
+    as_gt() |> tab_footnote(footnote = "Multivariable models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status, 
                             personal history of benign thyroid disease, educational level, household annual income, and Area Deprivation Index")
   return(data)
 }
@@ -287,8 +379,14 @@ polish_childhood = function(data, group_name = FALSE)
         dplyr::add_row(
           label = "Socioeconomic factors",
           .before = grep("ses_income_child", data$table_body$variable) + 2
-        )
-    ) 
+        ) |>
+        dplyr::filter(!label %in% c("Start age for hormonal birth control","Never used birth control","Started after 20 years of age",
+                                    "Unknown birth control status","Hormonal birth control duration under age 20","Started after 20","Unknown status",
+                                    "Total years of smoking before 20","Smoking before 20 (Pack-years)","Never smoked")))
+  data=data|>  modify_table_body(~ .x  |>    dplyr::mutate(sort = 1:nrow(.x)) |>
+        dplyr::mutate(sort = if_else(label == "After 20 years of age",  sort + 6,
+                                     if_else(label =="Unknown smoking status", sort + 5, sort)))|>arrange(sort))
+     
   
   data = data |>
     modify_table_styling(
@@ -304,7 +402,7 @@ polish_childhood = function(data, group_name = FALSE)
   }
   data = modify_footnote(data, abbreviation = TRUE) |>
     as_gt() |> tab_footnote(
-      footnote = "Multivariate models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status 
+      footnote = "Multivariable models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status 
                          (except for the analysis for the age started smoking), personal history of benign thyroid disease, educational level, 
                          household annual income, and Area Deprivation Index"
     )
@@ -352,3 +450,76 @@ add_evalues <- function(data) {
   return(data)
 }
 
+#11 Prepare for forest plot (strat long) for childhood paper
+change_numbers_next_value=function(numbers) {
+  for (i in 1:(length(numbers))) {
+    if (i == length(numbers)) {numbers[i] = NA}
+    else {numbers[i] <- numbers[i + 1]}
+  }
+  return(numbers)
+}
+
+change_all_values_next_value <- function(df, columns) {
+  for (column in columns) {
+    df[[column]] <- change_numbers_next_value(df[[column]])
+  }
+  return(df)
+}
+
+columns_to_change <- c("n_obs", "n_event", "exposure", "estimate", "std.error", 
+                       "statistic", "nevent", "conf.low", "conf.high", "ci", "p.value","cases","n_event_ref")
+
+forest_plot_child = function(dat,cat,label1,label2){
+  dat = dat$table_body|>group_by(N)|>
+    mutate(n_event_ref = ifelse(or(is.na(n_event),row_number()<=2),NA, n_event[2]))|>
+    ungroup()|> 
+    mutate(cases=ifelse(is.na(n_event),"",paste0(n_event,"/",n_event_ref)))|>filter(is.na(n_event) |label == cat)|>
+    change_all_values_next_value(columns_to_change)|>
+    dplyr::filter(or(label != cat,!is.na(n_event)))|>sort_childhood_not_gtsummary()|>
+    mutate(ln_estimate=ifelse(n_event==0,NA,log(estimate)))|>
+    mutate(ln_original_standard_error=ifelse(n_event==0,NA,(log(conf.high)-log(conf.low))/3.92))
+  
+  forest_meta_random=metagen(TE = ln_estimate,seTE = ln_original_standard_error,studlab=paste(label),
+                             data=dat,comb.fixed = FALSE,
+                             method.tau="DL",hakn=FALSE,prediction = FALSE,sm="HR",
+                             random = FALSE, 
+                             fixed = FALSE)
+  plot=forest(forest_meta_random,print.tau2 = FALSE,col.diamond = "blue",
+         label.right = "Risk higher",label.left = "Risk lower",
+         colgap.left = "3mm",prediction = FALSE,
+         leftcols=c("label","cases"),leftlabs = c("Factors",paste0(label1,"\n",label2," (cases)")),
+         header.line=TRUE,
+         rightcols = c("estimate","ci" ),
+         rightlabs = c("HR","95%CI"),colgap.right = "5mm",colgap.forest.right = "5mm",
+         resid.hetstat = FALSE,col.by = "black",subgroup = FALSE,
+         addrow.overall=TRUE,hetstat = TRUE,overall.hetstat = FALSE,
+         overall = FALSE,xlim = c(0.3,3.5), weight.study="same", plotwidth="2inch",
+         spacing = 1.3,
+         addrow = TRUE,
+         fontsize = 14,squaresize =0.7)
+  return(plot)
+}
+
+#12. Remove the numbering
+remove_numbering_in_levels <- function(dat) {
+  for (i in colnames(dat)) {
+    if (is.factor(dat[, i])) {
+      levels(dat[, i]) <- gsub("^\\d+\\.?\\s*\\)\\s*", "", levels(dat[, i]), perl = TRUE)
+    }
+  }
+  return(dat)
+}
+
+#13. p-interaction
+
+p_interaction = function(surv, var_name1, var_name2, covar, data, model_name=NULL)
+{
+  results_cox1 = reformulate(c(var_name1, var_name2, covar), response = surv)|>
+      coxph(method = "breslow", data = data) 
+   
+  results_cox2 = reformulate(c(var_name1, var_name2,paste0(var_name1,"*",var_name2), covar), response = surv)|>
+    coxph(method = "breslow", data = data) 
+  
+  p_interaction = anova(results_cox1,results_cox2)
+  return(p_interaction)
+}

@@ -47,9 +47,9 @@ data ss_smok;
 		sm_age_start_smok_cat = 0;
 	else if 0<ceil(SM_AgeStartN_T0)<=15 then
 		sm_age_start_smok_cat = 1;
-	else if 15<ceil(SM_AgeStartN_T0)<=20 then
+	else if 15<ceil(SM_AgeStartN_T0)<20 then
 		sm_age_start_smok_cat = 2;
-	else if SM_AgeStartN_T0>20 then
+	else if SM_AgeStartN_T0>=20 then
 		sm_age_start_smok_cat = 3;
 	else sm_age_start_smok_cat = 4;
 
@@ -125,22 +125,28 @@ data ss_smok;
 	else pack_yr_0109_cat = 5;*/
 	sm_pack_yr_1019_cont = SM_PackYears1;
 
-	if smok_before20 = 0 then
+	if SM_Smoke_T0 = 0 then
 		sm_pack_yr_1019_cat = 0;
-	else if 0<ceil(SM_PackYears1)<=5 then
+	else if SM_Smoke_T0 >0 and smok_before20 = 1 then do; 
+	if 0<ceil(SM_PackYears1)<=5 then
 		sm_pack_yr_1019_cat = 1;
 	else if 5<SM_PackYears1 then
-		sm_pack_yr_1019_cat = 2;
-	else sm_pack_yr_1019_cat = 3;
+		sm_pack_yr_1019_cat = 2; 
+	else sm_pack_yr_1019_cat = 4;end;
+	else if SM_Smoke_T0 >0 and smok_before20 = 0 then sm_pack_yr_1019_cat = 3;
+	else sm_pack_yr_1019_cat = 4;
 	sm_pack_yr_before20_cont = SM_PackYears0+SM_PackYears1;
 
-	if smok_before20 = 0 then
+	if SM_Smoke_T0 = 0 then
 		sm_pack_yr_before20_cat = 0;
-	else if 0<ceil(sm_pack_yr_before20_cont)<=5 then
+	else if SM_Smoke_T0 >0 and smok_before20 = 1 then do; 
+	if 0<ceil(sm_pack_yr_before20_cont)<=5 then
 		sm_pack_yr_before20_cat = 1;
 	else if 5<sm_pack_yr_before20_cont then
 		sm_pack_yr_before20_cat = 2;
-	else sm_pack_yr_before20_cat = 3;
+	else sm_pack_yr_before20_cat = 4;end;
+	else if SM_Smoke_T0 >0 and smok_before20 = 0 then sm_pack_yr_before20_cat = 3;
+	else sm_pack_yr_before20_cat = 4;
 
 	/* limited number
 	yr_smok_0109_cont=SM_YrSmoked0;
@@ -150,22 +156,29 @@ data ss_smok;
 	else yr_smok_0109_cat = 3;*/
 	sm_yr_smok_1019_cont=SM_YrSmoked1;
 
-	if smok_before20 = 0 then
+	if SM_Smoke_T0 = 0 then
 		sm_yr_smok_1019_cat = 0;
-	else if 0<ceil(SM_YrSmoked1)<=5 then
+	else if SM_Smoke_T0 >0 and smok_before20 = 1 then do; 
+	if 0<ceil(SM_YrSmoked1)<=5 then
 		sm_yr_smok_1019_cat = 1;
 	else if 5<ceil(SM_YrSmoked1)<=10 then
 		sm_yr_smok_1019_cat = 2;
-	else sm_yr_smok_1019_cat = 3;
-	sm_yr_smok_before20_cont=SM_YrSmoked0+SM_YrSmoked1;
+	else sm_yr_smok_1019_cat = 4;end;
+	else if SM_Smoke_T0 >0 and smok_before20 = 0 then  sm_yr_smok_1019_cat = 3;
+		else sm_yr_smok_1019_cat = 4;
+sm_yr_smok_before20_cont=SM_YrSmoked0+SM_YrSmoked1;
 
-	if smok_before20 = 0 then
+	if SM_Smoke_T0 = 0 then
 		sm_yr_smok_before20_cat = 0;
-	else if 0<ceil(sm_yr_smok_before20_cont)<=5 then
+	else if SM_Smoke_T0 >0 and smok_before20 = 1 then do; 
+	if 0<ceil(sm_yr_smok_before20_cont)<=5 then
 		sm_yr_smok_before20_cat = 1;
 	else if 5<ceil(sm_yr_smok_before20_cont)<=10 then
 		sm_yr_smok_before20_cat = 2;
-	else sm_yr_smok_before20_cat = 3;
+	else sm_yr_smok_before20_cat = 4;end;
+	else if SM_Smoke_T0 >0 and smok_before20 = 0 then  sm_yr_smok_before20_cat = 3;
+	else sm_yr_smok_before20_cat = 4;
+
 	format 
 	smok_status smok.
 	sm_pack_yr_cat pack_yr. 

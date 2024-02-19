@@ -18,7 +18,7 @@ value not_DTC			0="0) No TC" 1="1) DTC" 2="2) Moderately or poorly differentiate
 value birth_year		-1="Unknown" 0="1) Before 1951" 1="2) 1951 or after" ;
 value edu 				0="1) Highschool or GED or less" 1="2) Some college or associate or technical degree" 2="3) Bachelor’s degree or higher" 3="Unknown";
 value income 			1,2="1) <$50000" 3="2) $50000-$99999" 4="3) $100000+" -1="Unknown";
-value income_childhood 	1="2) Well off" 	2="1) Middle income" 3="3) Low income" 4="4) Poor" 5="5) Unknown";
+value income_childhood 	1="2) Well off" 	2="1) Middle income" 3="3) Low income" 4="4) Poor" 5="Unknown";
 value household_compo 	1="1) Two parents" 	2="2) Single parent" 3="3) Other" 4="Unknown";
 value marital 			0="2) Single/never married" 1="1) Married/Committed relationship" 2="3) Divorced/Widowed/Separated" 3="Unknown";
 value race 				0="1) Non-Hispanic White" 1="2) Non-Hispanic Black" 2="3) Hispanic" 3="4) Non-Hispanic all other races" 4="Unknown" ;
@@ -27,12 +27,12 @@ value race_other		0="1) Non-Hispanic White" 1="2) Non-Hispanic Black" 2="3) Hisp
 value residence			-1="Unknown" 1="1) Urban, suburban, small town" 2="2) Rural areas";
 value adi				-1="Unknown" 0,1="1) Less than 30" 2,3="2) 30 or more" ;
 value smok 				0="1) Never smoked" 1="2) Past smoker" 2="3) Current smoker" -1="Unknown";
-value pack_yr 			0="1) Never smoked" 1="2) 10 pack-years or less" 2="3) 10-20 pack-years" 3="4) More than 20 pack-years" 4="Unknown";
-value packyr_child 		0="1) Never smoked before 20" 1="2) 5 pack-years or less" 2="3) More than 5 pack-years" 3="Unknown";
-value age_start_smok 	0="1) Never smoked" 1="2) 15 years of age or less" 2="3) 15-20 years of age" 3="4) More than 20 years of age" 4="Unknown";
+value pack_yr 			0="1) Never smoked" 1="2) 10 pack-years or less" 2="3) 10-20 pack-years" 3="4) More than 20 pack-years" 4="Unknown status";
+value packyr_child 		0="1) Never smoked" 1="2) Started before 20, 5 pack-years or less" 2="3) Started before 20, more than 5 pack-years" 3="Started after 20" 4="Unknown status";
+value age_start_smok 	0="1) Never smoked before baseline" 1,2="2) Before 20 years of age" /*2="3) 15-20 years of age"*/ 3="4) After 20 years of age" 4="Unknown smoking status";
 value age_stop_smok 	0="1) Never smoked" 1="2)  20 years of age or less" 2="3) 20-30 years of age" 3="4) 30-40 years of age" 4="5) More than 40 years of age" 5="Unknown";
 value yr_smok 			0="1) Never smoked" 1="2) 10 years or less" 2="3) 10-20 years" 3="4) 20-30 years" 4="5) More than 30 years" 5="Unknown";
-value yr_smok_child 	0="1) Never smoked before 20" 1="2) 5 years or less" 2="3) More than 5 years" 3="Unknown";
+value yr_smok_child 	0="1) Never smoked" 1="2) Started before 20, for 5 years or less" 2="3) Started before 20, for more than 5 years" 3="Started after 20" 4="Unknown status";
 value ETS_child_yr 		0="1) No secondhand smoking during childhood" 1="2) 10 years or less" 2="3) More than 10 years" 3="Unknown";
 value ETS_total_yr 		0="1) No secondhand smoking ever" 1="2) 10 years or less" 2="3) 10-20 years" 3="4) 20-30 years" 4="5) More than 30 years" 5="Unknown";
 value alc_status 		0="1) Never drinker" 1="2) Former drinker" 2="Drinker: <1 drink/week" 3="Drinker: 1+ drink/week" -1="Unknown";
@@ -62,7 +62,7 @@ value parents_age 		0-<25="1) Before 25 years" 25-<30="2) Between 25 and 29 year
 value birth_weight 		0-<5.51="2) < 2500 g" 5.51-<8.82="1) Between 2500 and 3999 g" 8.82-high="3) 4000+ g" -1="Unknown";
 value size_ges 			 0="1) Small-for-gestational age" 1="2) Normal-for-gestational age" 2="3) Large-for-gestational age" 3="Unknown";
 value twin_female 		-1="Unknown" 1="2) Single birth" 2="3) Multiple birth, male" 3="4) Multiple birth, female";
-value time_preg 		 0="1) First born" 0.5-2 = "2) Equal or less than 2 year" 3-5="3) 3-5 years" 6-high="4) More than 5 years" -1="Unknown";
+value time_preg 		 0="1) First born" 0.5-2 = "2) Equal or less than 2 years" 3-5="3) 3-5 years" 6-high="4) More than 5 years" -1="Unknown";
 value preg_order 		1="1) First born" 2="2) Second born" 3="3) Third born" 4-high="4) Fourth born or more" -1 = "Unknown";
 value AN17R_modif 		-1="Unknown" 1="2) Lighter"	2="1) Same weight"	3="3) Heavier"	;
 VALUE AN4R_modif 		-1="Unknown" 1="2) Shorter"	2="1) Same height"	3="3) Taller"	;
@@ -77,7 +77,8 @@ value last_preg 		 0="4) Never have any full-term pregnancy" 1="1) Less than 10 
 value nb_preg 			 0="1) 0" 1="2) 1" 2="3) 2" 3-high="4) 3 or more" -1="Unknown";
 value age_menarche 		0-<12="2) Less than 12 years of age" 12-<14="1) 12-14 years of age" 14-20="3) 14 years of age or more" -1,21-high="Unknown";
 value BC_ingredient 	 0="2) No birth control before 20 years of age" 1="1) Combined hormonal contraception" 2="3) Progestin-only contraception" 3="4) Unknown ingredient" 4="Unknown birth control status before 20";
-value bc_ado_dur_all	 0="1) Never used birth control" 1="2) Yes, less than 5 years" 2="3) Yes, 5 years or more" 3="4) Yes, unknown duration" 4="Started after 20 years of age" 5="Unknown";
+value bc_all			0="1) No" 			1="2) Yes" 		-1="Unknown birth control status";
+value bc_ado_dur_all	 0="1) Never used birth control" 1="2) Started at 20 years of age or less, for less than 5 years" 2="3) Started at 20 years of age or less, for 5 years or more" 3="4) Started at 20 years of age or less, for unknown duration" 4="Started after 20 years of age" 5="Unknown";
 value bc_ado_dur 		 0="1) No" 1="2) Yes, less than 5 years" 2="3) Yes, 5 years or more" 3="4) Yes, unknown duration" 4="Unknown";
 value bc_min_age 		1,2="2) Started at 20 years of age or less" 3="4) Started after 20 years of age" 0="1) Never used birth control" 4="Unknown birth control status";
 value bc_type 			 0="2) No birth control before 20 years of age" 1="1) Oral pills" 2="3) Implants (Norplant)" 3="4) IUD" 4="Injection (Depo-Provera)" 5="5) Patch" 6="6) Other methods" 7="7) Unknown";
