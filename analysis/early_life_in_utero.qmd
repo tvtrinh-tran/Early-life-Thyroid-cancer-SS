@@ -47,13 +47,13 @@ source(paste(here::here(),'/analysis/setup_library_and_data.R',sep = ""),local =
 
 #Covariates to adjust in Cox models
 covariates_label_utero = list(
-  "ses_race"~"Race",
-  "an_bmi_cat"~"BMI",
-  "smok_status"~"Smoking status",
-  "illness_thyroid_all"~"Benign thyroid disease",
-  "ses_edu_level"~"Educational level",
-  "ses_income"~"Household annual income",
-  "ses_ADI_baseline_cat"~"Area deprivation index"
+  "ses_race"~"Race"
+  # "an_bmi_cat"~"BMI",
+  # "smok_status"~"Smoking status",
+  # "illness_thyroid_all"~"Benign thyroid disease",
+  # "ses_edu_level"~"Personal educational level",
+  # "ses_income"~"Household annual income",
+  # "ses_ADI_baseline_cat"~"Area deprivation index"
 )
 covariates_utero = substr(covariates_label_utero, 2, unlist(gregexpr("~", covariates_label_utero)) - 3)
 
@@ -66,6 +66,8 @@ var_label_utero = list(
 ###"ui_DES"~"DES use",                                                        #not included because of number of cases<5
   "ui_mother_smok"~"Smoking during pregnancy",
   "ui_hh_smok"~"Household secondhand smoking during pregnancy",
+  "ui_preg_last_cat"~"Time since last pregnancy of the participants' mother",
+  "ui_preg_last_cont"~"Time since last pregnancy of the participants' mother (year, continuous)",
   "ui_mother_age_cat"~"Age at delivery",
   "ui_mother_age_cont"~"Age at delivery (year, continuous)",
   "ui_diab_father"~"Diabetes",
@@ -76,13 +78,12 @@ var_label_utero = list(
   "ui_birth_weight_cont"~"Birth weight (continuous)",
   #"ui_maternal_1st_born"~"First born", # Accounted for Cari's comment on 02/11/24: I would delete this (first born, yes or no) since it is not showing anything different from the expanded variable. 
   "ui_preg_order_cat"~"Birth order",
-  "ui_preg_order_cont"~"Birth order (continuous)",
-  "ui_preg_last_cat"~"Time since last pregnancy of the participants' mother",
-  "ui_preg_last_cont"~"Time since last pregnancy of the participants' mother (year, continuous)",
+  "ui_preg_order_cont"~"Birth order (kg, continuous)",
   "ui_multiple_birth"~"Multiple birth",
-  "ui_early_gest"~"Gestational age at birth",
+  "ui_early_gest"~"Gestational length at birth",
 ###"ui_early_gest_detail"~"Gestational age at birth",                         #for exploratory purposes only, number of cases<5
-  "ui_breastfed"~"Ever breastfed"
+  "ui_breastfed"~"Ever breastfed",
+  "ui_breastfed_time"~"Duration of breastfeeding"
 ###"ui_soy"~"Ever fed soy formula"                                            #not included because of number of cases<5)
 )
 var_name_utero = substr(var_label_utero, 2, unlist(gregexpr("~", var_label_utero)) - 3)
@@ -91,7 +92,7 @@ var_name_utero = substr(var_label_utero, 2, unlist(gregexpr("~", var_label_utero
 
 # Main Tables and Figures
 
-## Figure 1: Flowchart of study population
+## Figure 1: **Flowchart of study population**
 
 ```{r}
 #| label: flowchart
@@ -109,11 +110,11 @@ included <- boxGrob(glue("Study population",
   x = unit(0.2, "npc"))
 
 excluded <- boxGrob(glue("Excluded:",
-                         " - Withdrawal from the Sister study: n = 5",
+                         " - Withdrawal from the Sister Study: n = 5",
+                         " - Any history of invasive cancer prior to baseline: n = 2911",
+                         " - Self-reported total thyroidectomy prior to baseline: n = 103",
                          " - Self-reported chemotherapy or radiotherapy for cancer prior",
                          " to baseline: n = 55",
-                         " - Self-reported total thyroidectomy prior to baseline: n = 103",
-                         " - Any history of invasive cancer prior to baseline: n = 2911",
                          tot = 30,
                          uninterested = 12,
                          contra = 30 - 12,
@@ -126,7 +127,7 @@ vert <- spreadVertical(eligible = eligible,
 
 excluded <- moveBox(excluded,
                     x = 0.65,
-                    y =coords(vert$included)$top + distance(vert$eligible, vert$included, half = TRUE, center = FALSE))
+                    y =coords(vert$included)$top + distance(vert$eligible, vert$included, half = FALSE, center = FALSE))
 
 for (i in 1:(length(vert) - 1)) {
   connectGrob(vert[[i]], vert[[i + 1]], type = "vert") %>%
@@ -142,7 +143,7 @@ rm(eligible,excluded,included,vert)
 
 ```
 
-## Table 1: Characteristics of the study population (n=47810)
+## Table 1: **Characteristics of the study population (n=47810)**
 
 ```{r}
 #| label: tbl-descript
@@ -155,11 +156,11 @@ table1_descript_var_label = list(
   "ident_ageexact_bl"~"Age at baseline",
   "ses_race"~"Race",
   "an_bmi_cat"~"BMI",
-  "smok_status"~"Smoking status",
+#  "smok_status"~"Smoking status",
   "illness_thyroid_all"~"Benign thyroid disease",
   "ses_edu_level"~"Educational level",
   "ses_income"~"Household annual income",
-  "ses_ADI_baseline_cat"~"Area deprivation index"
+#  "ses_ADI_baseline_cat"~"Area deprivation index"
 )
 table1_descript_var_name = substr(table1_descript_var_label, 2, unlist(gregexpr("~", table1_descript_var_label)) - 3)
 
@@ -170,7 +171,7 @@ rm(table1_descript_var_label,table1_descript_var_name)
 descript_covar
 ```
 
-## Table 2: Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants
+## Table 2: **Association between in-utero and newborn factors and thyroid cancer incidence in the Sister Study cohort**
 
 ```{r}
 #| label: utero
@@ -186,11 +187,11 @@ descript_utero = descript_table(var_name = var_name_utero,
                                 var_label = var_label_utero,
                                 data = earlylife_popu)|> sort_birth_weight()
 
-univariable_utero=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
-                     var_name = var_name_utero,
-                     var_label = var_label_utero,
-                     covar = NULL,
-                     data=earlylife_popu)|> sort_birth_weight()
+# univariable_utero=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+#                      var_name = var_name_utero,
+#                      var_label = var_label_utero,
+#                      covar = NULL,
+#                      data=earlylife_popu)|> sort_birth_weight()
 
 multivariable_utero=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
                        var_name = var_name_utero,
@@ -200,11 +201,14 @@ multivariable_utero=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_D
 
 #assemble descriptive table and cox models' results
 cox_utero = tbl_merge(
-  tbls = list(descript_utero, univariable_utero, multivariable_utero),
+  tbls = list(descript_utero, 
+              #univariable_utero, 
+              multivariable_utero),
   tab_spanner = c("**N (%)**",
-                  "**Univariable models**",
+                  #"**Univariable models**",
                   "**Multivariable models**")) |> 
-  modify_column_hide(c(n_event_3,exposure_3))|>polish_utero(group_name = TRUE)
+  #modify_column_hide(c(n_event_3,exposure_3))|>
+  polish_utero(group_name = TRUE)
 ```
 
 ```{r}
@@ -217,7 +221,7 @@ cox_utero = tbl_merge(
 cox_utero
 ```
 
-## Table 3: Simultaneously adjusted association between thyroid cancer risk and pre-pregnancy or gestational diabetes, gestational hypertension or hypertension-related disorders, birth weight, and gestational age at birth
+## Table 3: **Simultaneously adjusted association between thyroid cancer risk and pre-pregnancy or gestational diabetes, gestational hypertension or hypertension-related disorders, birth weight (categorical variable), and gestational age at birth**
 
 ```{r}
 #| label: tbl-hyper-diab-birthweight-cat
@@ -247,28 +251,80 @@ hyper_diab_birthweight_mutual_cat = reformulate(c(mutual_name_cat, covariates_ut
                 estimate ~ "**HR**") |>
   modify_table_body( ~ .x |> dplyr::relocate(exposure, .before = estimate))|>
   modify_footnote(abbreviation = TRUE,
-                         `estimate` ~ "Multivariable models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status, 
-                         personal history of benign thyroid disease, educational level, household annual income, and Area Deprivation Index"
-  )
+                         `estimate` ~ "Multivariable models were adjusted for attained age (timescale), and self-identified race/ethnicity")
 
 hyper_diab_birthweight_mutual_cat
 
 ```
 
-## Table 4: Association between birth weight (continuous) and thyroid cancer incidence in the Sister Study participants by Area Deprivation Index, levels of education, and household income
+
+# Supplementary materials
+## Supplementary table 1: **Association between birth weight and thyroid cancer risk, after excluding participants who were born at least 2 weeks before the due date or those who were part of a multiple birth**
+
+```{r}
+#| label: sensi-birthweight
+#| output: false
+surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
+
+non_preterm = earlylife_popu |> filter(ui_early_gest != "Yes, at least 2 weeks before due date" & (ui_multiple_birth != "Multiple birth" ))
+
+
+birth_weight_name = c("ui_birth_weight_cat", "ui_birth_weight_cont")
+birth_weight_label = list(
+  "ui_birth_weight_cat" ~ "Birth weight",
+  "ui_birth_weight_cont" ~ "Birth weight (continuous)"
+)
+
+descript_birth = descript_table(var_name = birth_weight_name,
+                                var_label = birth_weight_label,
+                                data = non_preterm)
+
+multivariable_birth = cox_model(
+  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+  var_name = birth_weight_name,
+  var_label = birth_weight_label,
+  covar = covariates_utero,
+  data = non_preterm
+)
+
+#assemble descriptive table and cox models' results
+cox_birth_weight = tbl_merge(
+  tbls = list(descript_birth, multivariable_birth),
+  tab_spanner = c("**N (%)**",
+                  "**Multivariable models**")
+) |> sort_birth_weight() |> polish_utero()
+```
+
+```{r}
+#| label: tbl-sensi-birthweight
+#| tbl-cap: "Association between birth weight and thyroid cancer risk, after excluding participants who were born more than 2 weeks before due date or those who were part of a multiple birth"
+cox_birth_weight
+```
+
+## Supplementary table 2: **Association between birth weight (continuous) and thyroid cancer incidence in the Sister Study cohort by baseline examiner-measured BMI, Area Deprivation Index, personal educational level, and household annual income**
 
 ```{r}
 #| label: tbl-birthweight-strat
-#| tbl-cap: "Association between birth weight (continuous) and thyroid cancer incidence in the Sister Study participants by Area Deprivation Index, levels of education, and household income"
+#| tbl-cap: "Association between birth weight (continuous) and thyroid cancer incidence in the Sister Study participants by baseline examiner-measured BMI, Area Deprivation Index, levels of education, and household annual income"
 
-strat_ADI_birthweight = stratification_long(
-  strat_var = ses_ADI_baseline_cat,
+strat_BMI_birthweight = stratification_long(
+  strat_var = an_bmi_cat,
   surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
   var_name = "ui_birth_weight_cont",
   var_label = list("ui_birth_weight_cont" ~ "Birth weight (continuous)"),
   covar = covariates_utero,
   data = earlylife_popu
 )
+
+strat_benign_thyroid_birthweight = stratification_long(
+  strat_var = illness_thyroid_all,
+  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+  var_name = "ui_birth_weight_cont",
+  var_label = list("ui_birth_weight_cont" ~ "Birth weight (continuous)"),
+  covar = covariates_utero,
+  data = earlylife_popu
+)
+
 
 strat_edu_birthweight = stratification_long(
   strat_var = ses_edu_level,
@@ -290,7 +346,9 @@ strat_income_birthweight = stratification_long(
 
 
 strat_all_birthweight = tbl_stack(list(
-  strat_ADI_birthweight,
+  strat_BMI_birthweight,
+  strat_benign_thyroid_birthweight,
+  #strat_ADI_birthweight,
   strat_edu_birthweight,
   strat_income_birthweight
 ))
@@ -298,39 +356,54 @@ strat_all_birthweight = tbl_stack(list(
 strat_all_birthweight = strat_all_birthweight |> modify_table_body(
   ~ .x  |>
     dplyr::add_row(
-      label = "Area Deprivation Index",
-      .before = grep("Less than 30", strat_all_birthweight$table_body$label)
+      label = "Examiner-measured BMI",
+      .before = grep("<25", strat_all_birthweight$table_body$label)
     )  |>
     dplyr::add_row(
-      label = "Level of education",
+      label = "Benign thyroid disease",
+      .before = grep(
+        "No", 
+        strat_all_birthweight$table_body$label
+        ) + 1
+    )  |>
+    dplyr::add_row(
+      label = "Personal educational level",
       .before = grep(
         "Highschool or GED or less",
         strat_all_birthweight$table_body$label
-      ) + 1
+      ) + 2
     )  |>
     dplyr::add_row(
-      label = "Household income",
+      label = "Household annual income",
       .after = grep(
         "Bachelor's degree or higher",
         strat_all_birthweight$table_body$label
-      ) + 2
+      ) + 3
     )
 ) |>
   modify_table_styling(
     column = "label",
     rows = strat_all_birthweight$table_body$label %in% c(
-      "Area Deprivation Index",
-      "Level of education",
-      "Household income"
+      "Examiner-measured BMI",
+      "Benign thyroid disease",
+      "Personal educational level",
+      "Household annual income"
     ),
     text_format = "bold"
   )   
 
 strat_all_birthweight
-p_interaction_ADI_birthweight=p_interaction(
+p_interaction_BMI_birthweight=p_interaction(
   surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
   var_name1 = "ui_birth_weight_cont",
-  var_name2 = "ses_ADI_baseline_cat",
+  var_name2 = "an_bmi_cat",
+  covar = covariates_utero,
+  data = earlylife_popu
+)
+p_interaction_benign_thyroid_birthweight=p_interaction(
+  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+  var_name1 = "ui_birth_weight_cont",
+  var_name2 = "illness_thyroid_all",
   covar = covariates_utero,
   data = earlylife_popu
 )
@@ -349,16 +422,15 @@ p_interaction_income_birthweight=p_interaction(
   covar = covariates_utero,
   data = earlylife_popu
 )
-p_interaction_ADI_birthweight$`Pr(>|Chi|)`[2]
+p_interaction_BMI_birthweight$`Pr(>|Chi|)`[2]
+p_interaction_benign_thyroid_birthweight$`Pr(>|Chi|)`[2]
 p_interaction_edu_birthweight$`Pr(>|Chi|)`[2]
 p_interaction_income_birthweight$`Pr(>|Chi|)`[2]
 
 
 ```
 
-# Supplementary materials
-
-## Supplementary table 1: Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants, when considering only medically confirmed cases, papillary histology, competing risks, and E-values
+## Supplementary table 3: **Association between in-utero and newborn factors and thyroid cancer incidence in the Sister Study participants, when considering competing risk, only medically confirmed cases, or papillary histology, complete case analysis, and the E-values**
 
 ```{r}
 #| label: var-list-utero-for-sup-tables
@@ -431,6 +503,59 @@ cox_PTC_utero = cox_model(
 
 ```
 
+
+```{r}
+#| label: utero-complete-case
+#| output: false
+
+cox_complete_ges_hypertension = cox_model(
+  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+  var_name = "ui_hypertension_all",
+  var_label = list("ui_hypertension_all"~"Gestational hypertension or hypertension-related disorders"),
+  covar = covariates_utero,
+  data = earlylife_popu[earlylife_popu$ui_hypertension_all!="Unknown",]
+)|> sort_birth_weight()
+
+cox_complete_ges_diab = cox_model(
+  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+  var_name = "ui_diab_all_mother",
+  var_label = list("ui_diab_all_mother"~"Pre-pregnancy or gestational diabetes"),
+  covar = covariates_utero,
+  data = earlylife_popu[earlylife_popu$ui_diab_all_mother!="Unknown",]
+)|> sort_birth_weight()
+
+cox_complete_birth_weight_cat = cox_model(
+  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+  var_name = "ui_birth_weight_cat",
+  var_label = list("ui_birth_weight_cat"~"Birth weight"),
+  covar = covariates_utero,
+  data = earlylife_popu[earlylife_popu$ui_birth_weight_cat!="Unknown",]
+)|> sort_birth_weight()
+
+
+cox_complete_birth_weight_cont = cox_model(
+  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+  var_name = "ui_birth_weight_cont",
+  var_label = list("ui_birth_weight_cont"~"Birth weight (continuous)"),
+  covar = covariates_utero,
+  data = earlylife_popu[!is.na(earlylife_popu$ui_birth_weight_cont),]
+)|> sort_birth_weight()
+
+
+cox_complete_early_gest = cox_model(
+  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+  var_name = "ui_early_gest",
+  var_label = list("ui_early_gest"~"Gestational length at birth"),
+  covar = covariates_utero,
+  data = earlylife_popu[earlylife_popu$ui_early_gest!="Unknown",]
+)|> sort_birth_weight()
+
+cox_complete = tbl_stack(list(cox_complete_ges_hypertension, cox_complete_ges_diab, cox_complete_birth_weight_cat, cox_complete_birth_weight_cont, cox_complete_early_gest))|>
+  polish_utero()
+```
+
+
+
 ```{r}
 #| label: e-values
 #| output: false
@@ -454,7 +579,8 @@ sensi_censor_utero = tbl_merge(
   tbls = list(
     cox_cmprsk_utero,
     cox_medical_confirmed,
-    cox_PTC_utero
+    cox_PTC_utero,
+    cox_complete
   ),
   tab_spanner = FALSE
 )  |>
@@ -473,117 +599,6 @@ sensi_censor_utero = tbl_merge(
 sensi_censor_utero
 Evalues
 ```
-
-## Supplementary table 2: Association between birth weight and thyroid cancer risk, after excluding participants who were born more than 2 weeks before due date or those who were part of a multiple birth
-
-```{r}
-#| label: sensi-birthweight
-#| output: false
-surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
-
-non_preterm = earlylife_popu |> filter(ui_early_gest != "Yes, at least 2 weeks before due date" & (ui_multiple_birth != "Multiple birth" ))
-
-
-birth_weight_name = c("ui_birth_weight_cat", "ui_birth_weight_cont")
-birth_weight_label = list(
-  "ui_birth_weight_cat" ~ "Birth weight",
-  "ui_birth_weight_cont" ~ "Birth weight (continuous)"
-)
-
-descript_birth = descript_table(var_name = birth_weight_name,
-                                var_label = birth_weight_label,
-                                data = non_preterm)
-
-multivariable_birth = cox_model(
-  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
-  var_name = birth_weight_name,
-  var_label = birth_weight_label,
-  covar = covariates_utero,
-  data = non_preterm
-)
-
-#assemble descriptive table and cox models' results
-cox_birth_weight = tbl_merge(
-  tbls = list(descript_birth, multivariable_birth),
-  tab_spanner = c("**N (%)**",
-                  "**Multivariable models**")
-) |> sort_birth_weight() |> polish_utero()
-```
-
-```{r}
-#| label: tbl-sensi-birthweight
-#| tbl-cap: "Association between birth weight and thyroid cancer risk, after excluding participants who were born more than 2 weeks before due date or those who were part of a multiple birth"
-cox_birth_weight
-```
-
-## Supplementary table 3: **Simultaneously adjusted association between thyroid cancer risk and pre-pregnancy or gestational diabetes, gestational hypertension or hypertension-related disorders, birth weight (continuous), and gestational age at birth**
-
-```{r}
-#| label: tbl-hyper-diab-birthweight-cont
-#| tbl-cap: "Simultaneously adjusted association between thyroid cancer risk and pre-pregnancy or gestational diabetes, gestational hypertension or hypertension-related disorders, birth weight (continuous), and gestational age at birth"
-
-surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
-mutual_label_cont = list(
-  "ui_diab_all_mother" ~ "Pre-pregnancy or gestational diabetes",
-  "ui_hypertension_all" ~ "Gestational hypertension or pre-eclampsia",
-  "ui_early_gest" ~ "Gestational age at birth",
-  "ui_birth_weight_cont" ~ "Birth weight (continuous)"
-)
-mutual_name_cont = substr(mutual_label_cont, 2, unlist(gregexpr("~", mutual_label_cont)) - 3)
-
-hyper_diab_birthweight_mutual_cont = reformulate(c(mutual_name_cont, covariates_utero), response = surv) |>
-  coxph(method = "breslow", data = earlylife_popu) |>
-  tbl_regression(
-    exponentiate = TRUE,
-    conf.int = TRUE,
-    conf.level = 0.95,
-    add_estimate_to_reference_rows = TRUE,
-    label = mutual_label_cont,
-    include = mutual_name_cont
-  )|> sort_birth_weight()|>
-  modify_header(n_event ~ "**Number of events**",
-                exposure ~ "**Person-years**",
-                estimate ~ "**HR**") |>
-  modify_table_body( ~ .x |> dplyr::relocate(exposure, .before = estimate))|>
-  modify_footnote(abbreviation = TRUE,
-                         `estimate` ~ "Multivariable models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status, 
-                         personal history of benign thyroid disease, educational level, household annual income, and Area Deprivation Index"
-  )
-hyper_diab_birthweight_mutual_cont
-```
-
-# Nitty-gritty analyses that will not be shown in the paper
-
-## Test for non-linearity of birth weight in the whole population and in non-preterm participants
-
-Whole population, multivariable model, add squared term and compare the two nested models
-
-```{r}
-# earlylife_popu=earlylife_popu|>mutate(ui_birth_weight_cont_2= (ui_birth_weight_cont)^2)
-# a = reformulate(c(covariates_utero, "ui_birth_weight_cont"), response = surv) |>
-#   coxph(method = "breslow", data = earlylife_popu)
-# b = reformulate(c(covariates_utero, "ui_birth_weight_cont", "ui_birth_weight_cont_2"),  response = surv) |>
-#   coxph(method = "breslow", data = earlylife_popu) 
-# anova(a,b)
-
-```
-
-Non-preterm, multivariable model, add squared term and compare the two nested models
-
-```{r}
-#Add ui_birth_weight_cont squared, insignificant
-# non_preterm=non_preterm|>mutate(ui_birth_weight_cont_2= (ui_birth_weight_cont)^2)
-# a = reformulate(c(covariates_utero, "ui_birth_weight_cont"), response = surv) |>
-#   coxph(method = "breslow", data = non_preterm)
-# b = reformulate(c(covariates_utero, "ui_birth_weight_cont", "ui_birth_weight_cont_2"),  response = surv) |>
-#   coxph(method = "breslow", data = non_preterm) 
-# anova(a,b)
-
-```
-
-Whole population, multivariable model, insignificant spline birth weight,
-
-`{r} #Insignificant B-Spline surv="Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"  reformulate(c(covariates_utero,"bs(ui_birth_weight_cont)"),response = surv)|>  coxph(method = "breslow", data = earlylife_popu) |> summary()}`
 
 ```{r}
 stop_time=Sys.time() - start_time

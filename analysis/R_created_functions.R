@@ -113,40 +113,40 @@ stratification_wide = function(strat_var,
 #4.1 Stratified analyses (long for continuous variables)
 
 
-stratification_long = function(strat_var,
-                               surv,
-                               var_name,
-                               var_label,
-                               covar,
-                               data)
-{
-  data = data |> 
-    filter({{strat_var}}!="Unknown")|>droplevels()
-  
-  # Extract unique levels from the stratification variable
-  unique_levels = data |> select({{strat_var}}) |>
-    summarise_each(list( ~ levels(.))) |>
-    pull() |> as.factor()
-  
-  
-  header = substring(unique_levels,4)
-  header = paste("**", header, "**",sep="")
-  
-  
-  # Use purrr::map to create a list of stratified data frames and appy the function cox_model on them
-  results = unique_levels |>
-    map(
-      ~ data |>
-        filter({{strat_var}} == .x) |>
-        cox_model(surv = surv,
-                  var_name = var_name,
-                  var_label = var_label,
-                  covar = covar
-        )) |>
-    tbl_stack()|>modify_table_body(~ .x |> dplyr::mutate(label = unique_levels))
-  return(results)
-  rm(results)
-}
+ stratification_long = function(strat_var,
+                                surv,
+                                var_name,
+                                var_label,
+                                covar,
+                                data)
+ {
+   data = data |> 
+     filter({{strat_var}}!="Unknown")|>droplevels()
+   
+   # Extract unique levels from the stratification variable
+   unique_levels = data |> select({{strat_var}}) |>
+     summarise_each(list( ~ levels(.))) |>
+     pull() |> as.factor()
+   
+   
+   header = substring(unique_levels,4)
+   header = paste("**", header, "**",sep="")
+   
+   
+   # Use purrr::map to create a list of stratified data frames and appy the function cox_model on them
+   results = unique_levels |>
+     map(
+       ~ data |>
+         filter({{strat_var}} == .x) |>
+         cox_model(surv = surv,
+                   var_name = var_name,
+                   var_label = var_label,
+                   covar = covar
+         )) |>
+     tbl_stack()|>modify_table_body(~ .x |> dplyr::mutate(label = unique_levels))
+   return(results)
+   rm(results)
+ }
 
 
 #4.2 Stratified analyses (long for categorical variables)
@@ -224,7 +224,7 @@ stratification_long_for_a_list = function(var_name,
       data = earlylife_popu
     ) |> modify_table_body(~ .x  |>
                              dplyr::add_row(label = strat_label,
-                                            .before = 0))
+                                            .before = 0)|>dplyr::add_row(label = ""))
     
     # Store the result in the results_list
     results_list[[as.character(strat_var)]] <- result
@@ -354,8 +354,7 @@ polish_utero = function(data, group_name = FALSE)
   }
   data = modify_footnote(data,
                          abbreviation = TRUE)|>
-    as_gt() |> tab_footnote(footnote = "Multivariable models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status, 
-                            personal history of benign thyroid disease, educational level, household annual income, and Area Deprivation Index")
+    as_gt() |> tab_footnote(footnote = "Multivariable models were adjusted for attained age (timescale), and self-identified race/ethnicity")
   return(data)
 }
 
@@ -374,18 +373,17 @@ polish_childhood = function(data, group_name = FALSE)
         )  |>
         dplyr::add_row(
           label = "Lifestyle factors",
-          .before = grep("ph_hrs_wk_before20_cat", data$table_body$variable) + 1
+          .before = grep("ph_MET_wk_before20_cat", data$table_body$variable) + 1
         )  |>
         dplyr::add_row(
           label = "Socioeconomic factors",
           .before = grep("ses_income_child", data$table_body$variable) + 2
         ) |>
-        dplyr::filter(!label %in% c("Start age for hormonal birth control","Never used birth control","Started after 20 years of age",
-                                    "Unknown birth control status","Hormonal birth control duration under age 20","Started after 20","Unknown status",
+        dplyr::filter(!label %in% c("Hormonal birth control duration under age 20","Started after 20","Unknown status",
                                     "Total years of smoking before 20","Smoking before 20 (Pack-years)","Never smoked")))
   data=data|>  modify_table_body(~ .x  |>    dplyr::mutate(sort = 1:nrow(.x)) |>
-        dplyr::mutate(sort = if_else(label == "After 20 years of age",  sort + 6,
-                                     if_else(label =="Unknown smoking status", sort + 5, sort)))|>arrange(sort))
+        dplyr::mutate(sort = if_else(and(variable=="sm_age_start_smok_cat",label == "20 years of age or older"),  sort + 4,
+                                     if_else(label =="Unknown smoking status", sort + 3, sort)))|>arrange(sort))
      
   
   data = data |>
@@ -403,7 +401,7 @@ polish_childhood = function(data, group_name = FALSE)
   data = modify_footnote(data, abbreviation = TRUE) |>
     as_gt() |> tab_footnote(
       footnote = "Multivariable models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status 
-                         (except for the analysis for the age started smoking), personal history of benign thyroid disease, educational level, 
+                         (except for the analysis for the age started smoking), personal history of benign thyroid disease, personal educational level, 
                          household annual income, and Area Deprivation Index"
     )
   

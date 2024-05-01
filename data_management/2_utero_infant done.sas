@@ -128,6 +128,12 @@ data ss_utero_infant;
 		ui_twin_female=3;
 	else ui_twin_female = -1;
 
+	if F22 <0 then 
+		ui_breastfed_time = -1;
+	else if F22 in (3 4) then ui_breastfed_time = 0;
+	else if FH_BrstFedTime < 0 then ui_breastfed_time = 5;
+	else ui_breastfed_time = FH_BrstFedTime;
+
 	ui_preg_last_cont=Sib_Maternal_PregLast*1;
 	ui_preg_last_cat=Sib_Maternal_PregLast;
 	ui_preg_order_cont=Sib_Maternal_PregOrder*1;
@@ -158,7 +164,7 @@ data ss_utero_infant;
 	F27fix F27FIX_modif.
 	F28fix F28X_modif.
 	F29fix F29X_modif.
-	FH_BrstFedTime F23X_modif.
+	ui_breastfed_time F23X_modif.
 	ui_early_gest FHGEST_modif.
 	FH_EarlyGest FHGEST_modif_new.
 	ui_diab_all_mother ui_hypertension_all F4NEW_modif.
@@ -194,7 +200,6 @@ data ss_utero_infant;
 	F24=ui_soy	 	 	/*CALC: F24. (recoded) Were you fed formulas made from soy (not regular formula)?*/
 	F174b=ui_diab_father
 	FH_EarlyGest=ui_early_gest_detail	 	 	 	/*CALC: Born at least 2 weeks before due date [F18,F19]*/
-	FH_BrstFedTime=ui_breastfed_time		/*CALC: F23. How many weeks or months were you breastfed? (among those definitely breastfed [F22])*/
 	Sib_Maternal_FirstBorn=ui_maternal_1st_born
 	;
 run;
