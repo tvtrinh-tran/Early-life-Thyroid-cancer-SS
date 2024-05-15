@@ -129,244 +129,12 @@ data ss_illness_treatment;
 	/*FU_Thyroidectomy_Age	 	 	 	/*CALC: Thyroidectomy - Age at procedure (.b=Prevalent, age unknown. Thyroidectomy not systematically asked about/volunteered by participant)*/
 	FU_Thyroidectomy_AgeExact	 	 	 	/*CALC: Thyroidectomy - Age (exact) at procedure (.b=Prevalent, age unknown. Thyroidectomy not systematically asked about/volunteered by participant)*/
 
-	/*HZ_RM_BRCA1	 	 	 	/*CALC: BRCA1 status (from best available source in baseline and follow-up)*/
-	/*HZ_RM_BRCA2	 	 	 	/*CALC: BRCA2 status (from best available source in baseline and follow-up)*/
-	/*HZ_RM_BRCA1_SOURCE	 	 	 	/*Source for HZ_RM_BRCA1 - MR (medical reports), FHU (Family Health Update), BCFU (breast cancer follow-up self-report) or PX (baseline CATI self-report)*/
-	/*HZ_RM_BRCA2_SOURCE	 	 	 	/*Source for HZ_RM_BRCA2 - MR (medical reports), FHU (Family Health Update), BCFU (breast cancer follow-up self-report) or PX (baseline CATI self-report)*/
-	/*HZ_RX_Amiodarone_AgeStart	 	 	 	/*CALC: Harmonized - Age at first use of amiodarone*/
-	/*HZ_RX_Amiodarone_AgeStop	 	 	 	/*CALC: Harmonized - Age at last use of amiodarone*/
-	/*HZ_RX_Amiodarone_Current	 	 	 	/*CALC: Harmonized - Currently use amiodarone*/
-	/*HZ_RX_Amiodarone_Dose	 	 	 	/*CALC: Harmonized - Total dose of amiodarone - (times/day)*(days/week) summed over years of use*/
-	/*HZ_RX_Amiodarone_Ever	 	 	 	/*CALC: Harmonized - Ever used amiodarone*/
-	/*HZ_RX_Amiodarone_FqMiss	 	 	 	/*FLAG: Harmonized - Frequency missing for at least one reported medication within class*/
-	/*HZ_RX_Amiodarone_Freq	 	 	 	/*CALC: Harmonized - Average frequency used amiodarone  (times/week) (See HZ_RX_Amiodarone_FqMiss)*/
-	/*HZ_RX_Amiodarone_Years	 	 	 	/*CALC: Harmonized - Total years used amiodarone (See HZ_RX_Amiodarone_YrMiss)*/
-	/*HZ_RX_Amiodarone_YrMiss	 	 	 	/*FLAG: Harmonized - Duration missing for at least one reported medication within class*/
-	HZ_RX_Antithyroid_AgeStart	 	 	 	/*CALC: Harmonized - Age at first use of antithyroid medication*/
+	/*Rx_ThyroidMed_AgeStart_T0	/*CALC: Age at first use of Thyroid Hormone Substitutes/Antithyroid/Iodine/Iodide through baseline*/
+	/*Rx_ThyroidMed_AgeStop_T0	/*CALC: Age at last use of Thyroid Hormone Substitutes/Antithyroid/Iodine/Iodide through baseline*/	
+	/*Rx_ThyroidMed_Current_T0	/*CALC: Currently use Thyroid Hormone Substitutes/Antithyroid/Iodine/Iodide at baseline*/	
+	/*Rx_ThyroidMed_Dose_T0	/*CALC: Total Dose of Thyroid Hormone Substitutes/Antithyroid/Iodine/Iodide through baseline*/	
+	Rx_ThyroidMed_Ever_T0	/*CALC: Ever used Thyroid Hormone Substitutes/Antithyroid/Iodine/Iodide through baseline*/	
 
-	/*HZ_RX_Antithyroid_AgeStop	 	 	 	/*CALC: Harmonized - Age at last use of antithyroid medication*/
-	/*HZ_RX_Antithyroid_Current	 	 	 	/*CALC: Harmonized - Currently use antithyroid medication*/
-	/*HZ_RX_Antithyroid_Dose	 	 	 	/*CALC: Harmonized - Total dose of antithyroid medication - (times/day)*(days/week) summed over years of use*/
-	HZ_RX_Antithyroid_Ever	 	 	 	/*CALC: Harmonized - Ever used antithyroid medication*/
-
-	/*HZ_RX_Antithyroid_FqMiss	 	 	 	/*FLAG: Harmonized - Frequency missing for at least one reported medication within class*/
-	/*HZ_RX_Antithyroid_Freq	 	 	 	/*CALC: Harmonized - Average frequency used antithyroid medication  (times/week) (See HZ_RX_Antithyroid_FqMiss)*/
-	/*HZ_RX_Antithyroid_Years	 	 	 	/*CALC: Harmonized - Total years used antithyroid medication (See HZ_RX_Antithyroid_YrMiss)*/
-
-	/*HZ_RX_Antithyroid_YrMiss	 	;
-	/*HZ_RX_BiologicalProds_AgeStart	 	 	 	/*CALC: Harmonized - Age at first use of biological products*/
-
-	/*HZ_RX_BiologicalProds_AgeStop	 	 	 	/*CALC: Harmonized - Age at last use of biological products*/
-	/*HZ_RX_BiologicalProds_Current	 	 	 	/*CALC: Harmonized - Currently use biological products*/
-	/*HZ_RX_BiologicalProds_Dose	 	 	 	/*CALC: Harmonized - Total dose of biological products - (times/day)*(days/week) summed over years of use*/
-	/*HZ_RX_BiologicalProds_Ever	 	 	 	/*CALC: Harmonized - Ever used biological products*/
-	/*HZ_RX_BiologicalProds_FqMiss	 	 	 	/*FLAG: Harmonized - Frequency missing for at least one reported medication within class*/
-	/*HZ_RX_BiologicalProds_Freq	 	 	 	/*CALC: Harmonized - Average frequency used biological products  (times/week) (See HZ_RX_BiologicalProds_FqMiss)*/
-	/*HZ_RX_BiologicalProds_Years	 	 	 	/*CALC: Harmonized - Total years used biological products (See HZ_RX_BiologicalProds_YrMiss)*/
-	/*HZ_RX_BiologicalProds_YrMiss	 	 	 	/*FLAG: Harmonized - Duration missing for at least one reported medication within class*/
-	HZ_RX_Diab_AnyOralMed_AgeStart	 	 	 	/*CALC: Harmonized - Age at first use of any oral diabetes medication*/
-
-	/*HZ_RX_Diab_AnyOralMed_AgeStop	 	 	 	/*CALC: Harmonized - Age at last use of any oral diabetes medication*/
-	/*HZ_RX_Diab_AnyOralMed_Current	 	 	 	/*CALC: Harmonized - Currently use any oral diabetes medication*/
-	/*HZ_RX_Diab_AnyOralMed_Dose	 	 	 	/*CALC: Harmonized - Total dose of any oral diabetes medication - (times/day)*(days/week) summed over years of use*/
-	HZ_RX_Diab_AnyOralMed_Ever	 	 	 	/*CALC: Harmonized - Ever used any oral diabetes medication*/
-
-	/*HZ_RX_Diab_AnyOralMed_FqMiss	 	 	 	/*FLAG: Harmonized - Frequency missing for at least one reported medication within class*/
-	/*HZ_RX_Diab_AnyOralMed_Freq	 	 	 	/*CALC: Harmonized - Average frequency used any oral diabetes medication (times/week) (See HZ_RX_Diab_AnyOralMed_FqMiss)*/
-	/*HZ_RX_Diab_AnyOralMed_Years	 	 	 	/*CALC: Harmonized - Total years used any oral diabetes medication (See HZ_RX_Diab_AnyOralMed_YrMiss)*/
-	/*HZ_RX_Diab_AnyOralMed_YrMiss	 	 	 	/*FLAG: Harmonized - Duration missing for at least one reported medication within class*/
-	HZ_RX_Diab_Insulin_AgeStart	 	 	 	/*CALC: Harmonized - Age at first use of insulin*/
-
-	/*HZ_RX_Diab_Insulin_AgeStop	 	 	 	/*CALC: Harmonized - Age at last use of insulin*/
-	/*HZ_RX_Diab_Insulin_Current	 	 	 	/*CALC: Harmonized - Currently use insulin*/
-	/*HZ_RX_Diab_Insulin_Dose	 	 	 	/*CALC: Harmonized - Total dose of insulin - (times/day)*(days/week) summed over years of use*/
-	HZ_RX_Diab_Insulin_Ever	 	 	 	/*CALC: Harmonized - Ever used insulin*/
-
-	/*HZ_RX_Diab_Insulin_FqMiss	 	 	 	/*FLAG: Harmonized - Frequency missing for at least one reported medication within class*/
-	/*HZ_RX_Diab_Insulin_Freq	 	 	 	/*CALC: Harmonized - Average frequency used insulin (times/week) (See HZ_RX_Diab_insulin_FqMiss)*/
-	/*HZ_RX_Diab_Insulin_Years	 	 	 	/*CALC: Harmonized - Total years used insulin (See HZ_RX_Diab_Insulin_YrMiss)*/
-	/*HZ_RX_Diab_Insulin_YrMiss	 	 	 	/*FLAG: Harmonized - Duration missing for at least one reported medication within class*/
-	/*HZ_RX_HTN_Any_AgeStart	 	 	 	/*CALC: Harmonized - Age at first use of any hypertension medication*/
-	/*HZ_RX_HTN_Any_AgeStop	 	 	 	/*CALC: Harmonized - Age at last use of any hypertension medication*/
-	/*HZ_RX_HTN_Any_Current	 	 	 	/*CALC: Harmonized - Currently use any hypertension medication*/
-	/*HZ_RX_HTN_Any_Dose	 	 	 	/*CALC: Harmonized - Total dose of any hypertension medication - (times/day)*(days/week) summed over years of use*/
-	/*HZ_RX_HTN_Any_Ever	 	 	 	/*CALC: Harmonized - Ever used any hypertension medication*/
-	/*HZ_RX_HTN_Any_FqMiss	 	 	 	/*FLAG: Harmonized - Frequency missing for at least one reported medication within class*/
-	/*HZ_RX_HTN_Any_Freq	 	 	 	/*CALC: Harmonized - Average frequency used any hypertension medication (times/week) (See HZ_RX_HTN_Any_FqMiss)*/
-	/*HZ_RX_HTN_Any_Years	 	 	 	/*CALC: Harmonized - Total years used any hypertension medication (See HZ_RX_HTN_Any_YrMiss)*/
-	/*HZ_RX_HTN_Any_YrMiss	 	 	 	/*FLAG: Harmonized - Duration missing for at least one reported medication within class*/
-	/*HZ_RX_Interferon_AgeStart	 	 	 	/*CALC: Harmonized - Age at first use of interferon*/
-	/*HZ_RX_Interferon_AgeStop	 	 	 	/*CALC: Harmonized - Age at last use of interferon*/
-	/*HZ_RX_Interferon_Current	 	 	 	/*CALC: Harmonized - Currently use interferon*/
-	/*HZ_RX_Interferon_Dose	 	 	 	/*CALC: Harmonized - Total dose of interferon - (times/day)*(days/week) summed over years of use*/
-	/*HZ_RX_Interferon_Ever	 	 	 	/*CALC: Harmonized - Ever used interferon*/
-	/*HZ_RX_Interferon_FqMiss	 	 	 	/*FLAG: Harmonized - Frequency missing for at least one reported medication within class*/
-	/*HZ_RX_Interferon_Freq	 	 	 	/*CALC: Harmonized - Average frequency used interferon  (times/week) (See HZ_RX_Interferon_FqMiss)*/
-	/*HZ_RX_Interferon_Years	 	 	 	/*CALC: Harmonized - Total years used interferon (See HZ_RX_Interferon_YrMiss)*/
-	/*HZ_RX_Interferon_YrMiss	 	 	 	/*FLAG: Harmonized - Duration missing for at least one reported medication within class*/
-	/*HZ_RX_Lithium_AgeStart	 	 	 	/*CALC: Harmonized - Age at first use of lithium*/
-	/*HZ_RX_Lithium_AgeStop	 	 	 	/*CALC: Harmonized - Age at last use of lithium*/
-	/*HZ_RX_Lithium_Current	 	 	 	/*CALC: Harmonized - Currently use lithium*/
-	/*HZ_RX_Lithium_Dose	 	 	 	/*CALC: Harmonized - Total dose of lithium - (times/day)*(days/week) summed over years of use*/
-	/*HZ_RX_Lithium_Ever	 	 	 	/*CALC: Harmonized - Ever used lithium*/
-	/*HZ_RX_Lithium_FqMiss	 	 	 	/*FLAG: Harmonized - Frequency missing for at least one reported medication within class*/
-	/*HZ_RX_Lithium_Freq	 	 	 	/*CALC: Harmonized - Average frequency used lithium  (times/week) (See HZ_RX_Lithium_FqMiss)*/
-	/*HZ_RX_Lithium_Years	 	 	 	/*CALC: Harmonized - Total years used lithium (See HZ_RX_Lithium_YrMiss)*/
-	/*HZ_RX_Lithium_YrMiss	 	 	 	/*FLAG: Harmonized - Duration missing for at least one reported medication within class*/
-	/*HZ_RX_Meds_FUSource	 	 	 	/*CALC: Source of medication history through follow-up (1=Baseline only, 2=Baseline & Follow-up, 3=Follow-up only)*/
-	/*HZ_RX_Meds_FUSource_Age	 	 	 	/*CALC: Exact age through which medication history extends [MDDate, H_Date, TH_Date, LH_Date, TT_Date]*/
-	/*HZ_RX_Meds_FUSource_AgeExact	 	 	 	/*CALC: Age through which medication history extends [MDDate, H_Date, TH_Date, LH_Date, TT_Date]*/
-	HZ_RX_OtherIodineMeds_AgeStart	 	 	 	/*CALC: Harmonized - Age at first use of other iodine medication*/
-
-	/*HZ_RX_OtherIodineMeds_AgeStop	 	 	 	/*CALC: Harmonized - Age at last use of other iodine medication*/
-	/*HZ_RX_OtherIodineMeds_Current	 	 	 	/*CALC: Harmonized - Currently use other iodine medication*/
-	/*HZ_RX_OtherIodineMeds_Dose	 	 	 	/*CALC: Harmonized - Total dose of other iodine medication - (times/day)*(days/week) summed over years of use*/
-	HZ_RX_OtherIodineMeds_Ever	 	 	 	/*CALC: Harmonized - Ever used other iodine medication*/
-
-	/*HZ_RX_OtherIodineMeds_FqMiss	 	 	 	/*FLAG: Harmonized - Frequency missing for at least one reported medication within class*/
-	/*HZ_RX_OtherIodineMeds_Freq	 	 	 	/*CALC: Harmonized - Average frequency used other iodine medication  (times/week) (See HZ_RX_OtherIodineMeds_FqMiss)*/
-	/*HZ_RX_OtherIodineMeds_Years	 	 	 	/*CALC: Harmonized - Total years used other iodine medication (See HZ_RX_OtherIodineMeds_YrMiss)*/
-	/*HZ_RX_OtherIodineMeds_YrMiss	 	 	 	/*FLAG: Harmonized - Duration missing for at least one reported medication within class*/
-	HZ_RX_Pot_Sod_Iodide_AgeStart	 	 	 	/*CALC: Harmonized - Age at first use of potassium or sodium iodide*/
-
-	/*HZ_RX_Pot_Sod_Iodide_AgeStop	 	 	 	/*CALC: Harmonized - Age at last use of potassium or sodium iodide*/
-	/*HZ_RX_Pot_Sod_Iodide_Current	 	 	 	/*CALC: Harmonized - Currently use potassium or sodium iodide*/
-	/*HZ_RX_Pot_Sod_Iodide_Dose	 	 	 	/*CALC: Harmonized - Total dose of potassium or sodium iodide - (times/day)*(days/week) summed over years of use*/
-	HZ_RX_Pot_Sod_Iodide_Ever	 	 	 	/*CALC: Harmonized - Ever used potassium or sodium iodide*/
-
-	/*HZ_RX_Pot_Sod_Iodide_FqMiss	 	 	 	/*FLAG: Harmonized - Frequency missing for at least one reported medication within class*/
-	/*HZ_RX_Pot_Sod_Iodide_Freq	 	 	 	/*CALC: Harmonized - Average frequency used potassium or sodium iodide  (times/week) (See HZ_RX_Pot_Sod_Iodide_FqMiss)*/
-	/*HZ_RX_Pot_Sod_Iodide_Years	 	 	 	/*CALC: Harmonized - Total years used potassium or sodium iodide (See HZ_RX_Pot_Sod_Iodide_YrMiss)*/
-	/*HZ_RX_Pot_Sod_Iodide_YrMiss	 	 	 	/*FLAG: Harmonized - Duration missing for at least one reported medication within class*/
-	HZ_RX_ThyroidHormSub_AgeStart	 	 	 	/*CALC: Harmonized - Age at first use of thyroid hormone substitutes*/
-
-	/*HZ_RX_ThyroidHormSub_AgeStop	 	 	 	/*CALC: Harmonized - Age at last use of thyroid hormone substitutes*/
-	/*HZ_RX_ThyroidHormSub_Current	 	 	 	/*CALC: Harmonized - Currently use thyroid hormone substitutes*/
-	/*HZ_RX_ThyroidHormSub_Dose	 	 	 	/*CALC: Harmonized - Total dose of thyroid hormone substitutes - (times/day)*(days/week) summed over years of use*/
-	HZ_RX_ThyroidHormSub_Ever	 	 	 	/*CALC: Harmonized - Ever used thyroid hormone substitutes*/
-
-	/*HZ_RX_ThyroidHormSub_FqMiss	 	 	 	/*FLAG: Harmonized - Frequency missing for at least one reported medication within class*/
-	/*HZ_RX_ThyroidHormSub_Freq	 	 	 	/*CALC: Harmonized - Average frequency used thyroid hormone substitutes  (times/week) (See HZ_RX_ThyroidHormSub_FqMiss)*/
-	/*HZ_RX_ThyroidHormSub_Years	 	 	 	/*CALC: Harmonized - Total years used thyroid hormone substitutes (See HZ_RX_ThyroidHormSub_YrMiss)*/
-	/*HZ_RX_ThyroidHormSub_YrMiss	 	 	 	/*FLAG: Harmonized - Duration missing for at least one reported medication within class*/
-	HZ_RX_ThyroidMed_AgeStart	 	 	 	/*CALC: Harmonized - Age at first use of thyroid hormone substitutes, antithyroid, or iodine/iodide medication*/
-
-	/*HZ_RX_ThyroidMed_AgeStop	 	 	 	/*CALC: Harmonized - Age at last use of thyroid hormone substitutes, antithyroid, or iodine/iodide medication*/
-	/*HZ_RX_ThyroidMed_Current	 	 	 	/*CALC: Harmonized - Currently use thyroid hormone substitutes, antithyroid, or iodine/iodide medication*/
-	/*HZ_RX_ThyroidMed_Dose	 	 	 	/*CALC: Harmonized - Total dose of thyroid hormone substitutes, antithyroid, or iodine/iodide medication - (times/day)*(days/week) summed over years of use*/
-	HZ_RX_ThyroidMed_Ever	 	 	 	/*CALC: Harmonized - Ever used thyroid hormone substitutes, antithyroid, or iodine/iodide medication*/
-
-	/*HZ_RX_ThyroidMed_FqMiss	 	 	 	/*FLAG: Harmonized - Frequency missing for at least one reported medication within class*/
-	/*HZ_RX_ThyroidMed_Freq	 	 	 	/*CALC: Harmonized - Average frequency used thyroid hormone substitutes, antithyroid, or iodine/iodide medication  (times/week) (See HZ_RX_ThyroidMed_FqMiss)*/
-	/*HZ_RX_ThyroidMed_Years	 	 	 	/*CALC: Harmonized - Total years used thyroid hormone substitutes, antithyroid, or iodine/iodide medication (See HZ_RX_ThyroidMed_YrMiss)*/
-	/*HZ_RX_ThyroidMed_YrMiss	 	 	 	/*FLAG: Harmonized - Duration missing for at least one reported medication within class*/
-	HZ_RX_Thyrotrophin_AgeStart	 	 	 	/*CALC: Harmonized - Age at first use of thyrotrophin*/
-
-	/*HZ_RX_Thyrotrophin_AgeStop	 	 	 	/*CALC: Harmonized - Age at last use of thyrotrophin*/
-	/*HZ_RX_Thyrotrophin_Current	 	 	 	/*CALC: Harmonized - Currently use thyrotrophin*/
-	/*HZ_RX_Thyrotrophin_Dose	 	 	 	/*CALC: Harmonized - Total dose of thyrotrophin - (times/day)*(days/week) summed over years of use*/
-	HZ_RX_Thyrotrophin_Ever	 	 	 	/*CALC: Harmonized - Ever used thyrotrophin*/
-
-	/*HZ_RX_Thyrotrophin_FqMiss	 	 	 	/*FLAG: Harmonized - Frequency missing for at least one reported medication within class*/
-	/*HZ_RX_Thyrotrophin_Freq	 	 	 	/*CALC: Harmonized - Average frequency used thyrotrophin  (times/week) (See HZ_RX_Thyrotrophin_FqMiss)*/
-	/*HZ_RX_Thyrotrophin_Years	 	 	 	/*CALC: Harmonized - Total years used thyrotrophin (See HZ_RX_Thyrotrophin_YrMiss)*/
-	/*HZ_RX_Thyrotrophin_YrMiss	 	 	 	/*FLAG: Harmonized - Duration missing for at least one reported medication within class*/
-	/*HR_HYST_FLAG_LOCF_T1	 	 	 	/*FLAG: Subject missing Hysterectomy status at 1st detailed follow-up, status based on last known*/
-	/*HR_HYST_FLAG_LOCF_T2	 	 	 	/*FLAG: Subject missing Hysterectomy status at 2nd detailed follow-up, status based on last known*/
-	/*HR_HYST_FLAG_LOCF_T3	 	 	 	/*FLAG: Subject missing Hysterectomy status at 3rd detailed follow-up, status based on last known*/
-	/*HR_HYST_FLAG_LOCF_T4	 	 	 	/*FLAG: Subject missing Hysterectomy status at 4th detailed follow-up, status based on last known*/
-	/*HR_HystAgeExact_T1	 	 	 	/*CALC: HR_HystAgeExact_T1. Hysterectomy age to the 1/10th of a year updated through 1st detailed follow-up*/
-	/*HR_HystAgeExact_T2	 	 	 	/*CALC: HR_HystAgeExact_T2. Hysterectomy age to the 1/10th of a year updated through 2nd detailed follow-up*/
-	/*HR_HystAgeExact_T3	 	 	 	/*CALC: HR_HystAgeExact_T3. Hysterectomy age to the 1/10th of a year updated through 3rd detailed follow-up*/
-	/*HR_HystAgeExact_T4	 	 	 	/*CALC: HR_HystAgeExact_T4. Hysterectomy age to the 1/10th of a year updated through 4th detailed follow-up*/
-	/*HR_HystAge_T1	 	 	 	/*CALC: HR_HystAge_T1. Hysterectomy age updated through 1st detailed follow-up*/
-	/*HR_HystAge_T2	 	 	 	/*CALC: HR_HystAge_T2. Hysterectomy age updated through 2nd detailed follow-up*/
-	/*HR_HystAge_T3	 	 	 	/*CALC: HR_HystAge_T3. Hysterectomy age updated through 3rd detailed follow-up*/
-	/*HR_HystAge_T4	 	 	 	/*CALC: HR_HystAge_T4. Hysterectomy age updated through 4th detailed follow-up*/
-	/*HR_Hyst_T1	 	 	 	/*CALC: HR_Hyst_T1. Hysterectomy updated through 1st detailed follow-up*/
-	/*HR_Hyst_T2	 	 	 	/*CALC: HR_Hyst_T2. Hysterectomy updated through 2nd detailed follow-up*/
-	/*HR_Hyst_T3	 	 	 	/*CALC: HR_Hyst_T3. Hysterectomy updated through 3rd detailed follow-up*/
-	/*HR_Hyst_T4	 	 	 	/*CALC: HR_Hyst_T4. Hysterectomy updated through 4th detailed follow-up*/
-	/*BH_RX_Amiodarone_Current	 	 	 	/*CALC: 1st detailed follow-up - Currently use amiodarone [H176]*/
-	/*BH_RX_Antithyroid_Current	 	 	 	/*CALC: 1st detailed follow-up - Currently use antithyroid meds [H176]*/
-	/*BH_RX_BiologicalProds_Current	 	 	 	/*CALC: 1st detailed follow-up - Currently use biological products [H176]*/
-	/*BH_RX_Diab_AnyOralMed_Current	 	 	 	/*CALC: 1st Detailed follow-up - Currently use any oral diabetes meds [H176]*/
-	/*BH_RX_Diab_Insulin_Current	 	 	 	/*CALC: 1st Detailed follow-up - Currently use insulin [H37C, H176]*/
-	/*BH_RX_HTN_Any_Current	 	 	 	/*CALC: 1st detailed follow-up - Currently use any hypertension medication [H176]*/
-	/*BH_RX_Interferon_Current	 	 	 	/*CALC: 1st detailed follow-up - Currently use interferon [H176]*/
-	/*BH_RX_Lithium_Current	 	 	 	/*CALC: 1st detailed follow-up - Currently use lithium [H176]*/
-	/*BH_RX_Meds_Missing	 	 	 	/*CALC: 1st detailed Follow-Up - missing form or reported medications*/
-	/*BH_RX_OtherIodineMeds_Current	 	 	 	/*CALC: 1st detailed follow-up - Currently use other iodine meds [H176]*/
-	/*BH_RX_Pot_Sod_Iodide_Current	 	 	 	/*CALC: 1st detailed follow-up - Currently use potassium or sodium iodide [H176]*/
-	/*BH_RX_ThyroidHormSub_Current	 	 	 	/*CALC: 1st detailed follow-up - Currently use thyroid hormone substitutes [H176]*/
-	/*BH_RX_ThyroidMed_Current	 	 	 	/*CALC: 1st detailed follow-up - Currently use thyroid hormone substitutes, antithyroid, or iodine/iodide meds [H176]*/
-	/*BH_RX_Thyrotrophin_Current	 	 	 	/*CALC: 1st detailed follow-up - Currently use thyrotrophin [H176]*/
-	/*MC149	 	 	 	/*MC149. Ever had radiation treatment*/
-	/*MC150	 	 	 	/*MC150. Radiation for spondylitis*/
-	/*MC151	 	 	 	/*MC151. Age 1st had radiation for spondylitis*/
-	/*MC152	 	 	 	/*MC152. Total # rad treatments for spondylitis*/
-	/*MC153	 	 	 	/*MC153. Radiation type for spondylitis*/
-	/*MC154	 	 	 	/*MC154. Radiation for bursitis/arthritis*/
-	/*MC155	 	 	 	/*MC155. Age 1st had radiation for bursitis/arthritis*/
-	/*MC156	 	 	 	/*MC156. Total # rad treatments for bursitis/arthritis*/
-	/*MC157	 	 	 	/*MC157. Radiation type for bursitis/arthritis*/
-	/*MC158	 	 	 	/*MC158. Radiation for skin conditions*/
-	/*MC159	 	 	 	/*MC159. Age 1st had radiation for skin conditions*/
-	/*MC160	 	 	 	/*MC160. Total # rad treatments for skin conditions*/
-	/*MC161	 	 	 	/*MC161. Radiation type for skin conditions*/
-	/*MC162	 	 	 	/*MC162. Radiation for enlarged tonsils/adenoids*/
-	/*MC163	 	 	 	/*MC163. Age 1st had radiation for tonsils/adenoids*/
-	/*MC164	 	 	 	/*MC164. Total # rad treatments for tonsils/adenoids*/
-	/*MC165	 	 	 	/*MC165. Radiation type for tonsils/adenoids*/
-	/*MC166	 	 	 	/*MC166. Radiation for enlarged thymus gland*/
-	/*MC167	 	 	 	/*MC167. Total # rad treatments for enlarged thymus gland*/
-	/*MC168	 	 	 	/*MC168. Radiation type for enlarged thymus gland*/
-	/*MC169	 	 	 	/*MC169. Radiation for other condition*/
-	/*MC170	 	 	 	/*MC170. Age 1st had radiation for other conditions*/
-	/*MC171	 	 	 	/*MC171. Total # rad treatments for other conditions*/
-	/*MC172	 	 	 	/*MC172. Radiation type for other conditions*/
-	/*MC169sp	 	 	 	/*MC169. Specify other condition treated w/radiation*/
-	/*TT57_1	 	 	 	/*TT57. Thyroid - ever take levothyroxine*/
-	/*TT57_2	 	 	 	/*TT57. Thyroid - ever take propylthiouracil/PTU*/
-	/*TT57_3	 	 	 	/*TT57. Thyroid - ever take methimazole/MMI*/
-	/*TT57_4	 	 	 	/*TT57. Thyroid - ever take other prescription medication*/
-	/*TT57a_1	 	 	 	/*TT57. Thyroid - currently take levothyroxine*/
-	/*TT57a_2	 	 	 	/*TT57. Thyroid - currently take propylthiouracil/PTU*/
-	/*TT57a_3	 	 	 	/*TT57. Thyroid - currently take methimazole/MMI*/
-	/*TT57a_4	 	 	 	/*TT57. Thyroid - currently take other prescription medication*/
-	/*TT57dSp	 	 	 	/*TT57.  Thyroid - currently take other prescription medication - specify*/
-	/*TT59a	 	 	 	/*TT59. Thyroid problems stopped after stopping medications such as lithium or amiodarone*/
-	/*TT_RX_Amiodarone_Current	 	 	 	/*CALC: 4th detailed follow-up - Currently use amiodarone [TT147]*/
-	/*TT_RX_Antithyroid_Current	 	 	 	/*CALC: 4th detailed follow-up - Currently use antithyroid meds [TT147]*/
-	/*TT_RX_BiologicalProds_Current	 	 	 	/*CALC: 4th detailed follow-up - Currently use biological products [TT147]*/
-	/*TT_RX_Diab_AnyOralMed_Current	 	 	 	/*CALC: 4th Detailed follow-up - Currently use any oral diabetes meds [TT147]*/
-	/*TT_RX_Diab_Insulin_Current	 	 	 	/*CALC: 4th Detailed follow-up - Currently use insulin [TT39, TT147]*/
-	/*TT_RX_HTN_Any_Current	 	 	 	/*CALC: 4th detailed follow-up - Currently use any hypertension medication [TT147]*/
-	/*TT_RX_Interferon_Current	 	 	 	/*CALC: 4th detailed follow-up - Currently use interferon [TT147]*/
-	/*TT_RX_Lithium_Current	 	 	 	/*CALC: 4th detailed follow-up - Currently use lithium [TT147]*/
-	/*TT_RX_Meds_Missing	 	 	 	/*CALC: 4th detailed Follow-Up - missing form or reported medications*/
-	/*TT_RX_OtherIodineMeds_Current	 	 	 	/*CALC: 4th detailed follow-up - Currently use other iodine meds [TT147]*/
-	/*TT_RX_Pot_Sod_Iodide_Current	 	 	 	/*CALC: 4th detailed follow-up - Currently use potassium or sodium iodide [TT147]*/
-	/*TT_RX_ThyroidHormSub_Current	 	 	 	/*CALC: 4th detailed follow-up - Currently use thyroid hormone substitutes [TT147]*/
-	/*TT_RX_ThyroidMed_Current	 	 	 	/*CALC: 4th detailed follow-up - Currently use thyroid hormone substitutes, antithyroid, or iodine/iodide meds [TT147]*/
-	/*TT_RX_Thyrotrophin_Current	 	 	 	/*CALC: 4th detailed follow-up - Currently use thyrotrophin [TT147]*/
-	/*TH_RX_Amiodarone_Current	 	 	 	/*CALC: 2nd detailed follow-up - Currently use amiodarone [TH199]*/
-	/*TH_RX_Antithyroid_Current	 	 	 	/*CALC: 2nd detailed follow-up - Currently use antithyroid meds [TH199]*/
-	/*TH_RX_BiologicalProds_Current	 	 	 	/*CALC: 2nd detailed follow-up - Currently use biological products [TH199]*/
-	/*TH_RX_Diab_AnyOralMed_Current	 	 	 	/*CALC: 2nd Detailed follow-up - Currently use any oral diabetes meds [TH199]*/
-	/*TH_RX_Diab_Insulin_Current	 	 	 	/*CALC: 2nd Detailed follow-up - Currently use insulin [TH47C, TH199]*/
-	/*TH_RX_HTN_Any_Current	 	 	 	/*CALC: 2nd detailed follow-up - Currently use any hypertension medication [TH199]*/
-	/*TH_RX_Interferon_Current	 	 	 	/*CALC: 2nd detailed follow-up - Currently use interferon [TH199]*/
-	/*TH_RX_Lithium_Current	 	 	 	/*CALC: 2nd detailed follow-up - Currently use lithium [TH199]*/
-	/*TH_RX_Meds_Missing	 	 	 	/*CALC: 2nd detailed Follow-Up - missing form or reported medications*/
-	/*TH_RX_OtherIodineMeds_Current	 	 	 	/*CALC: 2nd detailed follow-up - Currently use other iodine meds [TH199]*/
-	/*TH_RX_Pot_Sod_Iodide_Current	 	 	 	/*CALC: 2nd detailed follow-up - Currently use potassium or sodium iodide [TH199]*/
-	/*TH_RX_ThyroidHormSub_Current	 	 	 	/*CALC: 2nd detailed follow-up - Currently use thyroid hormone substitutes [TH199]*/
-	/*TH_RX_ThyroidMed_Current	 	 	 	/*CALC: 2nd detailed follow-up - Currently use thyroid hormone substitutes, antithyroid, or iodine/iodide meds [TH199]*/
-	/*TH_RX_Thyrotrophin_Current	 	 	 	/*CALC: 2nd detailed follow-up - Currently use thyrotrophin [TH199]*/
-	/*PX_Chemo	 	 	 	/*CALC: PX6. Ever chemotherapy (yes/no) [PX6 repeating]*/
-	/*PX_Radiation	 	 	 	/*CALC: PX7. Ever radiation therapy (yes/no) [PX7 repeating]*/
-	/*REX1_AgeExact	 	 	 	/*CALC: Age (exact) at questionnaire completion [(REX1_Date - DOB)/365.25]*/
 	;
 run;
 
@@ -411,38 +179,10 @@ data ss_illness_treatment;
 		tre_thyroidectomy=1;
 	else tre_thyroidectomy=0;
 
-	if HZ_RX_Antithyroid_Ever = 1 and HZ_RX_Antithyroid_AgeStart<=Age_Baseline then
-		tre_antithyroid = 1;
-	else tre_antithyroid = 0;
-
-	if HZ_RX_Diab_AnyOralMed_Ever = 1 and HZ_RX_Diab_AnyOralMed_AgeStart<=Age_Baseline then
-		tre_diab_oral = 1;
-	else tre_diab_oral = 0;
-
-	if HZ_RX_Diab_Insulin_Ever = 1 and HZ_RX_Diab_Insulin_AgeStart<=Age_Baseline then
-		tre_insulin = 1;
-	else tre_insulin = 0;
-
-	if HZ_RX_Pot_Sod_Iodide_Ever = 1 and HZ_RX_Pot_Sod_Iodide_AgeStart<=Age_Baseline then
-		tre_pot_sod_iodine = 1;
-	else tre_pot_sod_iodine = 0;
-
-	if HZ_RX_OtherIodineMeds_Ever = 1 and HZ_RX_OtherIodineMeds_AgeStart<=Age_Baseline then
-		tre_other_iodine = 1;
-	else tre_other_iodine = 0;
-
-	if HZ_RX_ThyroidHormSub_Ever = 1 and HZ_RX_ThyroidHormSub_AgeStart<=Age_Baseline then
-		tre_thyr_hor_sub = 1;
-	else tre_thyr_hor_sub = 0;
-
-	if HZ_RX_ThyroidMed_Ever = 1 and HZ_RX_ThyroidMed_AgeStart<=Age_Baseline then
+	if Rx_ThyroidMed_Ever_T0 = 1 then
 		tre_thyr_med_all = 1;
 	else tre_thyr_med_all = 0;
-
-	if HZ_RX_Thyrotrophin_Ever = 1 and HZ_RX_Thyrotrophin_AgeStart<=Age_Baseline then
-		tre_thyrotropin = 1;
-	else tre_thyrotropin = 0;
-	format tre_thyroidectomy tre_antithyroid tre_diab_oral tre_insulin  tre_pot_sod_iodine tre_other_iodine tre_thyr_hor_sub tre_thyr_med_all tre_thyrotropin  yesno.;
+	format tre_thyroidectomy tre_thyr_med_all  yesno.;
 run;
 
 data ss_illness_treatment;
@@ -457,7 +197,7 @@ run;
 data ss_illness_treatment;
 	set ss_illness_treatment;
 	keep psid illness_diab_border_bl illness_diab_bl  illness_hyper_bl illness_hypo_bl  illness_thynod_bl illness_thyoth_bl illness_thyroid_all illness_thyroid_disease
-		tre_thyroidectomy tre_antithyroid tre_diab_oral tre_insulin  tre_pot_sod_iodine tre_other_iodine tre_thyr_hor_sub tre_thyr_med_all tre_thyrotropin;
+		tre_thyroidectomy tre_thyr_med_all ;
 run;
 
 data ss_illness_treatment;

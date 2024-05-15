@@ -159,7 +159,7 @@ data ss_ident_cancer;
 		ident_DTC_histo = 3 /*Unknown*/;
 
 	/*Medically confirmed*/
-	if ident_DTC=1 and FU_ThyCa_DxReportSource = 1 then ident_DTC_source = 1;
+	if ident_DTC=1 and FU_ThyCa_DxReportSource in (1 8) then ident_DTC_source = 1;
 	else ident_DTC_source = 0; 
 
 	/*stage AJCC7*/

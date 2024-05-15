@@ -59,7 +59,7 @@ value FHGEST_modif_new		-1="Unknown" 0="1) Born post-term or up to 2 weeks pre-t
 value FHMISS2X_modif 	.D ="Unknown" .E="Unknown" .M="Unknown".P="Unknown".Q="Unknown" 90="Unknown" 98="Unknown" 99="Unknown"; 
 value FHYESNO_modif 	-1="Unknown" 0="1) No" 1="2) Yes"; 
 value parents_age 		0-<25="1) Before 25 years" 25-<30="2) Between 25 and 29 years" 30-<35="3) Between 30 and 34 years" 35-high="4) 35+ years" -1="Unknown";
-value birth_weight 		0-<5.51="2) < 2500 g" 5.51-<8.82="1) Between 2500 and 3999 g" 8.82-high="3) 4000+ g" -1="Unknown";
+value birth_weight 		0-<5.5116="2) < 2500 g" 5.5116-<8.8163="1) Between 2500 and 3999 g" 8.8163-high="3) 4000+ g" -1="Unknown";
 value size_ges 			 0="1) Small-for-gestational age" 1="2) Normal-for-gestational age" 2="3) Large-for-gestational age" 3="Unknown";
 value twin_female 		-1="Unknown" 1="2) Single birth" 2="3) Multiple birth, male" 3="4) Multiple birth, female";
 value time_preg 		 0="1) First born" 0.5-2 = "2) Equal or less than 2 years" 3-5="3) 3-5 years" 6-high="4) More than 5 years" -1="Unknown";

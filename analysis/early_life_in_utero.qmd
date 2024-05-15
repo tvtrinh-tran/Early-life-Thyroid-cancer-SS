@@ -66,11 +66,11 @@ var_label_utero = list(
 ###"ui_DES"~"DES use",                                                        #not included because of number of cases<5
   "ui_mother_smok"~"Smoking during pregnancy",
   "ui_hh_smok"~"Household secondhand smoking during pregnancy",
-  "ui_preg_last_cat"~"Time since last pregnancy of the participants' mother",
-  "ui_preg_last_cont"~"Time since last pregnancy of the participants' mother (year, continuous)",
+  "ui_preg_last_cat"~"Time since last pregnancy",
+  #"ui_preg_last_cont"~"Time since last pregnancy (per year, continuous)",
   "ui_mother_age_cat"~"Age at delivery",
   "ui_mother_age_cont"~"Age at delivery (year, continuous)",
-  "ui_diab_father"~"Diabetes",
+  #"ui_diab_father"~"Diabetes",
   "ui_father_smok"~"Smoking during 3 months before conception",
   "ui_father_age_cat"~"Age at delivery",
   "ui_father_age_cont"~"Age at delivery (year, continuous)",
@@ -104,17 +104,16 @@ eligible <- boxGrob(glue("Female participants", "in the Sister Study cohort",
                          .sep = "\n"),y = unit(0.5, "npc"),
   x = unit(0.2, "npc"))
 included <- boxGrob(glue("Study population",
-                         "n = 47810",
+                         "n = 47913",
                          incl = txtInt(122),
                          .sep = "\n"),y = unit(0.5, "npc"),
   x = unit(0.2, "npc"))
 
 excluded <- boxGrob(glue("Excluded:",
-                         " - Withdrawal from the Sister Study: n = 5",
                          " - Any history of invasive cancer prior to baseline: n = 2911",
-                         " - Self-reported total thyroidectomy prior to baseline: n = 103",
                          " - Self-reported chemotherapy or radiotherapy for cancer prior",
                          " to baseline: n = 55",
+                         " - Withdrawal from the Sister Study: n = 5",
                          tot = 30,
                          uninterested = 12,
                          contra = 30 - 12,
@@ -159,7 +158,7 @@ table1_descript_var_label = list(
 #  "smok_status"~"Smoking status",
   "illness_thyroid_all"~"Benign thyroid disease",
   "ses_edu_level"~"Educational level",
-  "ses_income"~"Household annual income",
+  "ses_income"~"Household annual income"
 #  "ses_ADI_baseline_cat"~"Area deprivation index"
 )
 table1_descript_var_name = substr(table1_descript_var_label, 2, unlist(gregexpr("~", table1_descript_var_label)) - 3)
@@ -209,6 +208,8 @@ cox_utero = tbl_merge(
                   "**Multivariable models**")) |> 
   #modify_column_hide(c(n_event_3,exposure_3))|>
   polish_utero(group_name = TRUE)
+
+
 ```
 
 ```{r}
@@ -219,6 +220,17 @@ cox_utero = tbl_merge(
 #| cache.extra: !expr file.mtime("C:/Users/trant4/OneDrive - National Institutes of Health/Trinh/Postdoc NCI - Risk factors and thyroid cancer/SS/data/ss_earlylife_popu.csv")
 #return the table 
 cox_utero
+#Exclude first born 
+descript_utero_preg_last_cont = descript_table(var_name = "ui_preg_last_cont",
+                       var_label = list("ui_preg_last_cont"~"Time since last pregnancy (per year, continuous)"),
+                                data=earlylife_popu[earlylife_popu$ui_preg_last_cont>0,])
+multivariable_utero_preg_last_cont=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+                       var_name = "ui_preg_last_cont",
+                       var_label = list("ui_preg_last_cont"~"Time since last pregnancy (per year, continuous)"),
+                       covar = covariates_utero,
+                   data=earlylife_popu[earlylife_popu$ui_preg_last_cont>0,])|> sort_birth_weight()
+descript_utero_preg_last_cont
+multivariable_utero_preg_last_cont
 ```
 
 ## Table 3: **Simultaneously adjusted association between thyroid cancer risk and pre-pregnancy or gestational diabetes, gestational hypertension or hypertension-related disorders, birth weight (categorical variable), and gestational age at birth**
@@ -257,8 +269,8 @@ hyper_diab_birthweight_mutual_cat
 
 ```
 
-
 # Supplementary materials
+
 ## Supplementary table 1: **Association between birth weight and thyroid cancer risk, after excluding participants who were born at least 2 weeks before the due date or those who were part of a multiple birth**
 
 ```{r}
@@ -266,7 +278,7 @@ hyper_diab_birthweight_mutual_cat
 #| output: false
 surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
 
-non_preterm = earlylife_popu |> filter(ui_early_gest != "Yes, at least 2 weeks before due date" & (ui_multiple_birth != "Multiple birth" ))
+non_preterm = earlylife_popu |> filter(ui_early_gest != "Born at least 2 weeks before the due date" & (ui_multiple_birth != "Multiple birth" ))
 
 
 birth_weight_name = c("ui_birth_weight_cat", "ui_birth_weight_cont")
@@ -503,7 +515,6 @@ cox_PTC_utero = cox_model(
 
 ```
 
-
 ```{r}
 #| label: utero-complete-case
 #| output: false
@@ -550,11 +561,9 @@ cox_complete_early_gest = cox_model(
   data = earlylife_popu[earlylife_popu$ui_early_gest!="Unknown",]
 )|> sort_birth_weight()
 
-cox_complete = tbl_stack(list(cox_complete_ges_hypertension, cox_complete_ges_diab, cox_complete_birth_weight_cat, cox_complete_birth_weight_cont, cox_complete_early_gest))|>
+cox_complete = tbl_stack(list(cox_complete_ges_diab, cox_complete_ges_hypertension, cox_complete_birth_weight_cat, cox_complete_birth_weight_cont, cox_complete_early_gest))|>
   polish_utero()
 ```
-
-
 
 ```{r}
 #| label: e-values
@@ -579,8 +588,7 @@ sensi_censor_utero = tbl_merge(
   tbls = list(
     cox_cmprsk_utero,
     cox_medical_confirmed,
-    cox_PTC_utero,
-    cox_complete
+    cox_PTC_utero
   ),
   tab_spanner = FALSE
 )  |>
@@ -597,6 +605,7 @@ sensi_censor_utero = tbl_merge(
 #| label: tbl-utero-censor-all
 #| tbl-cap: "Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants, when considering only medically confirmed cases, papillary histology, competing risks, or when stratified by tumor size, and cancer stage"
 sensi_censor_utero
+cox_complete
 Evalues
 ```
 

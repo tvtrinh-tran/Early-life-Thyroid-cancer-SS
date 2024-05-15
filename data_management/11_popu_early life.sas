@@ -22,8 +22,8 @@ data ss_earlylife_popu;
 
 	if ident_cancer_bl =1 then
 		exclusion = 1 /*Any history of invassive cancer prior to baseline*/;
-	else if tre_thyroidectomy=1 then
-		exclusion = 2 /*Self-reported total thyroidectomy prior to baseline*/;
+	/*else if tre_thyroidectomy=1 then
+		exclusion = 2 /*Self-reported total thyroidectomy prior to baseline;*/
 	else if ident_treatment_cancer_bl=1 then exclusion = 3; /*Self-reported chemotherapy or radiotherapy for cancer(s) prior to baseline*/
 	else if psid in ("00315_208117" "00315_225588" "00315_226048" "00315_227709" "00315_242695") then
 		exclusion = 4;

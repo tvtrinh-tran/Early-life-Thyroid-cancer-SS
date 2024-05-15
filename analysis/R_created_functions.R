@@ -332,7 +332,7 @@ polish_utero = function(data, group_name = FALSE)
         )  |>
         dplyr::add_row(
           label = "Paternal pregnancy characteristics",
-          .before = grep("ui_diab_father", data$table_body$variable) + 1
+          .before = grep("ui_father_smok", data$table_body$variable) + 1
         )  |>
         dplyr::add_row(
           label = "Birth and infancy characteristics",

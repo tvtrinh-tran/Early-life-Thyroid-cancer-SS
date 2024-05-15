@@ -102,7 +102,7 @@ data ss_utero_infant;
 		ui_farm_all=4;
 	else ui_farm_all=-1;
 
-	ui_birth_weight_cont=F20Weight*1;
+	ui_birth_weight_cont=F20Weight*0.4534;
 
 	if ui_birth_weight_cont=. and F21=1 then
 		ui_birth_weight_cat=0.0001;
