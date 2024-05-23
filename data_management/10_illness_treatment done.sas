@@ -7,12 +7,12 @@ data ss_illness_treatment;
 
 	/*FU_DiabBordPr_DxAgeExact	 	 	 	/*CALC: Borderline diabetes (initial diagnosis) - Age (exact) at diagnosis with imputation for cases missing dxdate (see FU_DiabBordPr_DxDateImputed)*/
 	/*FU_DiabBordPr_DxDateImputed	 	 	 	/*FLAG: Borderline diabetes (initial diagnosis) - Date/Age at diagnosis imputed*/
-	FU_DiabBordPr_DxPreBaseline	 	 	 	/*CALC: Borderline diabetes (initial diagnosis) - Timing around baseline*/
+	/*FU_DiabBordPr_DxPreBaseline	 	 	 	/*CALC: Borderline diabetes (initial diagnosis) - Timing around baseline*/
 
 	/*FU_DiabBordPr_DxReportSource	 	 	 	/*CALC: Borderline diabetes (initial diagnosis) - Data source*/
 	/*FU_DiabBordPr_DxType	 	 	 	/*CALC: Borderline diabetes (initial diagnosis) - Type*/
 	/*FU_DiabBordPr_DxType_Source	 	 	 	/*CALC: Borderline diabetes (initial diagnosis) - Data source for FU_DiabBordPr_DxType*/
-	FU_DiabBordPr_Event	 	 	 	/*CALC: Borderline diabetes (initial diagnosis) - Event*/
+	/*FU_DiabBordPr_Event	 	 	 	/*CALC: Borderline diabetes (initial diagnosis) - Event*/
 
 	/*FU_DiabBordPr_FlagStop	 	 	 	/*FLAG: Borderline diabetes - Participant indicated that they no longer have borderline diabetes at some point*/
 	/*FU_DiabBordPr_FlagStopAge	 	 	 	/*CALC: Borderline diabetes - Age at which participant indicated that they no longer have borderline diabetes*/
@@ -141,10 +141,6 @@ run;
 data ss_illness_treatment;
 	set ss_illness_treatment;
 
-	if FU_DiabBordPr_DxPreBaseline=1 then
-		illness_diab_border_bl = 1;
-	else illness_diab_border_bl=0;
-
 	if FU_Diab_DxPreBaseline=1 then
 		illness_diab_bl = 1;
 	else illness_diab_bl=0;
@@ -169,7 +165,7 @@ data ss_illness_treatment;
 		illness_thyroid_disease = 1;
 	else illness_thyroid_disease=0;
 	format 
-	illness_diab_border_bl illness_diab_bl  illness_hyper_bl illness_hypo_bl  illness_thynod_bl illness_thyoth_bl illness_thyroid_disease yesno.;
+	illness_diab_bl  illness_hyper_bl illness_hypo_bl  illness_thynod_bl illness_thyoth_bl illness_thyroid_disease yesno.;
 run;
 
 data ss_illness_treatment;
@@ -196,7 +192,7 @@ run;
 
 data ss_illness_treatment;
 	set ss_illness_treatment;
-	keep psid illness_diab_border_bl illness_diab_bl  illness_hyper_bl illness_hypo_bl  illness_thynod_bl illness_thyoth_bl illness_thyroid_all illness_thyroid_disease
+	keep psid illness_diab_bl  illness_hyper_bl illness_hypo_bl  illness_thynod_bl illness_thyoth_bl illness_thyroid_all illness_thyroid_disease
 		tre_thyroidectomy tre_thyr_med_all ;
 run;
 

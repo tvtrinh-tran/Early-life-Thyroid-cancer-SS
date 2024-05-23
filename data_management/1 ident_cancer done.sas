@@ -132,14 +132,23 @@ data ss_ident_cancer;
 	8347	mixed medullary papillary
 	8510	MTC
 	9084	Ovary*/
-	if FU_ThyCa_Event=1 and FU_ThyCa_DxGrade not in (2 3) and 
+	if FU_ThyCa_Event=1 and FU_ThyCa_EOFAgeExact <= ident_EOF and
+	FU_ThyCa_DxGrade not in (2 3) and 
 	FU_ThyCa_DxHist01 not in (8021 8265 8346 8347 8510 9084) and 
-	FU_ThyCa_DxHist02 not in (8021 8265 8346 8347 8510 9084) and 
-	FU_ThyCa_EOFAgeExact <= ident_EOF then
-		ident_DTC=1;
+	FU_ThyCa_DxHist02 not in (8021 8265 8346 8347 8510 9084)  
+	then ident_DTC=1;
 	else ident_DTC=0;
 
-	if FU_ThyCa_Event=1 and ident_DTC = 1 then ident_not_DTC = 1;
+	if FU_ThyCa_Event ne 1 or (FU_ThyCa_Event=1 and FU_ThyCa_EOFAgeExact > ident_EOF) then 
+		ident_TC_all = 0;
+	else if ident_DTC = 1 then ident_TC_all = 1;
+	else if FU_ThyCa_DxGrade in (2 3) then ident_TC_all = 2; 
+	else if FU_ThyCa_DxHist01 = 8021 then ident_TC_all = 3;
+	else if FU_ThyCa_DxHist01 in (8346 8347 8510) then ident_TC_all = 4; 
+	else if FU_ThyCa_DxHist01 in (8265 9084) then ident_TC_all = 5; 
+	else ident_TC_all = 6;
+
+/*and ident_DTC = 1 then ident_not_DTC = 1;
 	else if FU_ThyCa_Event=1 and ident_DTC ne 1 then do;
 		if ident_DTC = 0 and FU_ThyCa_DxGrade in (2 3) then ident_not_DTC = 2; 
 		else if FU_ThyCa_DxHist01 = 8021 then ident_not_DTC = 3;
@@ -219,7 +228,7 @@ run;
 
 data ss_ident_cancer;
 set ss_ident_cancer;
-format ident_DTC_histo histo. ident_DTC_stage_AJCC7 ajcc_seven. ident_DTC_inv invassive. ident_DTC_size size. ident_birth_year birth_year. ident_not_DTC not_DTC.;
+format ident_DTC_histo histo. ident_DTC_stage_AJCC7 ajcc_seven. ident_DTC_inv invassive. ident_DTC_size size. ident_birth_year birth_year. ident_TC_all not_DTC.;
 rename FU_ThyCa_DxReportSource = ident_DTC_source_detail;
 run;
 
@@ -233,13 +242,15 @@ data ss.ss_ident_cancer;
 		ident_cancer_bl
 		ident_treatment_cancer_bl
 		ident_DTC
-		ident_not_DTC
+		ident_TC_all
 		ident_DTC_histo
 		ident_DTC_stage_AJCC7
 		ident_DTC_size
 		ident_DTC_inv
 		ident_DTC_source
 		ident_DTC_source_detail
+		FU_ThyCa_DxHist01
+		FU_ThyCa_DxGrade
 		ident_FU_year
 		ident_EOF
 		ident_compete;

@@ -14,7 +14,7 @@ value histo 			0="1) No DTC"		1="2) PTC"		2="3) FTC"		3="Unknown";
 value size				0="1) No DTC" 		1="2) <1 cm"		2="3) 1-2 cm"		3="4) 2-4 cm"		4="5) 4 cm or more"		5="Unknown";
 value ajcc_seven 		0="1) No DTC" 		1="2) I"		2="3) II"		3="4) III"		4="5) IV"		5="Unknown";
 value invassive			0="1) Censored: No DTC/non-invasive" 1="2) Invassive DTC";
-value not_DTC			0="0) No TC" 1="1) DTC" 2="2) Moderately or poorly differentiated" 3="3) Anaplastic thyroid cancer" 4="4) Medullary thyroid cancer";
+value not_DTC			0="0) No TC" 1="1) DTC" 2="2) Moderately or poorly differentiated" 3="3) Anaplastic thyroid cancer" 4="4) Medullary thyroid cancer" 5="0) Histology 8265 9084, so not thyroid cancer" 6="6) Other reasons";
 value birth_year		-1="Unknown" 0="1) Before 1951" 1="2) 1951 or after" ;
 value edu 				0="1) Highschool or GED or less" 1="2) Some college or associate or technical degree" 2="3) Bachelor’s degree or higher" 3="Unknown";
 value income 			1,2="1) <$50000" 3="2) $50000-$99999" 4="3) $100000+" -1="Unknown";

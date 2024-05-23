@@ -78,7 +78,7 @@ var_label_utero = list(
   "ui_birth_weight_cont"~"Birth weight (continuous)",
   #"ui_maternal_1st_born"~"First born", # Accounted for Cari's comment on 02/11/24: I would delete this (first born, yes or no) since it is not showing anything different from the expanded variable. 
   "ui_preg_order_cat"~"Birth order",
-  "ui_preg_order_cont"~"Birth order (kg, continuous)",
+  "ui_preg_order_cont"~"Birth order (per birth, continuous)",
   "ui_multiple_birth"~"Multiple birth",
   "ui_early_gest"~"Gestational length at birth",
 ###"ui_early_gest_detail"~"Gestational age at birth",                         #for exploratory purposes only, number of cases<5
