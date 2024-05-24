@@ -46,45 +46,30 @@ source(paste(here::here(),'/analysis/setup_library_and_data.R',sep = ""),local =
 ###Create lists of exposure and covariates to avoid repetition in the code
 
 #Covariates to adjust in Cox models
-covariates_label_utero = list(
-  "ses_race"~"Race"
-  # "an_bmi_cat"~"BMI",
-  # "smok_status"~"Smoking status",
-  # "illness_thyroid_all"~"Benign thyroid disease",
-  # "ses_edu_level"~"Personal educational level",
-  # "ses_income"~"Household annual income",
-  # "ses_ADI_baseline_cat"~"Area deprivation index"
-)
+covariates_label_utero = list("ses_race"~"Race")
 covariates_utero = substr(covariates_label_utero, 2, unlist(gregexpr("~", covariates_label_utero)) - 3)
 
 #In-utero and infancy factors
 var_label_utero = list(
   "ui_diab_all_mother"~"Pre-pregnancy or gestational diabetes",
   "ui_hypertension_all"~"Gestational hypertension or hypertension-related disorders",
-###"ui_epilepsy_prior"~"Epilepsy",                                            #not included because of number of cases<5
   "ui_vomit"~"Morning sickness with vomiting",
-###"ui_DES"~"DES use",                                                        #not included because of number of cases<5
   "ui_mother_smok"~"Smoking during pregnancy",
   "ui_hh_smok"~"Household secondhand smoking during pregnancy",
   "ui_preg_last_cat"~"Time since last pregnancy",
-  #"ui_preg_last_cont"~"Time since last pregnancy (per year, continuous)",
   "ui_mother_age_cat"~"Age at delivery",
   "ui_mother_age_cont"~"Age at delivery (year, continuous)",
-  #"ui_diab_father"~"Diabetes",
   "ui_father_smok"~"Smoking during 3 months before conception",
   "ui_father_age_cat"~"Age at delivery",
   "ui_father_age_cont"~"Age at delivery (year, continuous)",
   "ui_birth_weight_cat"~"Birth weight",
   "ui_birth_weight_cont"~"Birth weight (continuous)",
-  #"ui_maternal_1st_born"~"First born", # Accounted for Cari's comment on 02/11/24: I would delete this (first born, yes or no) since it is not showing anything different from the expanded variable. 
   "ui_preg_order_cat"~"Birth order",
   "ui_preg_order_cont"~"Birth order (per birth, continuous)",
   "ui_multiple_birth"~"Multiple birth",
   "ui_early_gest"~"Gestational length at birth",
-###"ui_early_gest_detail"~"Gestational age at birth",                         #for exploratory purposes only, number of cases<5
   "ui_breastfed"~"Ever breastfed",
   "ui_breastfed_time"~"Duration of breastfeeding"
-###"ui_soy"~"Ever fed soy formula"                                            #not included because of number of cases<5)
 )
 var_name_utero = substr(var_label_utero, 2, unlist(gregexpr("~", var_label_utero)) - 3)
 
@@ -142,24 +127,19 @@ rm(eligible,excluded,included,vert)
 
 ```
 
-## Table 1: **Characteristics of the study population (n=47810)**
+## Table 1: **Characteristics of the study population (n=47913)**
 
 ```{r}
 #| label: tbl-descript
-#| tbl-cap: "Characteristics of the study population (n=47810)"
-#| cache: true
-#| dependson: c("setup-library-and-data", "var-list-utero", "functions")
-#| cache.extra: !expr file.mtime("C:/Users/trant4/OneDrive - National Institutes of Health/Trinh/Postdoc NCI - Risk factors and thyroid cancer/SS/data/ss_earlylife_popu.csv")
+#| tbl-cap: "Characteristics of the study population (n=47913)"
 
 table1_descript_var_label = list(
   "ident_ageexact_bl"~"Age at baseline",
   "ses_race"~"Race",
   "an_bmi_cat"~"BMI",
-#  "smok_status"~"Smoking status",
   "illness_thyroid_all"~"Benign thyroid disease",
   "ses_edu_level"~"Educational level",
   "ses_income"~"Household annual income"
-#  "ses_ADI_baseline_cat"~"Area deprivation index"
 )
 table1_descript_var_name = substr(table1_descript_var_label, 2, unlist(gregexpr("~", table1_descript_var_label)) - 3)
 
@@ -173,11 +153,8 @@ descript_covar
 ## Table 2: **Association between in-utero and newborn factors and thyroid cancer incidence in the Sister Study cohort**
 
 ```{r}
-#| label: utero
-#| output: false
-#| cache: true
-#| dependson: c("setup-library-and-data", "var-list-utero", "functions")
-#| cache.extra: !expr file.mtime("C:/Users/trant4/OneDrive - National Institutes of Health/Trinh/Postdoc NCI - Risk factors and thyroid cancer/SS/data/ss_earlylife_popu.csv")
+#| label: tbl-utero
+#| tbl-cap: "Association between in-utero and infancy factors and thyroid cancer incidence"
 
 ###To create Table Association between in-utero and infancy factors and thyroid cancer incidence
 
@@ -185,12 +162,6 @@ descript_covar
 descript_utero = descript_table(var_name = var_name_utero, 
                                 var_label = var_label_utero,
                                 data = earlylife_popu)|> sort_birth_weight()
-
-# univariable_utero=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
-#                      var_name = var_name_utero,
-#                      var_label = var_label_utero,
-#                      covar = NULL,
-#                      data=earlylife_popu)|> sort_birth_weight()
 
 multivariable_utero=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
                        var_name = var_name_utero,
@@ -204,22 +175,15 @@ cox_utero = tbl_merge(
               #univariable_utero, 
               multivariable_utero),
   tab_spanner = c("**N (%)**",
-                  #"**Univariable models**",
                   "**Multivariable models**")) |> 
-  #modify_column_hide(c(n_event_3,exposure_3))|>
   polish_utero(group_name = TRUE)
 
+#return the table 
+cox_utero
 
 ```
 
 ```{r}
-#| label: tbl-utero
-#| tbl-cap: "Association between in-utero and infancy factors and thyroid cancer incidence"
-#| cache: true
-#| dependson: c("setup-library-and-data", "var-list-utero", "functions","tbl-utero")
-#| cache.extra: !expr file.mtime("C:/Users/trant4/OneDrive - National Institutes of Health/Trinh/Postdoc NCI - Risk factors and thyroid cancer/SS/data/ss_earlylife_popu.csv")
-#return the table 
-cox_utero
 #Exclude first born 
 descript_utero_preg_last_cont = descript_table(var_name = "ui_preg_last_cont",
                        var_label = list("ui_preg_last_cont"~"Time since last pregnancy (per year, continuous)"),
@@ -274,8 +238,8 @@ hyper_diab_birthweight_mutual_cat
 ## Supplementary table 1: **Association between birth weight and thyroid cancer risk, after excluding participants who were born at least 2 weeks before the due date or those who were part of a multiple birth**
 
 ```{r}
-#| label: sensi-birthweight
-#| output: false
+#| label: tbl-sensi-birthweight
+#| tbl-cap: "Association between birth weight and thyroid cancer risk, after excluding participants who were born more than 2 weeks before due date or those who were part of a multiple birth"
 surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
 
 non_preterm = earlylife_popu |> filter(ui_early_gest != "Born at least 2 weeks before the due date" & (ui_multiple_birth != "Multiple birth" ))
@@ -305,12 +269,10 @@ cox_birth_weight = tbl_merge(
   tab_spanner = c("**N (%)**",
                   "**Multivariable models**")
 ) |> sort_birth_weight() |> polish_utero()
-```
 
-```{r}
-#| label: tbl-sensi-birthweight
-#| tbl-cap: "Association between birth weight and thyroid cancer risk, after excluding participants who were born more than 2 weeks before due date or those who were part of a multiple birth"
+#return the table
 cox_birth_weight
+
 ```
 
 ## Supplementary table 2: **Association between birth weight (continuous) and thyroid cancer incidence in the Sister Study cohort by baseline examiner-measured BMI, Area Deprivation Index, personal educational level, and household annual income**
@@ -581,8 +543,8 @@ Evalues=cbind(multivariable_evalues$`_data`$label,Evalues)|>as.data.frame()
 ```
 
 ```{r}
-#| label: utero-censor-all
-#| ouput: false
+#| label: tbl-utero-censor-all
+#| tbl-cap: "Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants, when considering only medically confirmed cases, papillary histology, competing risks, or when stratified by tumor size, and cancer stage"
 
 sensi_censor_utero = tbl_merge(
   tbls = list(
@@ -599,14 +561,11 @@ sensi_censor_utero = tbl_merge(
       exposure_3
     )
   )|>  polish_utero(group_name = TRUE)
-```
 
-```{r}
-#| label: tbl-utero-censor-all
-#| tbl-cap: "Association between in-utero and infancy factors and thyroid cancer incidence in the Sister Study participants, when considering only medically confirmed cases, papillary histology, competing risks, or when stratified by tumor size, and cancer stage"
 sensi_censor_utero
 cox_complete
 Evalues
+
 ```
 
 ```{r}
