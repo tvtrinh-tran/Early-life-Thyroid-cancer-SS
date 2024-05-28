@@ -20,7 +20,7 @@ value edu 				0="1) Highschool or GED or less" 1="2) Some college or associate o
 value income 			1,2="1) <$50000" 3="2) $50000-$99999" 4="3) $100000+" -1="Unknown";
 value income_childhood 	1="2) Well off" 	2="1) Middle income" 3="3) Low income" 4="4) Poor" 5="Unknown";
 value household_compo 	1="1) Two parents" 	2="2) Single parent" 3="3) Other" 4="Unknown";
-value marital 			0="2) Single/never married" 1="1) Married/Committed relationship" 2="3) Divorced/Widowed/Separated" 3="Unknown";
+value marital 			2="2) Single/never married" 1="1) Married/Committed relationship" 3="3) Divorced/Widowed/Separated" -1="Unknown";
 value race 				0="1) Non-Hispanic White" 1="2) Non-Hispanic Black" 2="3) Hispanic" 3="4) Non-Hispanic all other races" 4="Unknown" ;
 value race_other		0="1) Non-Hispanic White" 1="2) Non-Hispanic Black" 2="3) Hispanic" 3="5) Non-Hispanic other races: Asian" 
 						4="6) Non-Hispanic other races: American Indian/Alaska Native" 5="7) Non-Hispanic other races: Hawaiian/Pacific Islander " 6="Unknown" ;
@@ -67,12 +67,12 @@ value preg_order 		1="1) First born" 2="2) Second born" 3="3) Third born" 4-high
 value AN17R_modif 		-1="Unknown" 1="2) Lighter"	2="1) Same weight"	3="3) Heavier"	;
 VALUE AN4R_modif 		-1="Unknown" 1="2) Shorter"	2="1) Same height"	3="3) Taller"	;
 VALUE BMICDC_modif 		-1="Unknown" 1,2="1) <25"	3="2) 25.0-29.9"	4-6="3) 30.0+" /*1="2) < 18.5"	2="1) 18.5-24.9"	3="3) 25.0-29.9"	4="4) 30.0+"	5="5) 35.0-39.9"	6="6) 40.0+"	*/;
-value hrs_week 			0-<1="1) Less than 1 hour" 1-<4="2) 1-4 hours" 4-<7="3) 4-7 hours" 7-high="4) 7 hours or more" -1="Unknown";
-value met_week 			0-20.999999="1) Less than 21 MET-hours/week" 21-41.999999="2) 21-42 MET-hours/week" 42-high="3) 42 MET-hours/week or more" -1="Unknown";
+value hrs_week 			0-<1="1) Less than 1 hour" 1-<4="2) 1-<4 hours" 4-<7="3) 4-<7 hours" 7-high="4) 7 hours or more" -1="Unknown";
+value met_week 			0-20.999999="1) Less than 21 MET-hours/week" 21-41.999999="2) 21-<42 MET-hours/week" 42-high="3) 42 MET-hours/week or more" -1="Unknown";
 value thelarche 		0-10="2) Less than 11 years of age" 11-13="1) 11-13 years of age" 14-20="3) 14 years of age or more" -1, 21-high ="Unknown";
-value meno_age 			 0="1) Still have periods" 1="2) Yes, before 45" 2="3) Yes, between 45 and 55" 3="4) Yes, after 55" 4="5) Yes, unknown age" -1="Unknown";
+value meno_age 			 0="1) Still have periods" 1="2) Yes, before 45" 2="3) Yes, between 45 and 55" 3="4) Yes, 55 or more" 4="5) Yes, unknown age" -1="Unknown";
 value meno_cause 		1="1) Yes, natural" 2-5, 10= "2) Yes, medical reasons (surgery, chemotherapy, suppression medications or birth control pills)" 6, 7, 11="3) Still have periods" 8,9="Unknown";
-value first_preg 		 0="5) Never have any full-term pregnancy" 1="1) Less than 25 years of age" 2="2) 25-29 years of age" 3,4="3) 30 years of age or more" -1="Unknown";
+value first_preg 		 0="5) Never have any full-term pregnancy" 1="1) Less than 25 years of age" 2="2) 25-<30 years of age" 3,4="3) 30 years of age or more" -1="Unknown";
 value last_preg 		 0="4) Never have any full-term pregnancy" 1="1) Less than 10 years" 2="2) 10-20 years" 3="3) 20 years or more" -1="Unknown";
 value nb_preg 			 0="1) 0" 1="2) 1" 2="3) 2" 3-high="4) 3 or more" -1="Unknown";
 value age_menarche 		0-<12="2) Less than 12 years of age" 12-<14="1) 12-14 years of age" 14-20="3) 14 years of age or more" -1,21-high="Unknown";

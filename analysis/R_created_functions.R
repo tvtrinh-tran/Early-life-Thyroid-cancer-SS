@@ -400,9 +400,7 @@ polish_childhood = function(data, group_name = FALSE)
   }
   data = modify_footnote(data, abbreviation = TRUE) |>
     as_gt() |> tab_footnote(
-      footnote = "Multivariable models were adjusted for self-identified race/ethnicity, baseline BMI, smoking status 
-                         (except for the analysis for the age started smoking), personal history of benign thyroid disease, personal educational level, 
-                         household annual income, and Area Deprivation Index"
+      footnote = "Multivariable models were adjusted for attained age (timescale), and self-identified race/ethnicity"
     )
   
 }

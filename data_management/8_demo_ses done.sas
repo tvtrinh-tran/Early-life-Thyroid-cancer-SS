@@ -157,13 +157,13 @@ data ss_demo_ses;
 	else if SE_HHeducMax >= 8 then ses_edu_level_child = 2; /*Bachelor’s degree or higher*/
 	else ses_edu_level_child = 3; /*Unknown*/
 
-	if SE_Marital_T0 = 0 then
-		ses_marital_status = 0;
-	else if SE_Marital_T0 in (1 2) then
-		ses_marital_status = 1;
-	else if SE_Marital_T0 in (3 4 5) then
+	if SE_Marital_T0 = 1 then
 		ses_marital_status = 2;
-	else ses_marital_status = 3;
+	else if SE_Marital_T0 in (2 3 4) then
+		ses_marital_status = 3;
+	else if SE_Marital_T0 = 5 then
+		ses_marital_status = 1;
+	else ses_marital_status = -1;
 
 	if SE_RACE_ETH=0 then ses_race  = 0; /*Non-Hispanic White*/
 	else if SE_RACE_ETH=1 then ses_race  = 1; /*Non-Hispanic Black*/

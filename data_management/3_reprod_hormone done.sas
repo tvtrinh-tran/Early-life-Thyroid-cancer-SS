@@ -4,14 +4,14 @@ data ss_reprod_hormone;
 		AgeExact_Baseline
 		AN_BreastDevAge	 	 	 	/*AN_BreastDevAge*/
 
-HR_MenopauseAgeExact_T0			/*CALC: HR_MenopauseAgeExact_T0. Age at menopause status rounded to the 1/10th, at baseline adjusted for consistency with DFU data */
-HR_MenopauseStatus_T0				/*HR_MenopauseStatus_T0*/
-HR_Menopause_T0				/*HR_Menopause_T0*/
-PG_AgeFirstTermPG_T0				/*PG_AgeFirstTermPG_T0*/
-PG_AgeLastTermPG_T0				/*PG_AgeLastTermPG_T0*/
-PG_BreastTotal_t0				/*PG_BreastTotal_t0*/
-PG_EverPreg_t0				/*PG_EverPreg_t0*/
-PG_LastTermPGIndex_T0				/*PG_LastTermPGIndex_T0*/
+/*HR_MenopauseAgeExact_T0			/*CALC: HR_MenopauseAgeExact_T0. Age at menopause status rounded to the 1/10th, at baseline adjusted for consistency with DFU data */
+/*HR_MenopauseStatus_T0				/*HR_MenopauseStatus_T0*/
+/*HR_Menopause_T0				/*HR_Menopause_T0*/
+/*PG_AgeFirstTermPG_T0				/*PG_AgeFirstTermPG_T0*/
+/*PG_AgeLastTermPG_T0				/*PG_AgeLastTermPG_T0*/
+/*PG_BreastTotal_t0				/*PG_BreastTotal_t0*/
+/*PG_EverPreg_t0				/*PG_EverPreg_t0*/
+/*PG_LastTermPGIndex_T0				/*PG_LastTermPGIndex_T0*/
 PG_MenarcheAge				/*PG_MenarcheAge*/
 DR315_HR_BCAny_Adol			
 DR315_HR_BCAny_Adol_Yrs		
@@ -23,17 +23,12 @@ DR315_HR_BCNorp_Adol
 DR315_HR_BCNorp_Adol_Yrs	
 DR315_HR_BCPill_Adol		
 DR315_HR_BCPill_Adol_Yrs	
-DR315_HR_BCothr_Adol		
-DR315_HR_BCothr_Adol_Yrs	
 DR315_HR_BCpatc_Adol		
 DR315_HR_BCpatc_Adol_Yrs	
-HR_BCDepo_MinAge			
+HR_BCDepo_MinAge_T0			
 HR_BCIUDh_MinAge_T0			
-HR_BCIUDpatc_MinAge		
-HR_BCNorp_MinAge			
-HR_BCothr_MinAge			
-HR_BCpatc_MinAge				
-HR_BCpillPatcRing_MinAge		
+HR_BCNorp_MinAge_T0			
+HR_BCpatc_MinAge_T0				
 HR_BCpill_MinAge_T0				
 HR_BCAny_Ever_T0				
 HR_BCAny_MinAge_T0				
@@ -49,21 +44,21 @@ data ss_reprod_hormone;
 	rep_br_dev_age_cont=1*AN_BreastDevAge;
 	if rep_br_dev_age_cont>=21 then rep_br_dev_age_cont = .; /*if age at thelarche >=21 then it is considered implausible and missing data is assigned https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8666031/*/
 
-	rep_meno_age_cont=1*HR_MenopauseAgeExact_T0;
+/*	rep_meno_age_cont=1*HR_MenopauseAgeExact_T0;
 	rep_first_preg_cont=1*PG_AgeFirstTermPG_T0;
-	rep_br_feed_dur=1*PG_BreastTotal_t0;
+	rep_br_feed_dur=1*PG_BreastTotal_t0;*/
 
 	rep_age_menarche_cont=1*PG_MenarcheAge;
 	if rep_age_menarche_cont>=21 then rep_age_menarche_cont = .; /*if age at menarche >=21 then it is considered implausible and missing data is assigned to be consistent with age at thelarche*/
 
 
-	if PG_EverPreg_t0 =0 then
+/*	if PG_EverPreg_t0 =0 then
 		rep_first_preg_cat=0;
 	else if PG_EverPreg_t0 =1 and 0<rep_first_preg_cont<25 then
 		rep_first_preg_cat=1;
-	else if PG_EverPreg_t0 =1 and 25<=rep_first_preg_cont<29 then
+	else if PG_EverPreg_t0 =1 and 25<=rep_first_preg_cont<30 then
 		rep_first_preg_cat=2;
-	else if PG_EverPreg_t0 =1 and 29<=rep_first_preg_cont<35 then
+	else if PG_EverPreg_t0 =1 and 30<=rep_first_preg_cont<35 then
 		rep_first_preg_cat=3;
 	else if PG_EverPreg_t0 =1 and 35=<rep_first_preg_cont then
 		rep_first_preg_cat=4;
@@ -84,7 +79,7 @@ data ss_reprod_hormone;
 	else rep_meno_age_cat=-1;
 
 	/*Time since last pregnancy*/
-	if PG_AgeLastTermPG_T0 in (.D .M .N .Q .R .T) then
+/*	if PG_AgeLastTermPG_T0 in (.D .M .N .Q .R .T) then
 		rep_last_preg_cont=.;
 	else rep_last_preg_cont=AgeExact_Baseline-PG_AgeLastTermPG_T0;
 
@@ -102,7 +97,7 @@ data ss_reprod_hormone;
 		rep_nb_preg_cont = 0;
 	else rep_nb_preg_cont= 1*PG_LastTermPGIndex_T0;
 	rep_nb_preg_cat=rep_nb_preg_cont;
-	;
+	;*/
 run;
 
 /****classify according to active ingredient(s): 
@@ -155,7 +150,7 @@ data ss_reprod_hormone;
 	else rep_proges_ado_dur_cat = 4;
 
 	/*Min age*/
-	rep_proges_min_age_cont=min(of HR_BCDepo_MinAge HR_BCIUDh_MinAge_T0 HR_BCNorp_MinAge);
+	rep_proges_min_age_cont=min(of HR_BCDepo_MinAge_T0 HR_BCIUDh_MinAge_T0 HR_BCNorp_MinAge_T0);
 
 	if rep_proges_ado = 0 and 0>=rep_proges_min_age_cont then
 		rep_proges_min_age_cat=0;
@@ -186,7 +181,7 @@ data ss_reprod_hormone;
 	else rep_combined_ado_dur_cat = 4;
 
 	/*Min age*/
-	rep_combined_min_age_cont=min(of HR_BCpill_MinAge_T0 HR_BCpatc_MinAge);
+	rep_combined_min_age_cont=min(of HR_BCpill_MinAge_T0 HR_BCpatc_MinAge_T0);
 
 	if rep_combined_ado = 0 and 0>=rep_combined_min_age_cont then
 		rep_combined_min_age_cat=0;
@@ -249,13 +244,13 @@ data ss_reprod_hormone;
 	set ss_reprod_hormone;
 	format
 	AN_BreastDevAge	 	 thelarche.
-	HR_Menopause_T0 yesno.
+	/*HR_Menopause_T0 yesno.
 	HR_MenopauseStatus_T0 meno_cause.
 	rep_meno_age_cat meno_age.
 	rep_first_preg_cat first_preg.
 	rep_last_preg_cat last_preg.
 	PG_EverPreg_t0 yesno.
-	rep_nb_preg_cat nb_preg.
+	rep_nb_preg_cat nb_preg.*/
 	PG_MenarcheAge age_menarche.
 	DR315_HR_BCAny_Adol rep_proges_ado rep_combined_ado HR_HRT_Ever_T0 yesno.
 	HR_BCAny_Ever_T0 bc_all.
@@ -271,8 +266,8 @@ data ss_reprod_hormone;
 	set ss_reprod_hormone;
 	rename
 		AN_BreastDevAge	 	=rep_br_dev_age_cat
-		HR_MenopauseStatus_T0	 	=rep_meno_cause
-		PG_EverPreg_t0=rep_ever_preg
+		/*HR_MenopauseStatus_T0	 	=rep_meno_cause
+		PG_EverPreg_t0=rep_ever_preg*/
 		PG_MenarcheAge=rep_age_menarche_cat
 
 		DR315_HR_BCAny_Adol	 	=rep_bc_ado
@@ -281,15 +276,11 @@ data ss_reprod_hormone;
 	;
 	drop AgeExact_Baseline
 		HR_BCAny_MinAge_T0
-		HR_BCDepo_MinAge
+		HR_BCDepo_MinAge_T0
 		HR_BCIUDh_MinAge_T0
-		HR_BCIUDpatc_MinAge
-		HR_BCNorp_MinAge
-		HR_BCothr_MinAge
-		HR_BCpatc_MinAge
-		HR_BCpillPatcRing_MinAge
+		HR_BCNorp_MinAge_T0
+		HR_BCpatc_MinAge_T0
 		HR_BCpill_MinAge_T0
-		HR_MenopauseAgeExact_T0
 		DR315_HR_BCAny_Adol_Yrs
 		DR315_HR_BCDepo_Adol
 		DR315_HR_BCDepo_Adol_Yrs
@@ -299,15 +290,14 @@ data ss_reprod_hormone;
 		DR315_HR_BCNorp_Adol_Yrs
 		DR315_HR_BCPill_Adol
 		DR315_HR_BCPill_Adol_Yrs
-		DR315_HR_BCothr_Adol
-		DR315_HR_BCothr_Adol_Yrs
 		DR315_HR_BCpatc_Adol
 		DR315_HR_BCpatc_Adol_Yrs
+		/*HR_MenopauseAgeExact_T0
 		HR_Menopause_T0
 		PG_AgeFirstTermPG_T0
 		PG_AgeLastTermPG_T0
 		PG_BreastTotal_t0
-		PG_LastTermPGIndex_T0
+		PG_LastTermPGIndex_T0*/
 
 	;
 run;
@@ -332,10 +322,10 @@ data ss_reprod_hormone;
 		rep_br_feed_dur
 		rep_combined_ado_dur_cont
 		rep_combined_min_age_cont
-		rep_first_preg_cont
+		/*rep_first_preg_cont
 		rep_last_preg_cont
 		rep_meno_age_cont
-		rep_nb_preg_cont
+		rep_nb_preg_cont*/
 		rep_proges_ado_dur_cont
 		rep_proges_min_age_cont
 	;
