@@ -578,12 +578,11 @@ Evalues=cbind(multivariable_evalues$`_data`$label,Evalues)|>as.data.frame()
 ##| cache.extra: !expr file.mtime("C:/Users/trant4/OneDrive - National Institutes of Health/Trinh/Postdoc NCI - Risk factors and thyroid cancer/SS/data/ss_earlylife_popu.csv")
 
 sensi_censor_childhood = tbl_merge(
-  tbls = list(cox_early_onset_childhood,cox_late_onset_childhood,cox_cmprsk_childhood, 
+  tbls = list(cox_early_onset_childhood,cox_late_onset_childhood, 
               cox_medical_confirmed, cox_PTC_childhood),
   tab_spanner = c(
     "**Early-onset cancer**",
     "**Late-onset cancer**",
-    "**Competing risks**",
     "**Medically confirmed DTC cases**",
     "**Papillary thyroid cancer**"
   )
@@ -595,5 +594,6 @@ sensi_censor_childhood|> polish_childhood()
 #| label: tbl-childhood-censor-all
 #| tbl-cap: "Association between childhood and adolescent factors and thyroid cancer incidence in the Sister Study participants, when considering only medically confirmed cases, papillary histology, competing risks, or when stratified by tumor size, and cancer stage"
 sensi_censor_childhood
+cox_cmprsk_childhood
 Evalues
 ```
