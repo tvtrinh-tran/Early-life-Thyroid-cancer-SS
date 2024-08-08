@@ -54,9 +54,9 @@ covariates_childhood = substr(covariates_label_childhood, 2, unlist(gregexpr("~"
 
 #Childhood factors
 var_label_childhood = list(
-  "an_weight_age10" ~ "Weight at age 10 vs. peers"    ,
-  "an_height_age10" ~ "Height at age 10 vs. peers"    ,
-  "an_weight_teen" ~ "Teenage weight vs. peers"      ,
+  "an_weight_age10" ~ "Relative weight vs. peers at age 10"    ,
+  "an_height_age10" ~ "Relative height vs. peers at age 10"    ,
+  "an_weight_teen" ~ "Relative weight vs. peers during teen years"      ,
   "an_age_tallest" ~ "Age reached full adult height (continuous)"      ,
   "rep_br_dev_age_cat" ~ "Age at breast development"  ,
   "rep_br_dev_age_cont" ~ "Age at breast development (continuous)" ,
@@ -70,15 +70,15 @@ var_label_childhood = list(
   #"rep_bc_ado_dur_cont" ~ "Hormonal birth control duration under age 20 (continuous)"   ,
   #"ph_hrs_wk_before20_cat" ~ "Physical activity before age 20 (total hours/week)"    ,
   #"ph_hrs_wk_before20_cont" ~ "Physical activity before age 20 (total hours/week, continuous)"    ,
-  "ph_MET_wk_before20_cat" ~ "Physical activity before age 20 (MET hours/week)"      ,
-  "ph_MET_wk_before20_cont" ~ "Physical activity before age 20 (MET hours/week)" ,
+  "ph_MET_wk_before20_cat" ~ "Physical activity between age 5 and 20 (MET-hours/week)"      ,
+  "ph_MET_wk_before20_cont" ~ "Physical activity between age 5 and 20 (MET-hours/week, continuous)" ,
   "alc_age_start_reg_cat" ~ "Age started drinking regularly"         ,
-  "alc_drinks_before20_cat" ~ "Alcohol consumption under 20 (drinks/year)"     ,
-  #"alc_drinks_before20_cont" ~ "Alcohol consumption under 20 (drinks/year, among women who drank before 20)"     ,
+  "alc_drinks_before20_cat" ~ "Number of drinks per year between age 5 and 20 (drinks/year)"     ,
+  #"alc_drinks_before20_cont" ~ "Number of drinks per year between age 5 and 20 (drinks/year, continuous)"     ,
   # "alc_binge_time_519_cat" ~ "Times per year drank 4+ drinks under 20"     ,
   # "alc_binge_time_519_cont" ~ "Times per year drank 4+ drinks under 20"     ,
   #"alc_age_start_reg_cont" ~ "Age started drinking regularly"        ,
-  "sm_age_start_smok_cat" ~ "Age started smoking"   ,
+  "sm_age_start_smok_cat" ~ "Age started smoking and number of pack-years"   ,
   #"sm_age_start_smok_cont" ~ "Age started smoking (continuous, among women who smoked)"  ,
   #"sm_ETS_before18" ~ "Secondhand smoking under 18"     ,
   #"smok_before20" ~ "Smoking before 20"       ,
@@ -92,7 +92,7 @@ var_label_childhood = list(
   #"sm_yr_smok_before20_cont" ~ "Total years of smoking before 20 (continuous)"   ,
    #"sm_age_stop_smok_cat" ~ "Age stopped smoking"    ,
    #"sm_age_stop_smok_cont" ~ "Age stopped smoking (continuous, among women who smoked)"   ,
-  "sm_ETS_before18_yr_cat" ~ "Total years of secondhand smoking under 18"   ,
+  "sm_ETS_before18_yr_cat" ~ "Total years of secondhand smoking under age 18 from household member"   ,
   #"sm_ETS_before18_yr_cont" ~ "Total years of secondhand smoking under 18 (continuous)"  ,
   "ses_income_child" ~ "Family income while growing up"         ,
   "ses_hunger_child" ~ "Ever not having enough to eat during childhood"          ,
@@ -178,7 +178,7 @@ rm(table1_descript_var_label,table1_descript_var_name)
 descript_covar
 ```
 
-## Table 2: Association between childhood and adolescent factors and thyroid cancer incidence in the Sister Study participants
+## Table 2: **Association between childhood and adolescent factors and differentiated thyroid cancer incidence in the Sister Study cohort**
 
 ```{r}
 #| label: tbl-childhood
@@ -206,7 +206,7 @@ cox_childhood = tbl_merge(
 cox_childhood
 ```
 
-## Table 3: Simultaneously adjusted association between thyroid cancer risk and childhood growth and socioeconomic factors
+## Table 3: Mutually adjusted associations between differentiated thyroid cancer risk factors
 
 ```{r}
 #| label: tbl-all-SES
@@ -214,8 +214,8 @@ cox_childhood
 
 surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
 mutual_label = list(
-  "an_height_age10" ~ "Height at age 10 vs. peers",
-  "an_weight_teen" ~ "Teenage weight vs. peers",
+  "an_height_age10" ~ "Relative height vs. peers at age 10",
+  "an_weight_teen" ~ "Relative weight vs. peers during teen years",
   "ses_hunger_child" ~ "Ever not having enough to eat during childhood"          ,
   "ses_edu_level_child" ~ "Highest household educational level at age 13",
   "ses_income_child" ~ "Family income while growing up"         ,
@@ -264,11 +264,12 @@ mutual=tbl_merge(list(growth_SES_mutual,growth_SES_mutual_all),tab_spanner = c("
     rows = n_event_2 == "0") |>
   modify_column_hide(p.value_2) |>
   modify_footnote(abbreviation = TRUE,
-                         `estimate_1` ~ "Model 1 was simultaneously adjusted for attained age (timescale), self-identified race/ethnicity, height at age 10 vs. peers, and teenage weight vs. peers, ever not having enough to eat during childhood, and highest household educational level at age 13. Model 2 was simultaneously adjusted for all covariates of model 1 and family income while growing up, household composition at age 13, and childhood residence") 
+                         `estimate_1` ~ "Model 1 was simultaneously adjusted for attained age (timescale), self-identified race/ethnicity, relative height vs. peers at age 10, and relative weight vs. peers during teen years, ever not having enough to eat during childhood, and highest household educational level at age 13. Model 2 was simultaneously adjusted for all covariates of model 1 and family income while growing up, household composition at age 13, and childhood residence") 
+
 mutual
 ```
 
-## Figure 3: The joint associations of teenage weight vs. peers and baseline BMI with differentiated thyroid cancer incidence and of weight at age 10 vs. peers and baseline BMI with differentiated thyroid cancer incidence
+## Figure 2: The joint associations of teenage weight vs. peers and baseline BMI with differentiated thyroid cancer incidence and of weight at age 10 vs. peers and baseline BMI with differentiated thyroid cancer incidence
 
 ```{r}
 #| label: joint-weight-figure
@@ -310,34 +311,23 @@ earlylife_popu = earlylife_popu |>
                                                                    "Unknown than peers, baseline BMI 30.0+")))|>
   arrange(child_weight_adult_bmi)
 
+#Figure for ado_weight
 ado_weight_adult_bmi=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
           var_name = "ado_weight_adult_bmi",
           var_label = list("ado_weight_adult_bmi"~"Teenage weight vs. peers and baseline BMI"),
           covar = covariates_childhood,
           data=earlylife_popu)|>sort_childhood()
 
-child_weight_adult_bmi=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
-                               var_name = "child_weight_adult_bmi",
-                               var_label = list("child_weight_adult_bmi"~"Weight at age 10 vs. peers and baseline BMI"),
-                               covar = covariates_childhood,
-                               data=earlylife_popu)|>sort_childhood()
-
 results_ado_weight_adult_bmi=ado_weight_adult_bmi$table_body|>filter(n_event>0)|>
   mutate(group=c("Same weight (ref)","Same weight","Same weight",rep("Lighter",3),rep("Heavier",3)))|>
   mutate(group=fct_relevel(group,c("Lighter","Same weight","Same weight (ref)","Heavier")))|>
-  mutate(bmi=as_factor(rep(c("BMI <25","BMI 25.0-29.9", "BMI 30.0+"),3)))
-
-results_child_weight_adult_bmi=child_weight_adult_bmi$table_body|>filter(n_event>1)|> #n_event>1 to exclude Unknown category
-  mutate(group=c("Same weight (ref)","Same weight","Same weight",rep("Lighter",3),rep("Heavier",3)))|>
-  mutate(group=fct_relevel(group,c("Lighter","Same weight","Same weight (ref)","Heavier")))|>
-  mutate(bmi=as_factor(rep(c("BMI <25","BMI 25.0-29.9", "BMI 30.0+"),3)))
-
+  mutate(bmi=as_factor(rep(c("BMI < 25","BMI 25.0-29.9", "BMI 30.0+"),3)))
 
 results_ado_weight_adult_bmi = results_ado_weight_adult_bmi|>
   ggplot(aes(x = group,y = estimate, ymin = conf.low, ymax = conf.high ))+
   geom_pointrange(cex=3)+
   geom_hline(aes(fill=bmi),yintercept =1, linetype=2)+
-  xlab('Teenage weight vs. peers')+ ylab("Hazard Ratio (95% Confidence Interval)")+
+  xlab('Relative weight vs. peers during teen years')+ ylab("Hazard Ratio (95% Confidence Interval)")+
   geom_errorbar(aes(ymin=conf.low, ymax=conf.high),width=0,cex=1.5)+ 
   facet_wrap(~bmi,strip.position="bottom",nrow=1,scales = "free_x") +
   #labs(tag = "B") +
@@ -356,12 +346,24 @@ results_ado_weight_adult_bmi = results_ado_weight_adult_bmi|>
   )+
   scale_y_log10(breaks=c(0.5,1,2,3,4,5))+ylim(0.3,5.7)
 
+#Figure for childhood_weight
+
+child_weight_adult_bmi=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+                               var_name = "child_weight_adult_bmi",
+                               var_label = list("child_weight_adult_bmi"~"Weight at age 10 vs. peers and baseline BMI"),
+                               covar = covariates_childhood,
+                               data=earlylife_popu)|>sort_childhood()
+
+results_child_weight_adult_bmi=child_weight_adult_bmi$table_body|>filter(n_event>1)|> #n_event>1 to exclude Unknown category
+  mutate(group=c("Same weight (ref)","Same weight","Same weight",rep("Lighter",3),rep("Heavier",3)))|>
+  mutate(group=fct_relevel(group,c("Lighter","Same weight","Same weight (ref)","Heavier")))|>
+  mutate(bmi=as_factor(rep(c("BMI < 25","BMI 25.0-29.9", "BMI 30.0+"),3)))
 
 results_child_weight_adult_bmi=results_child_weight_adult_bmi|>
   ggplot(aes(x = group,y = estimate, ymin = conf.low, ymax = conf.high ))+
   geom_pointrange(cex=3)+
   geom_hline(aes(fill=bmi),yintercept =1, linetype=2)+
-  xlab('Weight at age 10 vs. peers')+ ylab("Hazard Ratio (95% Confidence Interval)")+
+  xlab('Relative height vs. peers at age 10')+ ylab("Hazard Ratio (95% Confidence Interval)")+
   geom_errorbar(aes(ymin=conf.low, ymax=conf.high),width=0,cex=1.5)+ 
   #labs(tag = "A") +
   facet_wrap(~bmi,strip.position="bottom",nrow=1,scales = "free_x") +
@@ -380,6 +382,7 @@ results_child_weight_adult_bmi=results_child_weight_adult_bmi|>
   )+
   scale_y_log10(breaks=c(0.5,1,2,3,4,5))+ylim(0.3,5.7)
 
+#Combine the ado_weight and childhood_weight figures and save the outcome
 png(filename=here::here("child_teen_bmi_weight_strat.png"),pointsize=14,width = 2400, height = 1500)
 grid.arrange(results_child_weight_adult_bmi, results_ado_weight_adult_bmi, ncol=2)
 dev.off()
@@ -393,37 +396,36 @@ dev.off()
 ```{r}
 #| label: childhood-strat-by-adult_SES
 #| cache: true
-ado_weight_adult_bmi_no_interaction=coxph(Surv(ident_ageexact_bl, ident_EOF, ident_DTC)~an_weight_teen+an_bmi_cat+ses_race+smok_status+illness_thyroid_all+
-                                            ses_edu_level+ses_income+ses_ADI_baseline_cat,
-                                          method = "breslow", data = earlylife_popu)
-ado_weight_adult_bmi_with_interaction=coxph(Surv(ident_ageexact_bl, ident_EOF, ident_DTC)~an_weight_teen*an_bmi_cat+ses_race+smok_status+illness_thyroid_all+
-                                            ses_edu_level+ses_income+ses_ADI_baseline_cat,
-                                          method = "breslow", data = earlylife_popu)
-anova(ado_weight_adult_bmi_no_interaction,ado_weight_adult_bmi_with_interaction)
 
 strat_list = list(
   "an_bmi_cat" ~ "BMI",
   "ses_edu_level" ~ "Personal educational level",
   "ses_income" ~ "Household annual income")
+
 strat_height_age10 = stratification_long_for_a_list(var_name = "an_height_age10",
-                                                    var_label = list("an_height_age10" ~ "Height at age 10 vs. peers"),
+                                                    var_label = list("an_height_age10" ~ "Relative height vs. peers at age 10"),
                                                     strat_list =  strat_list,
                                                     surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
                                                     covar = covariates_childhood,
                                                     data = earlylife_popu) 
 png(filename=here::here("childhood_height_age10_strat.png"),pointsize=14,width = 1000, height = 1200)
-strat_height_age10 |>forest_plot_child(cat = "Taller",label1 = "Height at age 10 vs. peers: ",label2 = "Taller vs same height")
+strat_height_age10 |>forest_plot_child(cat = "Taller",label1 = "Relative height vs. peers at age 10: ",label2 = "Taller vs same height")
 dev.off()
 
 strat_weight_teen = stratification_long_for_a_list(var_name = "an_weight_teen",
-                                                         var_label = list("an_weight_teen" ~ "Teenage weight vs. peers"),
+                                                         var_label = list("an_weight_teen" ~ "Relative weight vs. peers during teen years"),
                                                          strat_list =  strat_list,
                                                          surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
                                                          covar = covariates_childhood,
                                                          data = earlylife_popu) 
 png(filename=here::here("childhood_weight_teen_lighter_strat.png"),pointsize=14,width = 1000, height = 1200)
-strat_weight_teen|>forest_plot_child(cat = "Lighter",label1 = "Teenage weight vs. peers: ",label2 = "Lighter vs same weight")
+strat_weight_teen|>forest_plot_child(cat = "Lighter",label1 = "Relative weight vs. peers during teen years: ",label2 = "Lighter vs same weight")
 dev.off()
+
+png(filename=here::here("childhood_weight_teen_heavier_strat.png"),pointsize=14,width = 1000, height = 1200)
+strat_weight_teen|>forest_plot_child(cat = "Heavier",label1 = "Relative weight vs. peers during teen years: ",label2 = "Heavier vs same weight")
+dev.off()
+
 
 strat_hunger_child = stratification_long_for_a_list(var_name = "ses_hunger_child",
                                                     var_label = list("ses_hunger_child" ~ "Ever not having enough to eat during childhood"),
@@ -447,22 +449,44 @@ dev.off()
 png(filename=here::here("childhood_edu_household_strat_2.png"),pointsize=14,width = 1200, height = 1200)
 strat_edu_child|> forest_plot_child(cat = "Bachelor's degree or higher",label1 = "Bachelor's degree or higher vs",label2 = "Highschool or GED or less")
 dev.off()
+
+#p-interaction for ado_weight and baseline BMI
+ado_weight_adult_bmi_no_interaction=coxph(Surv(ident_ageexact_bl, ident_EOF, ident_DTC)~an_weight_teen+an_bmi_cat+ses_race, 
+                                          method = "breslow", data = earlylife_popu)
+ado_weight_adult_bmi_with_interaction=coxph(Surv(ident_ageexact_bl, ident_EOF,ident_DTC)~an_weight_teen*an_bmi_cat+ses_race,
+                                          method = "breslow", data = earlylife_popu)
+anova(ado_weight_adult_bmi_no_interaction,ado_weight_adult_bmi_with_interaction)
+
+#p-interaction for ado_weight and baseline edu levels
+ado_weight_adult_edu_no_interaction=coxph(Surv(ident_ageexact_bl, ident_EOF, ident_DTC)~an_weight_teen+ses_edu_level+ses_race, 
+                                          method = "breslow", data = earlylife_popu)
+ado_weight_adult_edu_with_interaction=coxph(Surv(ident_ageexact_bl, ident_EOF,ident_DTC)~an_weight_teen*ses_edu_level+ses_race,
+                                          method = "breslow", data = earlylife_popu)
+anova(ado_weight_adult_edu_no_interaction,ado_weight_adult_edu_with_interaction)
+
+#p-interaction for ado_weight and baseline household income
+ado_weight_adult_income_no_interaction=coxph(Surv(ident_ageexact_bl, ident_EOF, ident_DTC)~an_weight_teen+ses_income+ses_race, 
+                                          method = "breslow", data = earlylife_popu)
+ado_weight_adult_income_with_interaction=coxph(Surv(ident_ageexact_bl, ident_EOF,ident_DTC)~an_weight_teen*ses_income+ses_race,
+                                          method = "breslow", data = earlylife_popu)
+anova(ado_weight_adult_income_no_interaction,ado_weight_adult_income_with_interaction)
+
+
 ```
 
-## Supplementary table 1: The joint associations of teenage weight vs. peers and baseline BMI with differentiated thyroid cancer incidence 
+## Supplementary table 1: The joint associations of teenage weight vs. peers and baseline BMI with differentiated thyroid cancer incidence
 
 ```{r}
 #| label: joint-teenage-weight-table
 ado_weight_adult_bmi
 ```
 
-## Supplementary table 2: The joint associations of weight at age 10 vs. peers and baseline BMI with differentiated thyroid cancer incidence 
+## Supplementary table 2: The joint associations of weight at age 10 vs. peers and baseline BMI with differentiated thyroid cancer incidence
 
 ```{r}
 #| label: joint-age10-weight-table
 child_weight_adult_bmi
 ```
-
 
 ## Supplementary table 3: Association between childhood and adolescent factors and thyroid cancer incidence in the Sister Study participants, when considering only medically confirmed cases, papillary histology, competing risks, or when stratified by tumor size, cancer stage, and birth cohort
 
@@ -480,9 +504,6 @@ var_label_childhood_sup = list(
 var_name_childhood_sup = substr(var_label_childhood_sup, 2, unlist(gregexpr("~", var_label_childhood_sup)) - 3)
 
 ```
-
-
-
 
 ```{r}
 #| label: childhood-medically-confirmed
