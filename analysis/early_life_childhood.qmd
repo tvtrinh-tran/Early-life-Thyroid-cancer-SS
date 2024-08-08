@@ -383,7 +383,7 @@ results_child_weight_adult_bmi=results_child_weight_adult_bmi|>
   scale_y_log10(breaks=c(0.5,1,2,3,4,5))+ylim(0.3,5.7)
 
 #Combine the ado_weight and childhood_weight figures and save the outcome
-png(filename=here::here("child_teen_bmi_weight_strat.png"),pointsize=14,width = 2400, height = 1500)
+png(filename=here::here("/original_figures/child_teen_bmi_weight_strat.png"),pointsize=14,width = 2400, height = 1500)
 grid.arrange(results_child_weight_adult_bmi, results_ado_weight_adult_bmi, ncol=2)
 dev.off()
 
@@ -408,7 +408,7 @@ strat_height_age10 = stratification_long_for_a_list(var_name = "an_height_age10"
                                                     surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
                                                     covar = covariates_childhood,
                                                     data = earlylife_popu) 
-png(filename=here::here("childhood_height_age10_strat.png"),pointsize=14,width = 1000, height = 1200)
+png(filename=here::here("original_figures/childhood_height_age10_strat.png"),pointsize=14,width = 1000, height = 1200)
 strat_height_age10 |>forest_plot_child(cat = "Taller",label1 = "Relative height vs. peers at age 10: ",label2 = "Taller vs same height")
 dev.off()
 
@@ -418,11 +418,11 @@ strat_weight_teen = stratification_long_for_a_list(var_name = "an_weight_teen",
                                                          surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
                                                          covar = covariates_childhood,
                                                          data = earlylife_popu) 
-png(filename=here::here("childhood_weight_teen_lighter_strat.png"),pointsize=14,width = 1000, height = 1200)
+png(filename=here::here("original_figures/childhood_weight_teen_lighter_strat.png"),pointsize=14,width = 1000, height = 1200)
 strat_weight_teen|>forest_plot_child(cat = "Lighter",label1 = "Relative weight vs. peers during teen years: ",label2 = "Lighter vs same weight")
 dev.off()
 
-png(filename=here::here("childhood_weight_teen_heavier_strat.png"),pointsize=14,width = 1000, height = 1200)
+png(filename=here::here("original_figures/childhood_weight_teen_heavier_strat.png"),pointsize=14,width = 1000, height = 1200)
 strat_weight_teen|>forest_plot_child(cat = "Heavier",label1 = "Relative weight vs. peers during teen years: ",label2 = "Heavier vs same weight")
 dev.off()
 
@@ -432,7 +432,7 @@ strat_hunger_child = stratification_long_for_a_list(var_name = "ses_hunger_child
                                                     strat_list =  strat_list,surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
                                                     covar = covariates_childhood,
                                                     data = earlylife_popu) 
-png(filename=here::here("childhood_hunger_strat.png"),pointsize=14,width = 1000, height = 1200)
+png(filename=here::here("original_figures/childhood_hunger_strat.png"),pointsize=14,width = 1000, height = 1200)
 strat_hunger_child|>forest_plot_child(cat = "Yes",label1 = "Ever not having enough to eat",label2 = "during childhood: Yes vs No")
 dev.off()
 
@@ -442,11 +442,11 @@ strat_edu_child = stratification_long_for_a_list(var_name = "ses_edu_level_child
                                                  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
                                                  covar = covariates_childhood,
                                                  data = earlylife_popu) 
-png(filename=here::here("childhood_edu_household_strat.png"),pointsize=14,width = 1200, height = 1200)
+png(filename=here::here("original_figures/childhood_edu_household_strat.png"),pointsize=14,width = 1200, height = 1200)
 strat_edu_child|> forest_plot_child(cat = "Bachelor's degree or higher",label1 = "Highest household education level at age 13:",label2 = "Highschool or GED or less")
 dev.off()
 
-png(filename=here::here("childhood_edu_household_strat_2.png"),pointsize=14,width = 1200, height = 1200)
+png(filename=here::here("original_figures/childhood_edu_household_strat_2.png"),pointsize=14,width = 1200, height = 1200)
 strat_edu_child|> forest_plot_child(cat = "Bachelor's degree or higher",label1 = "Bachelor's degree or higher vs",label2 = "Highschool or GED or less")
 dev.off()
 
