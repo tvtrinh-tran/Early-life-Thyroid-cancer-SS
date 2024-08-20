@@ -54,9 +54,9 @@ covariates_childhood = substr(covariates_label_childhood, 2, unlist(gregexpr("~"
 
 #Childhood factors
 var_label_childhood = list(
-  "an_weight_age10" ~ "Relative weight vs. peers at age 10"    ,
-  "an_height_age10" ~ "Relative height vs. peers at age 10"    ,
-  "an_weight_teen" ~ "Relative weight vs. peers during teen years"      ,
+  "an_weight_age10" ~ "Weight relative to peers at age 10"    ,
+  "an_height_age10" ~ "Height relative to peers at age 10"    ,
+  "an_weight_teen" ~ "Weight relative to peers during teen years"      ,
   "an_age_tallest" ~ "Age reached full adult height (continuous)"      ,
   "rep_br_dev_age_cat" ~ "Age at breast development"  ,
   "rep_br_dev_age_cont" ~ "Age at breast development (continuous)" ,
@@ -204,6 +204,38 @@ cox_childhood = tbl_merge(
 
 #return the table 
 cox_childhood
+
+#Analyses for age started using hormonal birth control, age started drinking regularly, and age started smoking: exclude individuals who reported starting at 20 years of age or older
+#Disregard HRs and 95%CIs for age started using hormonal birth control, age started drinking regularly, and age started smoking from the cox_childhood above
+
+rep_bc_min_age=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+                             var_name = "rep_bc_min_age_cat",
+                             var_label = list("rep_bc_min_age_cat" ~ "Start age for hormonal birth control"),
+                             covar = covariates_childhood,
+                             data=earlylife_popu[earlylife_popu$rep_bc_min_age_cat!="Started at 20 years of age or older",])|>sort_childhood()
+
+alc_age_start_reg=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+                             var_name = "alc_age_start_reg_cat",
+                             var_label = list("alc_age_start_reg_cat" ~ "Age started drinking regularly"),
+                             covar = covariates_childhood,
+                             data=earlylife_popu[earlylife_popu$alc_age_start_reg_cat!="20 years of age or older",])|>sort_childhood()
+
+sm_age_start_smok=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+                             var_name = "sm_age_start_smok_cat",
+                             var_label = list("sm_age_start_smok_cat" ~ "Age started smoking and number of pack-years"),
+                             covar = covariates_childhood,
+                             data=earlylife_popu[earlylife_popu$sm_age_start_smok_cat!="20 years of age or older",])|>sort_childhood()
+
+sm_pack_yr_before20=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+                             var_name = "sm_pack_yr_before20_cat",
+                             var_label = list("sm_pack_yr_before20_cat" ~ "Smoking before 20 (Pack-years)"),
+                             covar = covariates_childhood,
+                             data=earlylife_popu[earlylife_popu$sm_pack_yr_before20_cat!="Started after 20",])|>sort_childhood()
+
+rep_bc_min_age
+alc_age_start_reg
+sm_age_start_smok
+sm_pack_yr_before20
 ```
 
 ## Table 3: Mutually adjusted associations between differentiated thyroid cancer risk factors
@@ -214,8 +246,8 @@ cox_childhood
 
 surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)"
 mutual_label = list(
-  "an_height_age10" ~ "Relative height vs. peers at age 10",
-  "an_weight_teen" ~ "Relative weight vs. peers during teen years",
+  "an_height_age10" ~ "Height relative to peers at age 10",
+  "an_weight_teen" ~ "Weight relative to peers during teen years",
   "ses_hunger_child" ~ "Ever not having enough to eat during childhood"          ,
   "ses_edu_level_child" ~ "Highest household educational level at age 13",
   "ses_income_child" ~ "Family income while growing up"         ,
@@ -247,6 +279,7 @@ growth_SES_mutual_all = reformulate(c(mutual_name, covariates_childhood), respon
     include = mutual_name
   )
 
+#combine and show the table in its final form
 mutual=tbl_merge(list(growth_SES_mutual,growth_SES_mutual_all),tab_spanner = c("**Model 1**", "**Model 2**"))|> 
   sort_childhood() |>
   modify_fmt_fun(estimate_1 ~ function(x)
@@ -264,7 +297,7 @@ mutual=tbl_merge(list(growth_SES_mutual,growth_SES_mutual_all),tab_spanner = c("
     rows = n_event_2 == "0") |>
   modify_column_hide(p.value_2) |>
   modify_footnote(abbreviation = TRUE,
-                         `estimate_1` ~ "Model 1 was simultaneously adjusted for attained age (timescale), self-identified race/ethnicity, relative height vs. peers at age 10, and relative weight vs. peers during teen years, ever not having enough to eat during childhood, and highest household educational level at age 13. Model 2 was simultaneously adjusted for all covariates of model 1 and family income while growing up, household composition at age 13, and childhood residence") 
+                         `estimate_1` ~ "Model 1 was simultaneously adjusted for attained age (timescale), self-identified race/ethnicity, Height relative to peers at age 10, and Weight relative to peers during teen years, ever not having enough to eat during childhood, and highest household educational level at age 13. Model 2 was simultaneously adjusted for all covariates of model 1 and family income while growing up, household composition at age 13, and childhood residence") 
 
 mutual
 ```
@@ -275,6 +308,7 @@ mutual
 #| label: joint-weight-figure
 ###Create lists of exposure and covariates that have a significant association
 
+#create combined variables for teen weight and baseline BMI, and weight at age 10 and baseline BMI
 earlylife_popu = earlylife_popu |>
   mutate(ado_weight_adult_bmi = as.factor(paste0(an_weight_teen, " than peers, baseline BMI ", an_bmi_cat)))|>
   mutate(ado_weight_adult_bmi = fct_relevel(ado_weight_adult_bmi,c("Same weight than peers, baseline BMI <25", 
@@ -312,22 +346,22 @@ earlylife_popu = earlylife_popu |>
   arrange(child_weight_adult_bmi)
 
 #Figure for ado_weight
-ado_weight_adult_bmi=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
-          var_name = "ado_weight_adult_bmi",
-          var_label = list("ado_weight_adult_bmi"~"Teenage weight vs. peers and baseline BMI"),
-          covar = covariates_childhood,
-          data=earlylife_popu)|>sort_childhood()
+ado_weight_adult_bmi = cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+                               var_name = "ado_weight_adult_bmi",
+                               var_label = list("ado_weight_adult_bmi"~"Teenage weight vs. peers and baseline BMI"),
+                               covar = covariates_childhood,
+                               data=earlylife_popu)|>sort_childhood()
 
-results_ado_weight_adult_bmi=ado_weight_adult_bmi$table_body|>filter(n_event>0)|>
-  mutate(group=c("Same weight (ref)","Same weight","Same weight",rep("Lighter",3),rep("Heavier",3)))|>
-  mutate(group=fct_relevel(group,c("Lighter","Same weight","Same weight (ref)","Heavier")))|>
-  mutate(bmi=as_factor(rep(c("BMI < 25","BMI 25.0-29.9", "BMI 30.0+"),3)))
+results_ado_weight_adult_bmi = ado_weight_adult_bmi$table_body|>filter(n_event>0)|>
+  mutate(group = c("Same weight (ref)","Same weight","Same weight",rep("Lighter",3),rep("Heavier",3)))|>
+  mutate(group = fct_relevel(group,c("Lighter","Same weight","Same weight (ref)","Heavier")))|>
+  mutate(bmi = as_factor(rep(c("BMI < 25","BMI 25.0-29.9", "BMI 30.0+"),3)))
 
 results_ado_weight_adult_bmi = results_ado_weight_adult_bmi|>
   ggplot(aes(x = group,y = estimate, ymin = conf.low, ymax = conf.high ))+
   geom_pointrange(cex=3)+
   geom_hline(aes(fill=bmi),yintercept =1, linetype=2)+
-  xlab('Relative weight vs. peers during teen years')+ ylab("Hazard Ratio (95% Confidence Interval)")+
+  xlab('Weight relative to peers during teen years')+ ylab("Hazard Ratio (95% Confidence Interval)")+
   geom_errorbar(aes(ymin=conf.low, ymax=conf.high),width=0,cex=1.5)+ 
   facet_wrap(~bmi,strip.position="bottom",nrow=1,scales = "free_x") +
   #labs(tag = "B") +
@@ -348,22 +382,22 @@ results_ado_weight_adult_bmi = results_ado_weight_adult_bmi|>
 
 #Figure for childhood_weight
 
-child_weight_adult_bmi=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+child_weight_adult_bmi = cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
                                var_name = "child_weight_adult_bmi",
                                var_label = list("child_weight_adult_bmi"~"Weight at age 10 vs. peers and baseline BMI"),
                                covar = covariates_childhood,
                                data=earlylife_popu)|>sort_childhood()
 
-results_child_weight_adult_bmi=child_weight_adult_bmi$table_body|>filter(n_event>1)|> #n_event>1 to exclude Unknown category
-  mutate(group=c("Same weight (ref)","Same weight","Same weight",rep("Lighter",3),rep("Heavier",3)))|>
-  mutate(group=fct_relevel(group,c("Lighter","Same weight","Same weight (ref)","Heavier")))|>
-  mutate(bmi=as_factor(rep(c("BMI < 25","BMI 25.0-29.9", "BMI 30.0+"),3)))
+results_child_weight_adult_bmi = child_weight_adult_bmi$table_body|>filter(n_event>1)|> #n_event>1 to exclude Unknown category
+  mutate(group = c("Same weight (ref)","Same weight","Same weight",rep("Lighter",3),rep("Heavier",3)))|>
+  mutate(group = fct_relevel(group,c("Lighter","Same weight","Same weight (ref)","Heavier")))|>
+  mutate(bmi = as_factor(rep(c("BMI < 25","BMI 25.0-29.9", "BMI 30.0+"),3)))
 
 results_child_weight_adult_bmi=results_child_weight_adult_bmi|>
   ggplot(aes(x = group,y = estimate, ymin = conf.low, ymax = conf.high ))+
   geom_pointrange(cex=3)+
   geom_hline(aes(fill=bmi),yintercept =1, linetype=2)+
-  xlab('Relative height vs. peers at age 10')+ ylab("Hazard Ratio (95% Confidence Interval)")+
+  xlab('Weight relative to peers at age 10')+ ylab("Hazard Ratio (95% Confidence Interval)")+
   geom_errorbar(aes(ymin=conf.low, ymax=conf.high),width=0,cex=1.5)+ 
   #labs(tag = "A") +
   facet_wrap(~bmi,strip.position="bottom",nrow=1,scales = "free_x") +
@@ -383,7 +417,7 @@ results_child_weight_adult_bmi=results_child_weight_adult_bmi|>
   scale_y_log10(breaks=c(0.5,1,2,3,4,5))+ylim(0.3,5.7)
 
 #Combine the ado_weight and childhood_weight figures and save the outcome
-png(filename=here::here("/original_figures/child_teen_bmi_weight_strat.png"),pointsize=14,width = 2400, height = 1500)
+png(filename=here::here("original_figures/child_teen_bmi_weight_strat.png"),pointsize=14,width = 2400, height = 1500)
 grid.arrange(results_child_weight_adult_bmi, results_ado_weight_adult_bmi, ncol=2)
 dev.off()
 
@@ -403,27 +437,27 @@ strat_list = list(
   "ses_income" ~ "Household annual income")
 
 strat_height_age10 = stratification_long_for_a_list(var_name = "an_height_age10",
-                                                    var_label = list("an_height_age10" ~ "Relative height vs. peers at age 10"),
+                                                    var_label = list("an_height_age10" ~ "Height relative to peers at age 10"),
                                                     strat_list =  strat_list,
                                                     surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
                                                     covar = covariates_childhood,
                                                     data = earlylife_popu) 
 png(filename=here::here("original_figures/childhood_height_age10_strat.png"),pointsize=14,width = 1000, height = 1200)
-strat_height_age10 |>forest_plot_child(cat = "Taller",label1 = "Relative height vs. peers at age 10: ",label2 = "Taller vs same height")
+strat_height_age10 |>forest_plot_child(cat = "Taller",label1 = "Height relative to peers at age 10: ",label2 = "Taller vs same height")
 dev.off()
 
 strat_weight_teen = stratification_long_for_a_list(var_name = "an_weight_teen",
-                                                         var_label = list("an_weight_teen" ~ "Relative weight vs. peers during teen years"),
+                                                         var_label = list("an_weight_teen" ~ "Weight relative to peers during teen years"),
                                                          strat_list =  strat_list,
                                                          surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
                                                          covar = covariates_childhood,
                                                          data = earlylife_popu) 
 png(filename=here::here("original_figures/childhood_weight_teen_lighter_strat.png"),pointsize=14,width = 1000, height = 1200)
-strat_weight_teen|>forest_plot_child(cat = "Lighter",label1 = "Relative weight vs. peers during teen years: ",label2 = "Lighter vs same weight")
+strat_weight_teen|>forest_plot_child(cat = "Lighter",label1 = "Weight relative to peers during teen years: ",label2 = "Lighter vs same weight")
 dev.off()
 
 png(filename=here::here("original_figures/childhood_weight_teen_heavier_strat.png"),pointsize=14,width = 1000, height = 1200)
-strat_weight_teen|>forest_plot_child(cat = "Heavier",label1 = "Relative weight vs. peers during teen years: ",label2 = "Heavier vs same weight")
+strat_weight_teen|>forest_plot_child(cat = "Heavier",label1 = "Weight relative to peers during teen years: ",label2 = "Heavier vs same weight")
 dev.off()
 
 
@@ -506,6 +540,58 @@ var_name_childhood_sup = substr(var_label_childhood_sup, 2, unlist(gregexpr("~",
 ```
 
 ```{r}
+#| label: childhood-complete-case
+#| output: false
+
+cox_complete_height_age10 = cox_model(
+  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+  var_name = "an_height_age10",
+  var_label = list("an_height_age10" ~ "Height at age 10 vs. peers"),
+  covar = covariates_childhood,
+  data = earlylife_popu[earlylife_popu$an_height_age10 != "Unknown", ]
+) |> sort_childhood()
+
+cox_complete_weight_teen = cox_model(
+  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+  var_name = "an_weight_teen",
+  var_label = list("an_weight_teen" ~ "Teenage weight vs. peers"),
+  covar = covariates_childhood,
+  data = earlylife_popu[earlylife_popu$an_weight_teen != "Unknown", ]
+) |> sort_childhood()
+
+cox_complete_hunger_child = cox_model(
+  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+  var_name = "ses_hunger_child",
+  var_label = list(
+    "ses_hunger_child" ~ "Ever not having enough to eat during childhood"
+  ),
+  covar = covariates_childhood,
+  data = earlylife_popu[earlylife_popu$ses_hunger_child != "Unknown", ]
+) |> sort_childhood()
+
+cox_complete_edu_level_child = cox_model(
+  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+  var_name = "ses_edu_level_child",
+  var_label = list(
+    "ses_edu_level_child" ~ "Highest household education level at age 13"
+  ),
+  covar = covariates_childhood,
+  data = earlylife_popu[earlylife_popu$ses_edu_level_child != "Unknown", ]
+) |> sort_childhood()
+
+
+cox_complete = tbl_stack(
+  list(
+    cox_complete_height_age10,
+    cox_complete_weight_teen,
+    cox_complete_hunger_child,
+    cox_complete_edu_level_child
+  )
+) |>
+  polish_childhood()
+```
+
+```{r}
 #| label: childhood-medically-confirmed
 #| output: false
 
@@ -536,15 +622,15 @@ cox_PTC_childhood = cox_model(
 ```{r}
 #| label: childhood-cmprsk
 #| output: false
-earlylife_popu$ident_compete_factor = factor(earlylife_popu$ident_compete)
-  
-cox_cmprsk_childhood = competing_risk_model(
-    surv = "Surv(ident_ageexact_bl, ident_EOF, ident_compete_factor)",
-    var_name = var_name_childhood_sup,
-    var_label = var_label_childhood_sup,
-    covar = covariates_childhood,
-    data = earlylife_popu
-  )|>sort_childhood()
+# earlylife_popu$ident_compete_factor = factor(earlylife_popu$ident_compete)
+#   
+# cox_cmprsk_childhood = competing_risk_model(
+#     surv = "Surv(ident_ageexact_bl, ident_EOF, ident_compete_factor)",
+#     var_name = var_name_childhood_sup,
+#     var_label = var_label_childhood_sup,
+#     covar = covariates_childhood,
+#     data = earlylife_popu
+#   )|>sort_childhood()
 
 ```
 
@@ -570,7 +656,7 @@ cox_early_onset_childhood = cox_model(
 
 earlylife_popu_late_onset=earlylife_popu|>filter(ident_ageexact_bl>=50)
 cox_late_onset_childhood = cox_model(
-  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC_PTC)",
+  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
   var_name = var_name_childhood_sup,
   var_label = var_label_childhood_sup,
   covar = covariates_childhood,
@@ -615,6 +701,7 @@ sensi_censor_childhood|> polish_childhood()
 #| label: tbl-childhood-censor-all
 #| tbl-cap: "Association between childhood and adolescent factors and thyroid cancer incidence in the Sister Study participants, when considering only medically confirmed cases, papillary histology, competing risks, or when stratified by tumor size, and cancer stage"
 sensi_censor_childhood
-cox_cmprsk_childhood
+#cox_cmprsk_childhood
+cox_complete
 Evalues
 ```
