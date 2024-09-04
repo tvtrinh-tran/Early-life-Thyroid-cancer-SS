@@ -90,6 +90,12 @@ run;
 
 data ss_phy_act;
 	set ss_phy_act;
+	if ph_MET_wk_before20_cont=. then ph_MET_wk_before20_cont_imputed = mean(ph_MET_wk_before20_cont);
+		else ph_MET_wk_before20_cont_imputed = ph_MET_wk_before20_cont;	
+run;
+
+data ss_phy_act;
+	set ss_phy_act;
 	rename
 		PH12_TotHrsPerWeekChild	 	= ph_hrs_wk_child_cat
 		PH12_TotHrsPerWeekTeens	 	= ph_hrs_wk_teen_cat

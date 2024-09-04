@@ -57,11 +57,13 @@ var_label_childhood = list(
   "an_weight_age10" ~ "Weight relative to peers at age 10"    ,
   "an_height_age10" ~ "Height relative to peers at age 10"    ,
   "an_weight_teen" ~ "Weight relative to peers during teen years"      ,
-  "an_age_tallest" ~ "Age reached full adult height (continuous)"      ,
+  #"an_age_tallest" ~ "Age reached full adult height (continuous)"      ,
   "rep_br_dev_age_cat" ~ "Age at breast development"  ,
   "rep_br_dev_age_cont" ~ "Age at breast development (continuous)" ,
+  "rep_br_dev_age_cont_imputed" ~ "Age at breast development (continuous, imputed)" ,
   "rep_age_menarche_cat" ~ "Age at menarche"   ,
   "rep_age_menarche_cont" ~ "Age at menarche (continuous)"   ,
+  "rep_age_menarche_cont_imputed" ~ "Age at menarche (continuous, imputed)"   ,
   #"rep_bc_ever" ~ "Ever used hormonal birth control" ,
   #"rep_bc_ado" ~ "Hormonal birth control under age 20"  ,
   "rep_bc_min_age_cat" ~ "Start age for hormonal birth control" ,
@@ -72,6 +74,7 @@ var_label_childhood = list(
   #"ph_hrs_wk_before20_cont" ~ "Physical activity before age 20 (total hours/week, continuous)"    ,
   "ph_MET_wk_before20_cat" ~ "Physical activity between age 5 and 20 (MET-hours/week)"      ,
   "ph_MET_wk_before20_cont" ~ "Physical activity between age 5 and 20 (MET-hours/week, continuous)" ,
+  "ph_MET_wk_before20_cont_imputed" ~ "Physical activity between age 5 and 20 (MET-hours/week, continuous, imputed)" ,
   "alc_age_start_reg_cat" ~ "Age started drinking regularly"         ,
   "alc_drinks_before20_cat" ~ "Number of drinks per year between age 5 and 20 (drinks/year)"     ,
   #"alc_drinks_before20_cont" ~ "Number of drinks per year between age 5 and 20 (drinks/year, continuous)"     ,
@@ -176,6 +179,11 @@ descript_covar = descript_table(var_name = table1_descript_var_name,
                                 data = earlylife_popu) |> sort_birth_weight()
 rm(table1_descript_var_label,table1_descript_var_name)
 descript_covar
+table(earlylife_popu$ses_race, earlylife_popu$ident_DTC)
+table(earlylife_popu$an_bmi_cat, earlylife_popu$ident_DTC)
+table(earlylife_popu$illness_thyroid_all, earlylife_popu$ident_DTC)
+table(earlylife_popu$ses_edu_level, earlylife_popu$ident_DTC)
+table(earlylife_popu$ses_income, earlylife_popu$ident_DTC)
 ```
 
 ## Table 2: **Association between childhood and adolescent factors and differentiated thyroid cancer incidence in the Sister Study cohort**
@@ -205,37 +213,6 @@ cox_childhood = tbl_merge(
 #return the table 
 cox_childhood
 
-#Analyses for age started using hormonal birth control, age started drinking regularly, and age started smoking: exclude individuals who reported starting at 20 years of age or older
-#Disregard HRs and 95%CIs for age started using hormonal birth control, age started drinking regularly, and age started smoking from the cox_childhood above
-
-rep_bc_min_age=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
-                             var_name = "rep_bc_min_age_cat",
-                             var_label = list("rep_bc_min_age_cat" ~ "Start age for hormonal birth control"),
-                             covar = covariates_childhood,
-                             data=earlylife_popu[earlylife_popu$rep_bc_min_age_cat!="Started at 20 years of age or older",])|>sort_childhood()
-
-alc_age_start_reg=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
-                             var_name = "alc_age_start_reg_cat",
-                             var_label = list("alc_age_start_reg_cat" ~ "Age started drinking regularly"),
-                             covar = covariates_childhood,
-                             data=earlylife_popu[earlylife_popu$alc_age_start_reg_cat!="20 years of age or older",])|>sort_childhood()
-
-sm_age_start_smok=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
-                             var_name = "sm_age_start_smok_cat",
-                             var_label = list("sm_age_start_smok_cat" ~ "Age started smoking and number of pack-years"),
-                             covar = covariates_childhood,
-                             data=earlylife_popu[earlylife_popu$sm_age_start_smok_cat!="20 years of age or older",])|>sort_childhood()
-
-sm_pack_yr_before20=cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
-                             var_name = "sm_pack_yr_before20_cat",
-                             var_label = list("sm_pack_yr_before20_cat" ~ "Smoking before 20 (Pack-years)"),
-                             covar = covariates_childhood,
-                             data=earlylife_popu[earlylife_popu$sm_pack_yr_before20_cat!="Started after 20",])|>sort_childhood()
-
-rep_bc_min_age
-alc_age_start_reg
-sm_age_start_smok
-sm_pack_yr_before20
 ```
 
 ## Table 3: Mutually adjusted associations between differentiated thyroid cancer risk factors
@@ -378,7 +355,7 @@ results_ado_weight_adult_bmi = results_ado_weight_adult_bmi|>
         plot.margin=unit(c(3,3,3,3),"cm")
         #plot.tag = element_text(size=40,face="bold",margin = margin(t = 0, r = 20, b = 0, l = 0))
   )+
-  scale_y_log10(breaks=c(0.5,1,2,3,4,5))+ylim(0.3,5.7)
+  coord_trans(y="log10")+ylim(0.5,6)
 
 #Figure for childhood_weight
 
@@ -414,7 +391,7 @@ results_child_weight_adult_bmi=results_child_weight_adult_bmi|>
         plot.margin=unit(c(3,3,3,3),"cm")
         #plot.tag = element_text(size=40,face="bold",margin = margin(t = 0, r = 20, b = 0, l = 0))
   )+
-  scale_y_log10(breaks=c(0.5,1,2,3,4,5))+ylim(0.3,5.7)
+  coord_trans(y="log10")+ylim(0.5,6)
 
 #Combine the ado_weight and childhood_weight figures and save the outcome
 png(filename=here::here("original_figures/child_teen_bmi_weight_strat.png"),pointsize=14,width = 2400, height = 1500)
@@ -439,6 +416,7 @@ strat_list = list(
 strat_height_age10 = stratification_long_for_a_list(var_name = "an_height_age10",
                                                     var_label = list("an_height_age10" ~ "Height relative to peers at age 10"),
                                                     strat_list =  strat_list,
+                                                    add_p_interaction = TRUE,
                                                     surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
                                                     covar = covariates_childhood,
                                                     data = earlylife_popu) 
@@ -449,6 +427,7 @@ dev.off()
 strat_weight_teen = stratification_long_for_a_list(var_name = "an_weight_teen",
                                                          var_label = list("an_weight_teen" ~ "Weight relative to peers during teen years"),
                                                          strat_list =  strat_list,
+                                                         add_p_interaction = TRUE,
                                                          surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
                                                          covar = covariates_childhood,
                                                          data = earlylife_popu) 
@@ -464,6 +443,7 @@ dev.off()
 strat_hunger_child = stratification_long_for_a_list(var_name = "ses_hunger_child",
                                                     var_label = list("ses_hunger_child" ~ "Ever not having enough to eat during childhood"),
                                                     strat_list =  strat_list,surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+                                                    add_p_interaction = TRUE,
                                                     covar = covariates_childhood,
                                                     data = earlylife_popu) 
 png(filename=here::here("original_figures/childhood_hunger_strat.png"),pointsize=14,width = 1000, height = 1200)
@@ -473,6 +453,7 @@ dev.off()
 strat_edu_child = stratification_long_for_a_list(var_name = "ses_edu_level_child",
                                                  var_label = list("ses_edu_level_child" ~ "Highest household education level at age 13"),
                                                  strat_list =  strat_list,
+                                                 add_p_interaction = TRUE,
                                                  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
                                                  covar = covariates_childhood,
                                                  data = earlylife_popu) 
@@ -483,27 +464,6 @@ dev.off()
 png(filename=here::here("original_figures/childhood_edu_household_strat_2.png"),pointsize=14,width = 1200, height = 1200)
 strat_edu_child|> forest_plot_child(cat = "Bachelor's degree or higher",label1 = "Bachelor's degree or higher vs",label2 = "Highschool or GED or less")
 dev.off()
-
-#p-interaction for ado_weight and baseline BMI
-ado_weight_adult_bmi_no_interaction=coxph(Surv(ident_ageexact_bl, ident_EOF, ident_DTC)~an_weight_teen+an_bmi_cat+ses_race, 
-                                          method = "breslow", data = earlylife_popu)
-ado_weight_adult_bmi_with_interaction=coxph(Surv(ident_ageexact_bl, ident_EOF,ident_DTC)~an_weight_teen*an_bmi_cat+ses_race,
-                                          method = "breslow", data = earlylife_popu)
-anova(ado_weight_adult_bmi_no_interaction,ado_weight_adult_bmi_with_interaction)
-
-#p-interaction for ado_weight and baseline edu levels
-ado_weight_adult_edu_no_interaction=coxph(Surv(ident_ageexact_bl, ident_EOF, ident_DTC)~an_weight_teen+ses_edu_level+ses_race, 
-                                          method = "breslow", data = earlylife_popu)
-ado_weight_adult_edu_with_interaction=coxph(Surv(ident_ageexact_bl, ident_EOF,ident_DTC)~an_weight_teen*ses_edu_level+ses_race,
-                                          method = "breslow", data = earlylife_popu)
-anova(ado_weight_adult_edu_no_interaction,ado_weight_adult_edu_with_interaction)
-
-#p-interaction for ado_weight and baseline household income
-ado_weight_adult_income_no_interaction=coxph(Surv(ident_ageexact_bl, ident_EOF, ident_DTC)~an_weight_teen+ses_income+ses_race, 
-                                          method = "breslow", data = earlylife_popu)
-ado_weight_adult_income_with_interaction=coxph(Surv(ident_ageexact_bl, ident_EOF,ident_DTC)~an_weight_teen*ses_income+ses_race,
-                                          method = "breslow", data = earlylife_popu)
-anova(ado_weight_adult_income_no_interaction,ado_weight_adult_income_with_interaction)
 
 
 ```
@@ -654,15 +614,16 @@ cox_early_onset_childhood = cox_model(
 ```{r}
 #| label: late-onset
 
-earlylife_popu_late_onset=earlylife_popu|>filter(ident_ageexact_bl>=50)
+earlylife_popu_late_onset=earlylife_popu|>filter(ident_ageexact_bl>=50|ident_EOF>50)|>
+  mutate(ident_ageexact_bl_late_onset=ifelse(ident_ageexact_bl>=50,ident_ageexact_bl,50))
 cox_late_onset_childhood = cox_model(
-  surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+  surv = "Surv(ident_ageexact_bl_late_onset, ident_EOF, ident_DTC)",
   var_name = var_name_childhood_sup,
   var_label = var_label_childhood_sup,
   covar = covariates_childhood,
   data = earlylife_popu_late_onset
 )|>sort_childhood()
-
+cox_late_onset_childhood
 ```
 
 ```{r}

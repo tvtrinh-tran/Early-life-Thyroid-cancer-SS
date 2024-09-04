@@ -43,7 +43,6 @@ data ss_reprod_hormone;
 
 	rep_br_dev_age_cont=1*AN_BreastDevAge;
 	if rep_br_dev_age_cont>=21 then rep_br_dev_age_cont = .; /*if age at thelarche >=21 then it is considered implausible and missing data is assigned https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8666031/*/
-
 /*	rep_meno_age_cont=1*HR_MenopauseAgeExact_T0;
 	rep_first_preg_cont=1*PG_AgeFirstTermPG_T0;
 	rep_br_feed_dur=1*PG_BreastTotal_t0;*/
@@ -98,6 +97,13 @@ data ss_reprod_hormone;
 	else rep_nb_preg_cont= 1*PG_LastTermPGIndex_T0;
 	rep_nb_preg_cat=rep_nb_preg_cont;
 	;*/
+run;
+
+data ss_reprod_hormone;
+	set ss_reprod_hormone;
+
+	if rep_br_dev_age_cont = . then rep_br_dev_age_cont_imputed = mean(rep_br_dev_age_cont); else rep_br_dev_age_cont_imputed = rep_br_dev_age_cont;
+	if rep_age_menarche_cont = . then rep_age_menarche_cont_imputed = mean(rep_age_menarche_cont); else rep_age_menarche_cont_imputed = rep_age_menarche_cont;
 run;
 
 /****classify according to active ingredient(s): 
@@ -292,6 +298,7 @@ data ss_reprod_hormone;
 		DR315_HR_BCPill_Adol_Yrs
 		DR315_HR_BCpatc_Adol
 		DR315_HR_BCpatc_Adol_Yrs
+
 		/*HR_MenopauseAgeExact_T0
 		HR_Menopause_T0
 		PG_AgeFirstTermPG_T0

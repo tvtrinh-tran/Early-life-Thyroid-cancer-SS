@@ -202,6 +202,7 @@ stratification_long_cat = function(strat_var,
 stratification_long_for_a_list = function(var_name,
                                           var_label,
                                           strat_list,
+                                          add_p_interaction = FALSE,
                                           surv,
                                           covar,
                                           data) {
@@ -224,8 +225,15 @@ stratification_long_for_a_list = function(var_name,
       data = earlylife_popu
     ) |> modify_table_body(~ .x  |>
                              dplyr::add_row(label = strat_label,
-                                            .before = 0)|>dplyr::add_row(label = ""))
-    
+                                            .before = 0)|>
+                             dplyr::add_row(label = ifelse(add_p_interaction,"p-interaction",""))|>
+                             dplyr::mutate(p_interaction = p_interaction(
+                               surv = "Surv(ident_ageexact_bl, ident_EOF, ident_DTC)",
+                               var_name1 = as.character(strat_var),
+                               var_name2 = {{var_name}},
+                               covar = covariates_childhood,
+                               data = earlylife_popu
+                             )$`Pr(>|Chi|)`[2]))
     # Store the result in the results_list
     results_list[[as.character(strat_var)]] <- result
   }
@@ -469,11 +477,18 @@ forest_plot_child = function(dat,cat,label1,label2){
   dat = dat$table_body|>group_by(N)|>
     mutate(n_event_ref = ifelse(or(is.na(n_event),row_number()<=2),NA, n_event[2]))|>
     ungroup()|> 
-    mutate(cases=ifelse(is.na(n_event),"",paste0(n_event,"/",n_event_ref)))|>filter(is.na(n_event) |label == cat)|>
+    mutate(cases=case_when(is.na(n_event) ~ "",
+                           .default=paste0(n_event,"/",n_event_ref)))|>filter(is.na(n_event) |label == cat)|>
     change_all_values_next_value(columns_to_change)|>
-    dplyr::filter(or(label != cat,!is.na(n_event)))|>sort_childhood_not_gtsummary()|>
+    mutate(cases=case_when(label=="p-interaction" ~ as.character(round(p_interaction,2)),
+                           .default=cases))|>
+    dplyr::filter(or(label != cat,cases!=""))|>sort_childhood_not_gtsummary()|>
     mutate(ln_estimate=ifelse(n_event==0,NA,log(estimate)))|>
-    mutate(ln_original_standard_error=ifelse(n_event==0,NA,(log(conf.high)-log(conf.low))/3.92))
+    mutate(ln_original_standard_error=ifelse(n_event==0,NA,(log(conf.high)-log(conf.low))/3.92))|>
+    mutate(group_index = as.integer(factor(p_interaction, levels = unique(p_interaction))))|>
+    group_by(group_index)|> 
+    group_modify( ~ add_row(.x,label="",.before = 0))|>ungroup()|>
+    filter(row_number() !=1)
   
   forest_meta_random=metagen(TE = ln_estimate,seTE = ln_original_standard_error,studlab=paste(label),
                              data=dat,comb.fixed = FALSE,
