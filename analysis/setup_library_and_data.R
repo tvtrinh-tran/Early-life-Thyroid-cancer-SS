@@ -51,6 +51,8 @@ levels(earlylife_popu$an_weight_age10)=c("Same weight","Lighter","Heavier","Unkn
 levels(earlylife_popu$an_height_age10)=c("Same height","Shorter","Taller","Unknown")
 levels(earlylife_popu$an_weight_teen)=c("Same weight","Lighter","Heavier","Unknown")
 levels(earlylife_popu$ses_income_child)=c("Middle income","Well off","Low income","Poor","Unknown")
+levels(earlylife_popu$an_bmi_cat)=c("<25", "25.0-29.9", "≥30.0","Unknown")
+levels(earlylife_popu$ses_income)=c("<$50,000", "$50,000-$99,999", "≥$100,000","Unknown")
 
 smok=c("sm_age_start_smok_cat","sm_pack_yr_before20_cat","sm_yr_smok_before20_cat","sm_age_start_smok_cont")
 

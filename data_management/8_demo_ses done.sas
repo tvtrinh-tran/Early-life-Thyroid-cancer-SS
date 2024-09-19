@@ -185,12 +185,10 @@ data ss_demo_ses;
 	if ses_ADI_baseline_cat<0 then ses_ADI_baseline_cat = -1; else ses_ADI_baseline_cat = ses_ADI_baseline_cat;
 
 	if RS_P_UrbRur_Area<0 or RS_P_UrbRur_Area = 5 then ses_urban_baseline=-1;
-	else if RS_P_UrbRur_Area=4 then ses_urban_baseline=2;
-	else ses_urban_baseline=1;
+	else ses_urban_baseline=RS_P_UrbRur_Area;
 
 	if RS_C_UrbRur_Area<0 or RS_C_UrbRur_Area = 5 then ses_urban_child=-1;
-	else if RS_C_UrbRur_Area=4 then ses_urban_child=2;
-	else ses_urban_child=1;
+	else ses_urban_child=RS_C_UrbRur_Area;
 
 
 	format ses_edu_level edu. ses_income income. ses_income_child income_childhood. 

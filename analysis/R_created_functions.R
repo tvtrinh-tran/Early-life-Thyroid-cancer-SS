@@ -498,7 +498,7 @@ forest_plot_child = function(dat,cat,label1,label2){
   plot=forest(forest_meta_random,print.tau2 = FALSE,col.diamond = "blue",
          label.right = "Risk higher",label.left = "Risk lower",
          colgap.left = "3mm",prediction = FALSE,
-         leftcols=c("label","cases"),leftlabs = c("Factors",paste0(label1,"\n",label2," (cases)")),
+         leftcols=c("label","cases"),leftlabs = c("Potential modifying factors",paste0(label1,"\n",label2," (cases)")),
          header.line=TRUE,
          rightcols = c("estimate","ci" ),
          rightlabs = c("HR","95%CI"),colgap.right = "5mm",colgap.forest.right = "5mm",

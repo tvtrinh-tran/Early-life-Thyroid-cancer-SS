@@ -332,7 +332,7 @@ ado_weight_adult_bmi = cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, iden
 results_ado_weight_adult_bmi = ado_weight_adult_bmi$table_body|>filter(n_event>0)|>
   mutate(group = c("Same weight (ref)","Same weight","Same weight",rep("Lighter",3),rep("Heavier",3)))|>
   mutate(group = fct_relevel(group,c("Lighter","Same weight","Same weight (ref)","Heavier")))|>
-  mutate(bmi = as_factor(rep(c("BMI < 25","BMI 25.0-29.9", "BMI 30.0+"),3)))
+  mutate(bmi = as_factor(rep(c("Baseline BMI <25","Baseline BMI 25.0-29.9", "Baseline BMI ≥30.0"),3)))
 
 results_ado_weight_adult_bmi = results_ado_weight_adult_bmi|>
   ggplot(aes(x = group,y = estimate, ymin = conf.low, ymax = conf.high ))+
@@ -340,7 +340,7 @@ results_ado_weight_adult_bmi = results_ado_weight_adult_bmi|>
   geom_hline(aes(fill=bmi),yintercept =1, linetype=2)+
   xlab('Weight relative to peers during teen years')+ ylab("Hazard Ratio (95% Confidence Interval)")+
   geom_errorbar(aes(ymin=conf.low, ymax=conf.high),width=0,cex=1.5)+ 
-  facet_wrap(~bmi,strip.position="bottom",nrow=1,scales = "free_x") +
+  facet_wrap(~bmi,strip.position="top",nrow=1,scales = "free_x") +
   #labs(tag = "B") +
   theme(plot.title=element_text(size=32,face="bold"),
         axis.text.x=element_text(size=32,face="bold",angle = 60, vjust = 1, hjust=1,margin = margin(t = 0, r = 10, b = 10, l = 0)),
@@ -368,7 +368,7 @@ child_weight_adult_bmi = cox_model(surv = "Surv(ident_ageexact_bl, ident_EOF, id
 results_child_weight_adult_bmi = child_weight_adult_bmi$table_body|>filter(n_event>1)|> #n_event>1 to exclude Unknown category
   mutate(group = c("Same weight (ref)","Same weight","Same weight",rep("Lighter",3),rep("Heavier",3)))|>
   mutate(group = fct_relevel(group,c("Lighter","Same weight","Same weight (ref)","Heavier")))|>
-  mutate(bmi = as_factor(rep(c("BMI < 25","BMI 25.0-29.9", "BMI 30.0+"),3)))
+  mutate(bmi = as_factor(rep(c("Baseline BMI <25","Baseline BMI 25.0-29.9", "Baseline BMI ≥30.0"),3)))
 
 results_child_weight_adult_bmi=results_child_weight_adult_bmi|>
   ggplot(aes(x = group,y = estimate, ymin = conf.low, ymax = conf.high ))+
@@ -377,7 +377,7 @@ results_child_weight_adult_bmi=results_child_weight_adult_bmi|>
   xlab('Weight relative to peers at age 10')+ ylab("Hazard Ratio (95% Confidence Interval)")+
   geom_errorbar(aes(ymin=conf.low, ymax=conf.high),width=0,cex=1.5)+ 
   #labs(tag = "A") +
-  facet_wrap(~bmi,strip.position="bottom",nrow=1,scales = "free_x") +
+  facet_wrap(~bmi,strip.position="top",nrow=1,scales = "free_x") +
   theme(plot.title=element_text(size=32,face="bold"),
         axis.text.x=element_text(size=32,face="bold",angle = 60, vjust = 1, hjust=1,margin = margin(t = 0, r = 10, b = 10, l = 0)),
         axis.text.y=element_text(size=32,face="bold",angle = 00, vjust = 1, hjust=1,margin = margin(t = 0, r = 10, b = 10, l = 0)),
@@ -394,7 +394,7 @@ results_child_weight_adult_bmi=results_child_weight_adult_bmi|>
   coord_trans(y="log10")+ylim(0.5,6)
 
 #Combine the ado_weight and childhood_weight figures and save the outcome
-png(filename=here::here("original_figures/child_teen_bmi_weight_strat.png"),pointsize=14,width = 2400, height = 1500)
+png(filename=here::here("original_figures/child_teen_bmi_weight_strat.png"),pointsize=14,width = 2700, height = 1500)
 grid.arrange(results_child_weight_adult_bmi, results_ado_weight_adult_bmi, ncol=2)
 dev.off()
 
@@ -409,9 +409,9 @@ dev.off()
 #| cache: true
 
 strat_list = list(
-  "an_bmi_cat" ~ "BMI",
-  "ses_edu_level" ~ "Personal educational level",
-  "ses_income" ~ "Household annual income")
+  "an_bmi_cat" ~ "Baseline BMI",
+  "ses_edu_level" ~ "Personal attained education level",
+  "ses_income" ~ "Annual household income")
 
 strat_height_age10 = stratification_long_for_a_list(var_name = "an_height_age10",
                                                     var_label = list("an_height_age10" ~ "Height relative to peers at age 10"),

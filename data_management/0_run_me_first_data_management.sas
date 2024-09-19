@@ -24,7 +24,7 @@ value marital 			2="2) Single/never married" 1="1) Married/Committed relationshi
 value race 				0="1) Non-Hispanic White" 1="2) Non-Hispanic Black" 2="3) Hispanic" 3="4) Non-Hispanic all other races" 4="Unknown" ;
 value race_other		0="1) Non-Hispanic White" 1="2) Non-Hispanic Black" 2="3) Hispanic" 3="5) Non-Hispanic other races: Asian" 
 						4="6) Non-Hispanic other races: American Indian/Alaska Native" 5="7) Non-Hispanic other races: Hawaiian/Pacific Islander " 6="Unknown" ;
-value residence			-1="Unknown" 1="1) Urban, suburban, small town" 2="2) Rural areas";
+value residence			-1="Unknown" 1-2="1) Urban and suburban" 3-4="2) Small town and rural areas";
 value adi				-1="Unknown" 0,1="1) Less than 30" 2,3="2) 30 or more" ;
 value smok 				0="1) Never smoked" 1="2) Past smoker" 2="3) Current smoker" -1="Unknown";
 value pack_yr 			0="1) Never smoked" 1="2) 10 pack-years or less" 2="3) 10-20 pack-years" 3="4) More than 20 pack-years" 4="Unknown status";
