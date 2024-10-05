@@ -253,7 +253,9 @@ data ss.ss_ident_cancer;
 		FU_ThyCa_DxGrade
 		ident_FU_year
 		ident_EOF
-		ident_compete;
+		ident_compete
+		PX_Chemo	
+		PX_Radiation;
 	rename Age_Baseline=ident_age_bl
 		AgeExact_Baseline=ident_ageexact_bl
 ;

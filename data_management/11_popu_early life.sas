@@ -35,7 +35,8 @@ data ss_earlylife_popu;
 run;
 
 proc freq data=ss_earlylife_popu;
-	table exclusion;
+	table exclusion*PX_Chemo*PX_Radiation;
+;
 run;
 
 data ss.ss_earlylife_popu;
