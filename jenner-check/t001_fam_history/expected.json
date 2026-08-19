@@ -1,0 +1,14 @@
+{
+  "_captured_at": "2026-08-19T13:35:00Z",
+  "_captured_run_id": "r_9f3a45809f6647d089060fa8da1f6cb3",
+  "status": "ok",
+  "exit_code": 0,
+  "log_contains": [
+    "NOTE: FORMAT yesno defined (3 ranges).",
+    "NOTE: Wrote original (10 rows, 13 columns).",
+    "NOTE: Wrote want_ss_fam_history (10 rows, 2 columns).",
+    "NOTE: PROC PRINT completed: 10 observations printed, 2 variables"
+  ],
+  "log_does_not_contain": ["ERROR:", "[JENNER-ERROR"],
+  "diagnostics": {"parse_warnings": [], "runtime_warnings": []}
+}

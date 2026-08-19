@@ -1,0 +1,7 @@
+{
+  "bundle": "t004_ident_cancer",
+  "source_file": "data_management/1 ident_cancer done.sas",
+  "source_blob_sha": "db39e75d6b9b0d1272534c11dc7170087bea80b5",
+  "source_commit": "e9cedad3e0dd21d9932b34b1f500d6e7ebf598aa",
+  "notes": "The repo's core outcome-derivation script: differentiated thyroid cancer (DTC) case identification, histology/stage/size/invasiveness classification, competing-risk (other invasive cancer or death) flagging, and a PROC RANK birth-year median split merged back by psid. `original` replaced with 10 fully-fabricated participants covering no-cancer, PTC, FTC, anaplastic, medullary, non-DTC grade, competing invasive cancer, and competing death branches. LIBNAME ss.ss_ident_cancer output redirected to WORK."
+}

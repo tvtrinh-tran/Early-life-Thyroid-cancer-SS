@@ -1,0 +1,85 @@
+                                                   The FREQ Procedure
+
+Controlling for exclusion=0
+
+Table of px_chemo by px_radiation
+
+px_chemo |         0 |         1 |      Total
+---------+-----------+-----------+-----------
+0        |         3 |         1 |          4
+         |     75.00 |     25.00 |     100.00
+         |     75.00 |     25.00 |     100.00
+         |    100.00 |    100.00 |     100.00
+---------+-----------+-----------+-----------
+1        |         0 |         0 |          0
+         |      0.00 |      0.00 |       0.00
+         |      0.00 |      0.00 |     100.00
+         |      0.00 |      0.00 |       0.00
+---------+-----------+-----------+-----------
+Total    |         3 |         1 |          4
+
+
+Controlling for exclusion=1) Any history of invassive cancer prior to baseline
+
+Table of px_chemo by px_radiation
+
+px_chemo |         0 |         1 |      Total
+---------+-----------+-----------+-----------
+0        |         1 |         0 |          1
+         |    100.00 |      0.00 |     100.00
+         |    100.00 |      0.00 |     100.00
+         |    100.00 |      0.00 |     100.00
+---------+-----------+-----------+-----------
+1        |         0 |         0 |          0
+         |      0.00 |      0.00 |       0.00
+         |      0.00 |      0.00 |     100.00
+         |      0.00 |      0.00 |       0.00
+---------+-----------+-----------+-----------
+Total    |         1 |         0 |          1
+
+
+Controlling for exclusion=3) Self-reported chemotherapy or radiotherapy for cancer(s) prior to baseline
+
+Table of px_chemo by px_radiation
+
+px_chemo |         0 |         1 |      Total
+---------+-----------+-----------+-----------
+0        |         0 |         0 |          0
+         |      0.00 |      0.00 |       0.00
+         |      0.00 |      0.00 |     100.00
+         |      0.00 |      0.00 |       0.00
+---------+-----------+-----------+-----------
+1        |         1 |         0 |          1
+         |    100.00 |      0.00 |     100.00
+         |    100.00 |      0.00 |     100.00
+         |    100.00 |      0.00 |     100.00
+---------+-----------+-----------+-----------
+Total    |         1 |         0 |          1
+
+
+Controlling for exclusion=4) Withdrawal from the Sister study
+
+Table of px_chemo by px_radiation
+
+px_chemo |         0 |         1 |      Total
+---------+-----------+-----------+-----------
+0        |         2 |         0 |          2
+         |    100.00 |      0.00 |     100.00
+         |    100.00 |      0.00 |     100.00
+         |    100.00 |      0.00 |     100.00
+---------+-----------+-----------+-----------
+1        |         0 |         0 |          0
+         |      0.00 |      0.00 |       0.00
+         |      0.00 |      0.00 |     100.00
+         |      0.00 |      0.00 |       0.00
+---------+-----------+-----------+-----------
+Total    |         2 |         0 |          2
+
+                          ss_earlylife_popu (bundle output; original also PROC EXPORTs to csv)
+
+        psid  ident_cancer_bl  ident_treatment_cancer_bl  px_chemo  px_radiation  utero_birthweight_cat  reprod_menarche_cat  an_bmi_cat  phy_act_cat  alc_cat  smok_cat  demo_edu_cat  fam_history_dtc  illness_thyroid_disease  exclusion
+99900_000001                0                          0         0             0                      1                    1           1            1        0         0             1                0                        0          0
+99900_000004                0                          0         0             0                      3                    3           3            3        3         0             3                0                        1          0
+99900_000005                0                          0         0             1                      1                    1           1            1        0         1             2                1                        0          0
+99900_000006                0                          0         0             0                      2                    2           2            2        1         0             1                0                        0          0
+

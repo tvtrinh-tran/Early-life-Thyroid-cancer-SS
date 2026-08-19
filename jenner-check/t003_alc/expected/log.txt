@@ -1,0 +1,55 @@
+NOTE: Option OBS changed to 100.
+NOTE: PROC FORMAT library=WORK
+
+NOTE: FORMAT alc_status defined (5 ranges).
+NOTE: FORMAT drinkPY defined (5 ranges).
+NOTE: FORMAT binge defined (5 ranges).
+NOTE: FORMAT alc_age_start defined (5 ranges).
+NOTE: DATA original
+
+NOTE: Processing inline DATALINES (10 lines)
+
+NOTE: Read 10 rows from DATALINES.
+NOTE: Wrote original (10 rows, 5 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA ss_alc
+
+
+NOTE: Read 10 rows from original.
+NOTE: Wrote ss_alc (10 rows, 5 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA ss_alc
+
+
+NOTE: Read 10 rows from ss_alc.
+NOTE: Wrote ss_alc (10 rows, 8 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA ss_alc
+
+
+NOTE: Read 10 rows from ss_alc.
+NOTE: Wrote ss_alc (10 rows, 8 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA ss_alc
+
+
+NOTE: Read 10 rows from ss_alc.
+NOTE: Wrote ss_alc (10 rows, 8 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC PRINT data=ss_alc
+
+NOTE: PROC PRINT completed: 10 observations printed, 8 variables
+NOTE: PROC DATASETS library=WORK
+
+NOTE: Deleting SS_ALC (memtype=DATA).
+NOTE: 1 dataset(s) deleted.

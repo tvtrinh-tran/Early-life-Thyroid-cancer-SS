@@ -1,0 +1,70 @@
+NOTE: Option OBS changed to 100.
+NOTE: PROC FORMAT library=WORK
+
+NOTE: FORMAT AN4R_modif defined (4 ranges).
+NOTE: FORMAT AN17R_modif defined (4 ranges).
+NOTE: FORMAT BMICDC_modif defined (5 ranges).
+NOTE: DATA original
+
+NOTE: Processing inline DATALINES (10 lines)
+
+NOTE: Read 10 rows from DATALINES.
+NOTE: Wrote original (10 rows, 8 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA ss_anthropometry
+
+
+NOTE: Read 10 rows from original.
+NOTE: Wrote ss_anthropometry (10 rows, 8 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA ss_anthropometry
+
+
+NOTE: Read 10 rows from ss_anthropometry.
+NOTE: Wrote ss_anthropometry (10 rows, 8 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA ss_anthropometry
+
+
+NOTE: Read 10 rows from ss_anthropometry.
+NOTE: Wrote ss_anthropometry (10 rows, 8 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA ss_anthropometry
+
+
+NOTE: Read 10 rows from ss_anthropometry.
+NOTE: Wrote ss_anthropometry (10 rows, 8 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA ss_anthropometry
+
+
+NOTE: Read 10 rows from ss_anthropometry.
+NOTE: Wrote ss_anthropometry (10 rows, 8 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA ss_anthropometry
+
+
+NOTE: Read 10 rows from ss_anthropometry.
+NOTE: Wrote ss_anthropometry (10 rows, 8 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC PRINT data=ss_anthropometry
+
+NOTE: PROC PRINT completed: 10 observations printed, 8 variables
+NOTE: PROC DATASETS library=WORK
+
+NOTE: Deleting SS_ANTHROPOMETRY (memtype=DATA).
+NOTE: 1 dataset(s) deleted.

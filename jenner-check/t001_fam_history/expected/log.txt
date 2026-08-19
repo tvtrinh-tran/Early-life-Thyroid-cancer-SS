@@ -1,0 +1,44 @@
+NOTE: Option OBS changed to 100.
+NOTE: PROC FORMAT library=WORK
+
+NOTE: FORMAT yesno defined (3 ranges).
+NOTE: DATA original
+
+NOTE: Processing inline DATALINES (10 lines)
+
+NOTE: Read 10 rows from DATALINES.
+NOTE: Wrote original (10 rows, 13 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA ss_fam_history
+
+
+NOTE: Read 10 rows from original.
+NOTE: Wrote ss_fam_history (10 rows, 13 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA ss_fam_history
+
+
+NOTE: Read 10 rows from ss_fam_history.
+NOTE: Wrote ss_fam_history (10 rows, 14 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA want_ss_fam_history
+
+
+NOTE: Read 10 rows from ss_fam_history.
+NOTE: Wrote want_ss_fam_history (10 rows, 2 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC PRINT data=want_ss_fam_history
+
+NOTE: PROC PRINT completed: 10 observations printed, 2 variables
+NOTE: PROC DATASETS library=WORK
+
+NOTE: Deleting SS_FAM_HISTORY (memtype=DATA).
+NOTE: 1 dataset(s) deleted.

@@ -1,0 +1,7 @@
+{
+  "bundle": "t001_fam_history",
+  "source_file": "data_management/9_fam_history done.sas",
+  "source_blob_sha": "7fe14e78e103d66246cefc992293a48d58b066d0",
+  "source_commit": "e9cedad3e0dd21d9932b34b1f500d6e7ebf598aa",
+  "notes": "Recodes Thy_1stDegr (count of 1st-degree relatives with thyroid cancer) into a yes/no family-history flag using the repo's own yesno. format. Original LIBNAME ss.ss_fam_history output redirected to WORK; `original` replaced with 10 fully-fabricated participants (no real study data)."
+}

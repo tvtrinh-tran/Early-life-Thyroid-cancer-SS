@@ -1,0 +1,91 @@
+NOTE: Option OBS changed to 100.
+NOTE: PROC FORMAT library=WORK
+
+NOTE: FORMAT yesno defined (3 ranges).
+NOTE: FORMAT noyes defined (3 ranges).
+NOTE: FORMAT histo defined (4 ranges).
+NOTE: FORMAT size defined (6 ranges).
+NOTE: FORMAT ajcc_seven defined (6 ranges).
+NOTE: FORMAT invassive defined (2 ranges).
+NOTE: FORMAT not_DTC defined (7 ranges).
+NOTE: FORMAT birth_year defined (3 ranges).
+NOTE: FORMAT edu defined (4 ranges).
+NOTE: FORMAT income defined (5 ranges).
+NOTE: FORMAT income_childhood defined (5 ranges).
+NOTE: FORMAT household_compo defined (4 ranges).
+NOTE: FORMAT marital defined (4 ranges).
+NOTE: FORMAT race defined (5 ranges).
+NOTE: FORMAT race_other defined (7 ranges).
+NOTE: FORMAT residence defined (3 ranges).
+NOTE: FORMAT adi defined (5 ranges).
+NOTE: FORMAT smok defined (4 ranges).
+NOTE: FORMAT pack_yr defined (5 ranges).
+NOTE: FORMAT packyr_child defined (5 ranges).
+NOTE: FORMAT age_start_smok defined (5 ranges).
+NOTE: FORMAT age_stop_smok defined (6 ranges).
+NOTE: FORMAT yr_smok defined (6 ranges).
+NOTE: FORMAT yr_smok_child defined (5 ranges).
+NOTE: FORMAT ETS_child_yr defined (4 ranges).
+NOTE: FORMAT ETS_total_yr defined (6 ranges).
+NOTE: FORMAT alc_status defined (5 ranges).
+NOTE: FORMAT binge defined (5 ranges).
+NOTE: FORMAT drinkPY defined (5 ranges).
+NOTE: FORMAT alc_age_start defined (5 ranges).
+NOTE: FORMAT F4new_modif defined (3 ranges).
+NOTE: FORMAT farm defined (5 ranges).
+NOTE: FORMAT F18X_modif defined (4 ranges).
+NOTE: FORMAT F19X_modif defined (5 ranges).
+NOTE: FORMAT F20CAT_modif defined (12 ranges).
+NOTE: FORMAT F21X_modif defined (3 ranges).
+NOTE: FORMAT F23X_modif defined (7 ranges).
+NOTE: FORMAT F25X_modif defined (7 ranges).
+NOTE: FORMAT F27FIX_modif defined (4 ranges).
+NOTE: FORMAT F28X_modif defined (3 ranges).
+NOTE: FORMAT F29X_modif defined (3 ranges).
+NOTE: FORMAT F32X_modif defined (3 ranges).
+NOTE: FORMAT F35X_modif defined (4 ranges).
+NOTE: FORMAT F38X_modif defined (3 ranges).
+NOTE: FORMAT FHGEST_modif defined (4 ranges).
+NOTE: FORMAT FHGEST_modif_new defined (4 ranges).
+NOTE: FORMAT FHMISS2X_modif defined (8 ranges).
+NOTE: FORMAT FHYESNO_modif defined (3 ranges).
+NOTE: FORMAT parents_age defined (5 ranges).
+NOTE: FORMAT birth_weight defined (4 ranges).
+NOTE: FORMAT size_ges defined (4 ranges).
+NOTE: FORMAT twin_female defined (4 ranges).
+NOTE: FORMAT time_preg defined (5 ranges).
+NOTE: FORMAT preg_order defined (5 ranges).
+NOTE: FORMAT AN17R_modif defined (4 ranges).
+NOTE: FORMAT AN4R_modif defined (4 ranges).
+NOTE: FORMAT BMICDC_modif defined (5 ranges).
+NOTE: FORMAT hrs_week defined (5 ranges).
+NOTE: FORMAT met_week defined (4 ranges).
+NOTE: FORMAT thelarche defined (5 ranges).
+NOTE: FORMAT meno_age defined (6 ranges).
+NOTE: FORMAT meno_cause defined (8 ranges).
+NOTE: FORMAT first_preg defined (6 ranges).
+NOTE: FORMAT last_preg defined (5 ranges).
+NOTE: FORMAT nb_preg defined (5 ranges).
+NOTE: FORMAT age_menarche defined (5 ranges).
+NOTE: FORMAT BC_ingredient defined (5 ranges).
+NOTE: FORMAT bc_all defined (3 ranges).
+NOTE: FORMAT bc_ado_dur_all defined (6 ranges).
+NOTE: FORMAT bc_ado_dur defined (5 ranges).
+NOTE: FORMAT bc_min_age defined (5 ranges).
+NOTE: FORMAT bc_type defined (8 ranges).
+NOTE: FORMAT mammo defined (2 ranges).
+NOTE: FORMAT physical_exam defined (2 ranges).
+NOTE: FORMAT RSYESNO14_modif defined (3 ranges).
+NOTE: FORMAT exclusion defined (4 ranges).
+NOTE: DATA check_formats
+
+NOTE: Processing inline DATALINES (3 lines)
+
+NOTE: Read 3 rows from DATALINES.
+NOTE: Wrote check_formats (3 rows, 5 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC PRINT data=check_formats
+
+NOTE: PROC PRINT completed: 3 observations printed, 5 variables

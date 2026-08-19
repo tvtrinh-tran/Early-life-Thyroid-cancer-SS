@@ -1,0 +1,7 @@
+{
+  "bundle": "t002_anthropometry",
+  "source_file": "data_management/4_anthropometry done.sas",
+  "source_blob_sha": "8e11ee4567d6812e3e91231e7eee9a247d06cbf4",
+  "source_commit": "e9cedad3e0dd21d9932b34b1f500d6e7ebf598aa",
+  "notes": "Relative height/weight and BMI-category recode plus the repo's array/do-over pattern for normalizing SAS special missing codes (.A-.Z) to a sentinel and back to a true missing. `original` replaced with 10 fully-fabricated participants including a few genuine missing values to exercise that normalization path. LIBNAME ss.ss_anthropometry output redirected to WORK."
+}

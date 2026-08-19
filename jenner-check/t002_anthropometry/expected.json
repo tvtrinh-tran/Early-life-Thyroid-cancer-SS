@@ -1,0 +1,13 @@
+{
+  "_captured_at": "2026-08-19T13:40:00Z",
+  "_captured_run_id": "r_e4e73c21a841417b9d005d56bd8bf492",
+  "status": "ok",
+  "exit_code": 0,
+  "log_contains": [
+    "NOTE: FORMAT BMICDC_modif defined (5 ranges).",
+    "NOTE: Wrote original (10 rows, 8 columns).",
+    "NOTE: PROC PRINT completed: 10 observations printed, 8 variables"
+  ],
+  "log_does_not_contain": ["ERROR:", "[JENNER-ERROR"],
+  "diagnostics": {"parse_warnings": [], "runtime_warnings": []}
+}

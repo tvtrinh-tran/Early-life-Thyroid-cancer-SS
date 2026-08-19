@@ -1,0 +1,15 @@
+{
+  "_captured_at": "2026-08-19T14:00:00Z",
+  "_captured_run_id": "r_878b3d2152e8493ab1296c4ae12cda42",
+  "status": "ok",
+  "exit_code": 0,
+  "log_contains": [
+    "NOTE: FORMAT yesno defined (3 ranges).",
+    "NOTE: FORMAT FHMISS2X_modif defined (8 ranges).",
+    "NOTE: FORMAT exclusion defined (4 ranges).",
+    "NOTE: Wrote check_formats (3 rows, 5 columns).",
+    "NOTE: PROC PRINT completed: 3 observations printed, 5 variables"
+  ],
+  "log_does_not_contain": ["ERROR:", "[JENNER-ERROR"],
+  "diagnostics": {"parse_warnings": [], "runtime_warnings": []}
+}

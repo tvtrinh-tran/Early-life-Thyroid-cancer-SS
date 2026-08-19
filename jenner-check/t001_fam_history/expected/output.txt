@@ -1,0 +1,14 @@
+                          ss_fam_history (bundle output; original writes to ss.ss_fam_history)
+
+        psid  fam_history_DTC
+99900_000001            1) No
+99900_000002           2) Yes
+99900_000003            1) No
+99900_000004           2) Yes
+99900_000005            1) No
+99900_000006           2) Yes
+99900_000007            1) No
+99900_000008           2) Yes
+99900_000009            1) No
+99900_000010           2) Yes
+

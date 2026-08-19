@@ -1,0 +1,14 @@
+                        ss_anthropometry (bundle output; original writes to ss.ss_anthropometry)
+
+        psid  an_height_age10  an_weight_teen  an_weight_age10    an_bmi_cat  an_age_tallest  an_bmi_cont  an_WaistHip
+99900_000001   1) Same height  1) Same weight   1) Same weight        1) <25              12         22.4         0.82
+99900_000002       2) Shorter      2) Lighter       2) Lighter        1) <25              11         27.9         0.88
+99900_000003        3) Taller      3) Heavier       3) Heavier  2) 25.0-29.9              13         32.1         0.94
+99900_000004   1) Same height  1) Same weight       2) Lighter        1) <25              10           21         0.79
+99900_000005       2) Shorter      3) Heavier   1) Same weight        1) <25              14         26.5         0.85
+99900_000006        3) Taller      2) Lighter       3) Heavier  2) 25.0-29.9              12         33.8         0.97
+99900_000007          Unknown  1) Same weight   1) Same weight        1) <25               .         23.9         0.81
+99900_000008   1) Same height         Unknown       2) Lighter        1) <25              15         28.2            .
+99900_000009       2) Shorter      2) Lighter       2) Lighter        1) <25              11         20.6         0.77
+99900_000010        3) Taller      3) Heavier       3) Heavier  2) 25.0-29.9              13         31.4         0.92
+

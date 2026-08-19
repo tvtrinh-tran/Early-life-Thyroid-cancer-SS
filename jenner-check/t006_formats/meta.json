@@ -1,0 +1,7 @@
+{
+  "bundle": "t006_formats",
+  "source_file": "data_management/0_run_me_first_data_management.sas",
+  "source_blob_sha": "5c7a17a95ba2bd51d5563fbda39adbcf507f2537",
+  "source_commit": "e9cedad3e0dd21d9932b34b1f500d6e7ebf598aa",
+  "notes": "The study's master PROC FORMAT catalog (68 value-label sets covering demographics, smoking, alcohol, reproductive history, and the thyroid-cancer outcome codings used by every other script in data_management/), reproduced verbatim including the source file's own Windows-codepage mojibake apostrophes/micro signs. The external `original` read and PROC CATALOG COPY to a permanent library were dropped (neither is meaningful in isolation); a small smoke-test DATA step + PROC PRINT was added exercising a plain value list, a numeric range, an OTHER= catch-all, and the special-missing-value (.D/.E/.M/.P/.Q) range against fabricated values."
+}

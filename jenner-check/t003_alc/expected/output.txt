@@ -1,0 +1,14 @@
+                                  ss_alc (bundle output; original writes to ss.ss_alc)
+
+        psid                 alc_cat  alc_drinks_before20_cont      alc_drinks_before20_cat  alc_binge_time_519_cont  alc_binge_time_519_cat  alc_age_start_reg_cont                  alc_age_start_reg_cat
+99900_000001        1) Never drinker                         0              1) 0 drink/year                        0             1) 0 times                        .  1) Never drank before 20 years of age
+99900_000002       2) Former drinker                        45  2) Less than 60 drinks/year                       10   2) Less than 25 times                      17              2) Before 20 years of age
+99900_000003  Drinker: <1 drink/week                       180        3) 60-229 drinks/year                      100         3) 25-240 times                      14              2) Before 20 years of age
+99900_000004  Drinker: <1 drink/week                       300   4) 230 drinks/year or more                      260           4) 240+ times                      18              2) Before 20 years of age
+99900_000005                 Unknown                         .                      Unknown                       -1                 Unknown                       .                                Unknown
+99900_000006       2) Former drinker                        20  2) Less than 60 drinks/year                        0             1) 0 times                       22  1) Never drank before 20 years of age
+99900_000007  Drinker: <1 drink/week                       250   4) 230 drinks/year or more                        5   2) Less than 25 times                      12              2) Before 20 years of age
+99900_000008        1) Never drinker                         0              1) 0 drink/year                        0             1) 0 times                        .  1) Never drank before 20 years of age
+99900_000009  Drinker: <1 drink/week                        90        3) 60-229 drinks/year                       30         3) 25-240 times                      19              2) Before 20 years of age
+99900_000010  Drinker: <1 drink/week                         5  2) Less than 60 drinks/year                      260           4) 240+ times                      21  1) Never drank before 20 years of age
+
