@@ -1,0 +1,14 @@
+{
+  "_captured_at": "2026-08-19T13:45:00Z",
+  "_captured_run_id": "r_a6372525fea34a2ba025fde9f3afcf31",
+  "status": "ok",
+  "exit_code": 0,
+  "log_contains": [
+    "NOTE: FORMAT alc_status defined (5 ranges).",
+    "NOTE: FORMAT alc_age_start defined (5 ranges).",
+    "NOTE: Wrote original (10 rows, 5 columns).",
+    "NOTE: PROC PRINT completed: 10 observations printed, 8 variables"
+  ],
+  "log_does_not_contain": ["ERROR:", "[JENNER-ERROR"],
+  "diagnostics": {"parse_warnings": [], "runtime_warnings": []}
+}

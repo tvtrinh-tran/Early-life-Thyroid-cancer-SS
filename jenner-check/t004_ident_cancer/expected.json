@@ -1,0 +1,13 @@
+{
+  "_captured_at": "2026-08-19T13:50:00Z",
+  "_captured_run_id": "r_9c5d5c6b008f4c41a2ee9899fb8c5112",
+  "status": "ok",
+  "exit_code": 0,
+  "log_contains": [
+    "NOTE: Wrote original (10 rows, 22 columns).",
+    "NOTE: PROC RANK data=ss_ident_cancer out=group groups=2",
+    "NOTE: PROC PRINT completed: 10 observations printed, 21 variables"
+  ],
+  "log_does_not_contain": ["ERROR:", "[JENNER-ERROR", "Invalid data"],
+  "diagnostics": {"parse_warnings": [], "runtime_warnings": []}
+}

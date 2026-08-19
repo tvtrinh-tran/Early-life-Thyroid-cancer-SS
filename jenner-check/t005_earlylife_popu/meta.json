@@ -1,0 +1,7 @@
+{
+  "bundle": "t005_earlylife_popu",
+  "source_file": "data_management/11_popu_early life.sas",
+  "source_blob_sha": "5c7ce10f4bd6f7e508fc1d297e30f0e70251586c",
+  "source_commit": "e9cedad3e0dd21d9932b34b1f500d6e7ebf598aa",
+  "notes": "Final assembly step: PROC SQL nine-way LEFT JOIN of every per-domain analysis table on psid, then the study's exclusion hierarchy (baseline cancer > prior cancer treatment > withdrawal list > eligible) via PROC FREQ cross-tab and a filtered output. Each ss.ss_* input replaced with a tiny synthetic table (8 fabricated psids, no real study data); the original script's hardcoded withdrawal-list psids (real Sister Study participant identifiers) were NOT reproduced -- replaced with a placeholder membership check against two of this bundle's own synthetic psids so the branch logic still exercises unmodified. The run legitimately emits SAS's own 'Variable psid already exists' WARNING for the shared join key under select distinct a.*, b.*, ... -- expected behavior for this construct, not a Jenner bug, and status is still ok with correct output (4/8 rows survive exclusion=0)."
+}

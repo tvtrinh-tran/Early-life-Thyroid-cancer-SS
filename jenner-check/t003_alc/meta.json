@@ -1,0 +1,7 @@
+{
+  "bundle": "t003_alc",
+  "source_file": "data_management/6_alc done.sas",
+  "source_blob_sha": "281dd680ebe2592ad47a1abc5a90a1ae22785295",
+  "source_commit": "e9cedad3e0dd21d9932b34b1f500d6e7ebf598aa",
+  "notes": "Alcohol-history categorization: status recode, drinks-per-year and binge-frequency buckets (including the author's own ceil() workaround comment for a formatting quirk they hit cross-checking), age-started-drinking buckets, and the array/do-over missing-code normalization pattern shared with t002. `original` replaced with 10 fully-fabricated participants covering never/former/current drinker branches and the negative unknown-sentinel path. LIBNAME ss.ss_alc output redirected to WORK."
+}
